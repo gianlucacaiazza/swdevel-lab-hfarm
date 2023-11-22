@@ -32,7 +32,7 @@ def read_root():
     Returns:
         dict: A simple greeting.
     """
-    return {"Hello": "World"}
+    return {"To mare omo"}
 
 
 @app.get('/query/{person_name}')
