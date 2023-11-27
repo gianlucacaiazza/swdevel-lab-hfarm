@@ -82,3 +82,8 @@ def get_date():
     """
     current_date = datetime.now().isoformat()
     return JSONResponse(content={"date": current_date})
+
+
+#WePole code starts here
+flights = pd.read_csv('/app/app/flights.csv')
+
