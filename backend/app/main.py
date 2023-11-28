@@ -6,7 +6,6 @@ as the backend for the project.
 """
 
 from fastapi import FastAPI
-from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
