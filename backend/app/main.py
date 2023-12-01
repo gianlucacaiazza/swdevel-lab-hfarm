@@ -25,7 +25,9 @@ birthdays_dictionary = {
     'Rowan Atkinson': '01/6/1955'
 }
 
-df = pd.read_csv('/app/app/employees.csv')
+df = pd.read_csv('/app/app/strutture.csv', sep = ';')
+
+
 
 @app.get('/csv_show')
 def read_and_return_csv():
@@ -40,7 +42,7 @@ def read_root():
     Returns:
         dict: A simple greeting.
     """
-    return {"Hello": "World"}
+    return {"Prova": "World"}
 
 
 @app.get('/query/{person_name}')
