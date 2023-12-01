@@ -1,5 +1,5 @@
 import csv
-import os
+import os 
 
 # Define the path to your CSV file
 CSV_FILE_PATH = '/Users/francesco/provaW3LSPD'
