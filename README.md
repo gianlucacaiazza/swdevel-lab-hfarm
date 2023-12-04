@@ -51,7 +51,7 @@ Bidirectional communication is established between the Frontend (Flask) and Back
 1. Clone the repository and navigate in the directory:
 
     ```bash
-    git clone REPO_URL
+    git clone https://github.com/KlementinaYlli/M.E.K.E-Group.git
     cd swdevel-lab-hfarm
     ```
 
