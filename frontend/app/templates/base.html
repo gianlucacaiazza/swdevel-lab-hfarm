@@ -26,7 +26,11 @@
 
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.css">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index')}}"> H-Farm Group Project</a>
+        <a class="navbar-brand" href="{{ url_for('index')}}">Venetando</a>
+
+        <!--Non visualizzo l'immagine-->
+        <!--<img src="/frontend/app/templates/Images/logo.png" alt="logo" width="50" height="50">-->
+       
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -36,14 +40,33 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="/internal">Internal</a>
+                        <a class="nav-link" href="discover.html">Discover</a>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link">Destinations</a>
+                        <div class="dropdown-content"> 
+                            <a href="#">Belluno</a>
+                            <a href="#">Padova</a>
+                            <a href="#">Rovigo</a>
+                            <a href="#">Venezia</a>
+                            <a href="#">Verona</a>
+                            <a href="#">Vicenza</a>
+                        </div>
+                      </li>
+                    
+                    <li class="nav-item active">
+                        <a class="nav-link" href="activities.html">Activities</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="contacts.html">Contacts</a>
+                    </li>
+
             </ul>
         </div>
     </nav>
     <div class="container" style="background-color: black; width: 150%;">
         {% block content %} {% endblock %}
     </div>
-
+   
   </body>
 </html>
