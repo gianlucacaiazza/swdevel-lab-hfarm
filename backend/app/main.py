@@ -6,7 +6,6 @@ as the backend for the project.
 """
 
 from fastapi import FastAPI
-from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
@@ -26,6 +25,27 @@ birthdays_dictionary = {
 }
 
 df = pd.read_csv('/app/app/employees.csv')
+
+
+# Carica i dati relativi ai vini
+wines = pd.concat([pd.read_csv(file) for file in ['/app/app/Red.csv', '/app/app/Rose.csv', '/app/app/Sparkling.csv', '/app/app/White.csv']], ignore_index=True)
+
+# Definisci un endpoint che restituisce i dati in formato JSON
+@app.get("/get-wines-json/{vintage_min}/{vintage_max}")
+def get_wines_json(vintage_min: int, vintage_max: int):
+    try:
+        # Converti la colonna "Year" in numeri interi
+        wines["Year"] = pd.to_numeric(wines["Year"], errors="coerce")
+
+        # Filtra i dati dei vini nel range specificato di annate
+        filtered_wines = wines[(wines["Year"] >= vintage_min) & (wines["Year"] <= vintage_max)]
+
+        # Converte i dati filtrati in formato JSON e restituisci la risposta
+        wines_json = filtered_wines.to_json(orient="records")
+        return JSONResponse(content=wines_json)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get('/csv_show')
 def read_and_return_csv():
