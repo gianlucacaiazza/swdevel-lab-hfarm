@@ -42,3 +42,17 @@ def corrZipCrime(crime_rate):
         zipcodes_crime = crime['zipcode'].tolist()
 
     return zipcodes_crime
+
+
+# Finds common zipcodes among three lists
+def commonZip(zip_1, zip_2, zip_3):
+    res = set(zip_1) & set(zip_2) & set(zip_3)
+    return list(res)
+    
+
+# Find the cheapest zipcode for each zipcode in the list
+def cheapestBnbPerZip(zip_list, bnb_df):
+    filtered_airbnb_df = bnb_df[bnb_df['zipcode'].isin(zip_list)]
+    min_price_airbnb_df = filtered_airbnb_df.loc[filtered_airbnb_df.groupby('zipcode')['price'].idxmin()]
+    
+    return min_price_airbnb_df
