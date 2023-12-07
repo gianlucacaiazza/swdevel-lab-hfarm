@@ -25,3 +25,20 @@ def corrZipTrees(trees_bool):
         zipcodes_trees = trees['zipcode'].tolist()
     
     return zipcodes_trees
+
+
+# Finds zipcodes that respects the criteria for crime rates
+def corrZipCrime(crime_rate):
+    if(crime_rate == 4):
+        crime_threshold = int(((crime['count'].max()-crime['count'].min())/4)+crime['count'].min())
+        zipcodes_crime = crime[crime['count'] <= crime_threshold]['zipcode'].tolist()
+    elif(crime_rate == 3):
+        crime_threshold = int(((crime['count'].max()-crime['count'].min())/2)+crime['count'].min())
+        zipcodes_crime = crime[crime['count'] <= crime_threshold]['zipcode'].tolist()
+    elif(crime_rate == 2):
+        crime_threshold = int(((((crime['count'].max()-crime['count'].min())/4))*3)+crime['count'].min())
+        zipcodes_crime = crime[crime['count'] <= crime_threshold]['zipcode'].tolist()
+    elif(crime_rate == 1):
+        zipcodes_crime = crime['zipcode'].tolist()
+
+    return zipcodes_crime
