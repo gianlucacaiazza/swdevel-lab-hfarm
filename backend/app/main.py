@@ -11,19 +11,29 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 
+import sys
 
-#app = FastAPI()
+# Aggiungi il percorso della directory al sys.path
+sys.path.append('/app/app/mymodules/')
+
+# Ora puoi importare il modulo Cleaning
+from mymodules.Cleaning import flights_data_cleaned
+from mymodules.df_integrations import flights
+from mymodules.Destination_random import randomize_destination
 
 
-#@app.get('/')
-#def read_root():
-#    """
-#    Root endpoint for the backend.
 
-#    Returns:
-#        dict: A simple greeting.
-#    """
-#    return {"Hello": "World"}
+app = FastAPI()
+
+
+@app.get('/')
+def read_root():
+    """
+    Root endpoint for the backend.
+    Returns:
+        dict: A simple greeting.
+    """
+    return {"Hello": "World"}
 
 
 #@app.get('/query/{person_name}')
@@ -68,5 +78,9 @@ import pandas as pd
 
 
 
-from mymodules.df_integrations import flights
+#from mymodules.Cleaning import flights_data 
+
+@app.get('/randomize')
+def randomzie():
+    return randomize_destination(input(), flights)
 
