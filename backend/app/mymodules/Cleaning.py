@@ -22,3 +22,4 @@ flights_data_cleaned.rename(columns={'Journey Start Point':'Departure'}, inplace
 flights_data_cleaned.rename(columns={'Journey Finish Point':'Arrival'}, inplace=True)
 
 
+
