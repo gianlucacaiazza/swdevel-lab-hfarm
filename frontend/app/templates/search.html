@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Search of Frontend {% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h1>Hello, look for your ideal AirBnb</h1>
+
+        <!-- WTForms Form to get input from the user -->
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.crime_rate.label }}
+                {{ form.crime_rate(class="form-control") }}
+                {{ form.n_attr.label }}
+                {{ form.n_attr(class="form-control") }}
+                {{ form.trees_bool.label }}
+                {{ form.trees_bool(class="form-control") }}
+            </div>
+            </br>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+{% endblock %}
