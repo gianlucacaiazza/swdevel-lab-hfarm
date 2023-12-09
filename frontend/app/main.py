@@ -12,14 +12,13 @@ FASTAPI_BACKEND_HOST = 'http://backend'
 
 
 class SeachBnBForm(FlaskForm):
-    min_attr = SelectField('Min attractions?:',
-                         choices=[0, 5, 10])
-    max_attr = SelectField('Max attractions?:',
-                         choices=[5, 10, 20])
+    n_attr = SelectField('How many attractions do you plan on visiting?:',
+                         choices=['0-5', '5-10', '10-20'])
     trees_bool = SelectField('Do you want to be in a green area:',
                              choices=['True', 'False'])
     crime_rate = SelectField('How much do you care for a crime-free area?:',
-                             choices=[1, 2, 3, 4])
+                             choices=['Not at all', 'Very little', 'Enough',
+                                      'Extremely'])
 
     submit = SubmitField('Search')
 
@@ -30,16 +29,32 @@ def index():
     error_message = None
 
     if form.validate_on_submit():
-        crime_rate = form.crime_rate.data
-        min_attr = form.min_attr.data
-        max_attr = form.max_attr.data
+        if form.n_attr.data == '0-5':
+            min = 0
+            max = 5
+        elif form.n_attr.data == '5-10':
+            min = 5
+            max = 10
+        else:
+            min = 10
+            max = 20
+
+        if form.crime_rate.data == 'Not at all':
+            crime_rate = 1
+        elif form.crime_rate.data == 'Very little':
+            crime_rate = 2
+        elif form.crime_rate.data == 'Enough':
+            crime_rate = 3
+        elif form.crime_rate.data == 'Extremely':
+            crime_rate = 4
+
         trees_bool = form.trees_bool.data
 
         response = requests.get(
             'http://backend/search',
             params={
-                'min': min_attr,
-                'max': max_attr,
+                'min': min,
+                'max': max,
                 'trees_bool': trees_bool,
                 'crime_rate': crime_rate
             }
