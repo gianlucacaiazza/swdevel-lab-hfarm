@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from .mymodules import data_handling
 import pandas as pd
-
+import requests
+import time
 
 app = FastAPI()
 
@@ -39,3 +40,30 @@ def search_bnb(min, max, trees_bool, crime_rate ):
     list_of_dicts = val.to_json(orient='records')
 
     return list_of_dicts
+
+@app.get('/index')
+def air_quality():
+    neigh = {'Bronx' : (40.844784,-73.864830),
+             'Manhattan' : (40.783058, -73.971252),
+             'Queens' : (40.728226, -73.794853),
+             'Brooklyn' : (40.678177, -73.944160),
+             'Staten Island' : (40.5834557, -74.1496048)
+            }
+    airquality = []
+    for neighborhood, coordinates in neigh.items():
+        
+        lat = str(coordinates[0])
+        lon = str(coordinates[1])
+        current_date = str(int(time.time()))
+        request = 'http://api.openweathermap.org/data/2.5/air_pollution/history?lat='+ lat + '&lon=' + lon + '&start=946702800&end='+ current_date + '&appid=596dff3ac05aeb906e63803d2bfcf01a'
+        response = requests.get(request)
+        json = response.json()
+        aqi_values = [entry['main']['aqi'] for entry in json['list']]
+        mean_aqi = sum(aqi_values) / len(aqi_values)
+
+        neighborhood_dict = {'Neighborhood': neighborhood, 'AQI': round(mean_aqi, 3)}
+
+        airquality.append(neighborhood_dict)
+
+
+    return airquality

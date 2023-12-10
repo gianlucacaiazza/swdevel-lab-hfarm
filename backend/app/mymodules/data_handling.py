@@ -54,5 +54,13 @@ def commonZip(zip_1, zip_2, zip_3):
 def BnbPerZip(zip_list, bnb_df):
     airbnb_df = bnb_df[bnb_df['zipcode'].isin(zip_list)]
     
-    
     return airbnb_df
+
+def get_bnb_by_neighborhood(target_neighborhood):
+    result_list = []
+    neighborhood_df = bnb[bnb['neighbourhood_group_cleansed'] == target_neighborhood]
+
+    # Convert the filtered DataFrame to a list of dictionaries
+    result_list = neighborhood_df.to_dict(orient='records')
+
+    return result_list
