@@ -25,9 +25,13 @@ class SeachBnBForm(FlaskForm):
 
     submit = SubmitField('Search')
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    return render_template('index.html')
+    
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
     form = SeachBnBForm()
     error_message = None
 
