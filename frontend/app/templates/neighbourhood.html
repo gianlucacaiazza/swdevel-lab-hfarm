@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> {% block title %} Search of Frontend {% endblock %}</title>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1>Hello, look for your ideal AirBnb</h1>
+    
+            <!-- WTForms Form to get input from the user -->
+            <form method="POST" action="">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.sorting_key.label }}
+                    {{ form.sorting_key(class="form-control") }}
+                    {{ form.sorting_order.label }}
+                    {{ form.sorting_order(class="form-control") }}
+                </div>
+                </br>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+            </br>
+            {% if form.validate_on_submit() %}
+                {% if bnb_list %}
+                    {% for item in bnb_list %}
+                        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; width: 80%; word-wrap: break-word; overflow: hidden; display: flex; flex-direction: column;">
+                            <div style="overflow: hidden;">
+                                <h3 style="margin: 0;">{{ item['name'] }}</h3>
+                            </div>
+                
+                            <div style="display: flex;">
+                                <div style="flex: 0 0 30%; margin-right: 10px;">
+                                    <br>
+                                    <img src="{{ item['picture_url'] }}" alt="Immagine" style="width: 100%; height: auto;">
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <br>
+                                <p>
+                                    <b style="font-size: larger;">
+                                        Price:
+                                        {{ item['price'] }}$ per night
+                                    </b>
+                                    <br><br> 
+                                    <b>Description</b>
+                                    <br>
+                                    {{ item['description']|safe }}
+                                    <br><br>
+                                    <b>Review Score</b>
+                                    {{ item['review_scores_rating']|safe}}
+                                    <br><br>
+                                    <p>
+                                        <b><a href="{{ item['listing_url'] }}" target="_blank">Book this spot on AirBnb.com</a></b>
+                                    </p>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h3 style="margin: 0;">Your search did't produce any result</h3>
+                {% endif %}
+            {% endif %}
+        </div>
+    </body>
+</html>
+{% endblock %}

@@ -57,10 +57,9 @@ def BnbPerZip(zip_list, bnb_df):
     return airbnb_df
 
 def get_bnb_by_neighborhood(target_neighborhood):
-    result_list = []
     neighborhood_df = bnb[bnb['neighbourhood_group_cleansed'] == target_neighborhood]
 
     # Convert the filtered DataFrame to a list of dictionaries
-    result_list = neighborhood_df.to_dict(orient='records')
+    #result_list = neighborhood_df.to_dict(orient='records')
 
-    return result_list
+    return neighborhood_df.head(50)

@@ -24,7 +24,7 @@
                         </p>
                     {% endif %}
                 {% endfor %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="/neighbourhood?neighbourhood=Manhattan" class="btn btn-primary">Manhattan AirBnbs</a>
             </div>
         </div>
         
@@ -43,7 +43,7 @@
                         </p>
                     {% endif %}
                 {% endfor %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="/neighbourhood?neighbourhood=Queens" class="btn btn-primary">Queens AirBnbs</a>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                         </p>
                     {% endif %}
                 {% endfor %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="/neighbourhood?neighbourhood=Bronx" class="btn btn-primary">Bronx AirBnbs</a>
             </div>
         </div>
 
@@ -81,7 +81,7 @@
                         </p>
                     {% endif %}
                 {% endfor %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="/neighbourhood?neighbourhood=Brooklyn" class="btn btn-primary">Brooklyn AirBnbs</a>
             </div>
         </div>
 
@@ -90,7 +90,7 @@
             <div class="card-body">
                 <h5 class="card-title">Staten Island</h5>
                 {% for item in borough_list %}
-                    {% if item['Neighborhood'] == 'Manhattan' %}
+                    {% if item['Neighborhood'] == 'Staten Island' %}
                         <p class="card-text">
                             <b>AQI:</b>
                             {{ item['AQI'] }}
@@ -100,7 +100,7 @@
                         </p>
                     {% endif %}
                 {% endfor %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <a href="/neighbourhood?neighbourhood=Staten%20Island" class="btn btn-primary">Staten Island AirBnbs</a>
             </div>
         </div>
     </body>
