@@ -8,20 +8,35 @@
         <title> {% block title %} Search of Frontend {% endblock %}</title>
     </head>
     <body>
+        
         <div class="card d-inline-block" style="width: 40%;">
             <img src="static/tour-manhattan-589x392.jpg.avif" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Manhattan</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                {% for item in borough_list %}
+                    {% if item['Neighborhood'] == 'Manhattan' %}
+                        <p class="card-text">
+                            AQI:
+                            {{ item['AQI'] }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
-
+        
         <div class="card d-inline-block" style="width: 40%;">
             <img src="static/astoria.jpg" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Queens</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                {% for item in borough_list %}
+                    {% if item['Neighborhood'] == 'Queens' %}
+                        <p class="card-text">
+                            AQI:
+                            {{ item['AQI'] }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -30,7 +45,14 @@
             <img src="static/c65c7758-cf4c-4774-9144-53e703c9ff62.jpg.webp" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Bronx</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                {% for item in borough_list %}
+                    {% if item['Neighborhood'] == 'Bronx' %}
+                        <p class="card-text">
+                            AQI:
+                            {{ item['AQI'] }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -39,7 +61,14 @@
             <img src="static/puente-brooklyn-noche.jpg.webp" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Brooklyn</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                {% for item in borough_list %}
+                    {% if item['Neighborhood'] == 'Brooklyn' %}
+                        <p class="card-text">
+                            AQI:
+                            {{ item['AQI'] }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -48,7 +77,14 @@
             <img src="static/GettyImages-550760083.jpg" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Staten Island</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                {% for item in borough_list %}
+                    {% if item['Neighborhood'] == 'Manhattan' %}
+                        <p class="card-text">
+                            AQI:
+                            {{ item['AQI'] }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
