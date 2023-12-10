@@ -21,6 +21,7 @@ class SeachBnBForm(FlaskForm):
                                       'Extremely'])
     sorting_key = SelectField('Sort by:', choices = [('price', 'Price'),
                                                                ('review_scores_rating','Reviews')])
+    sorting_order = SelectField('Sorting Order:', choices= [(0,'Ascending'), (1,'Descending')])
 
     submit = SubmitField('Search')
 
@@ -68,9 +69,9 @@ def index():
             data = [elem for elem in data]
             data = data[:20]
             if form.sorting_key.data == 'review_scores_rating':
-                data = sorted(data, key = lambda x: int(x[form.sorting_key.data]*100), reverse = True)
+                data = sorted(data, key = lambda x: int(x[form.sorting_key.data]*100), reverse = bool(int(form.sorting_order.data)))
             else: 
-                data = sorted(data, key = lambda x: x[form.sorting_key.data], reverse = True)
+                data = sorted(data, key = lambda x: x[form.sorting_key.data], reverse = bool(int(form.sorting_order.data)))
             return render_template('search.html',
                                    form=form,
                                    string_list=data,
