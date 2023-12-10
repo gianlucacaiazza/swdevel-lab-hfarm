@@ -34,7 +34,7 @@ def search_bnb(min, max, trees_bool, crime_rate ):
     
     res = data_handling.commonZip(zipcodes_attr, zipcodes_crime, zipcodes_trees)
 
-    val = data_handling.cheapestBnbPerZip(res, bnb)
+    val = data_handling.BnbPerZip(res, bnb)
 
     list_of_dicts = val.to_json(orient='records')
 

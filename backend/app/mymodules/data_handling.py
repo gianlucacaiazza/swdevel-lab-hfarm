@@ -51,8 +51,8 @@ def commonZip(zip_1, zip_2, zip_3):
     
 
 # Find the cheapest zipcode for each zipcode in the list
-def cheapestBnbPerZip(zip_list, bnb_df):
-    filtered_airbnb_df = bnb_df[bnb_df['zipcode'].isin(zip_list)]
-    min_price_airbnb_df = filtered_airbnb_df.loc[filtered_airbnb_df.groupby('zipcode')['price'].idxmin()]
+def BnbPerZip(zip_list, bnb_df):
+    airbnb_df = bnb_df[bnb_df['zipcode'].isin(zip_list)]
     
-    return min_price_airbnb_df
+    
+    return airbnb_df

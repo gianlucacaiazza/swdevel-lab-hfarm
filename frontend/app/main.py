@@ -19,6 +19,8 @@ class SeachBnBForm(FlaskForm):
     crime_rate = SelectField('How much do you care for a crime-free area?:',
                              choices=['Not at all', 'Very little', 'Enough',
                                       'Extremely'])
+    sorting_key = SelectField('Sort by:', choices = [('price', 'Price'),
+                                                               ('review_scores_rating','Reviews')])
 
     submit = SubmitField('Search')
 
@@ -64,6 +66,11 @@ def index():
             data = response.json()
             data = json.loads(data)
             data = [elem for elem in data]
+            data = data[:20]
+            if form.sorting_key.data == 'review_scores_rating':
+                data = sorted(data, key = lambda x: int(x[form.sorting_key.data]*100), reverse = True)
+            else: 
+                data = sorted(data, key = lambda x: x[form.sorting_key.data], reverse = True)
             return render_template('search.html',
                                    form=form,
                                    string_list=data,

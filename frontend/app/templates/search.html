@@ -21,6 +21,8 @@
                     {{ form.n_attr(class="form-control") }}
                     {{ form.trees_bool.label }}
                     {{ form.trees_bool(class="form-control") }}
+                    {{ form.sorting_key.label }}
+                    {{ form.sorting_key(class="form-control") }}
                 </div>
                 </br>
                 {{ form.submit(class="btn btn-primary") }}
@@ -51,6 +53,9 @@
                                     <b>Description</b>
                                     <br>
                                     {{ item['description']|safe }}
+                                    <br><br>
+                                    <b>Review Score</b>
+                                    {{ item['review_scores_rating']|safe}}
                                     <br><br>
                                     <p>
                                         <b><a href="{{ item['listing_url'] }}" target="_blank">Book this spot on AirBnb.com</a></b>
