@@ -41,6 +41,11 @@ def search_bnb(min, max, trees_bool, crime_rate ):
 
     return list_of_dicts
 
+@app.get('/neighbourhood')
+def get_borough(neighbourhood):
+    data = data_handling.get_bnb_by_neighborhood(neighbourhood)
+    return data
+
 @app.get('/index')
 def air_quality():
     neigh = {'Bronx' : (40.844784,-73.864830),
