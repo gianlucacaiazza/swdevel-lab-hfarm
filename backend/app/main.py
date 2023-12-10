@@ -10,7 +10,7 @@ app = FastAPI()
 
 
 # Creating dataframes with pandas
-attractions = pd.read_csv('Datasets/Locations.csv')
+attractions = pd.read_csv('Datasets/Location.csv')
 crime = pd.read_csv('Datasets/CrimeCount.csv')
 stations = pd.read_csv('Datasets/Stations.csv')
 trees = pd.read_csv('Datasets/Trees.csv')

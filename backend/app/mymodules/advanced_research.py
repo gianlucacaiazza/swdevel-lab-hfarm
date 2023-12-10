@@ -4,7 +4,7 @@ import json
 
 #constants
 AIRBNB = pd.read_csv('Datasets/AirBnb.csv')
-ATTRACTION = pd.read_csv('Datasets/Location2.csv')
+ATTRACTION = pd.read_csv('Datasets/Location.csv')
 EARTH_RADIUS = 6378137  # Earth's radius in meters
 CIRCUMFERENCE = 2 * math.pi * EARTH_RADIUS  # Earth's circumference in meters
 
@@ -15,6 +15,12 @@ class GeoCoords:
         self.latitude = latitude
         self.longitude = longitude
 
+def convert_price(price_str):
+    prezzo_float = float(price_str.replace('$', '').replace(',', ''))
+
+    return int(prezzo_float)
+
+AIRBNB['price'] = AIRBNB['price'].apply(convert_price)
 
 def calculate_center(selected_attractions):
     '''
