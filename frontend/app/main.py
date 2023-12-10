@@ -27,7 +27,16 @@ class SeachBnBForm(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    response = requests.get('http://backend/index')
+    error_message = None
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+        return render_template('index.html', borough_list = data)
+    else:
+        error_message = f'Error: Unable to fetch data from FastAPI Backend'
+        return render_template('index.html', error_message=error_message)
     
 
 @app.route('/search', methods=['GET', 'POST'])

@@ -75,5 +75,4 @@ def air_quality():
 
         airquality.append(neighborhood_dict)
 
-
     return airquality
