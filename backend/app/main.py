@@ -44,7 +44,8 @@ def search_bnb(min, max, trees_bool, crime_rate ):
 @app.get('/neighbourhood')
 def get_borough(neighbourhood):
     data = data_handling.get_bnb_by_neighborhood(neighbourhood)
-    return data
+    list = data.to_json(orient='records')
+    return list
 
 @app.get('/index')
 def air_quality():

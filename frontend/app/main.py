@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, SelectField
@@ -25,6 +25,14 @@ class SeachBnBForm(FlaskForm):
 
     submit = SubmitField('Search')
 
+
+class neighbourhoodBnbForm(FlaskForm):
+    sorting_key = SelectField('Sort by:', choices = [('price', 'Price'),
+                                                     ('review_scores_rating','Reviews')])
+    sorting_order = SelectField('Sorting Order:', choices= [(0,'Ascending'), (1,'Descending')])
+    submit = SubmitField('Search')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     response = requests.get('http://backend/index')
@@ -32,7 +40,6 @@ def index():
 
     if response.status_code == 200:
         data = response.json()
-        print(data)
         return render_template('index.html', borough_list = data)
     else:
         error_message = f'Error: Unable to fetch data from FastAPI Backend'
@@ -80,7 +87,6 @@ def search():
             data = response.json()
             data = json.loads(data)
             data = [elem for elem in data]
-            data = data[:20]
             if form.sorting_key.data == 'review_scores_rating':
                 data = sorted(data, key = lambda x: int(x[form.sorting_key.data]*100), reverse = bool(int(form.sorting_order.data)))
             else: 
@@ -95,6 +101,36 @@ def search():
     return render_template('search.html', form=form, result=None,
                            error_message=error_message)
 
+
+@app.route('/neighbourhood', methods=['GET', 'POST'])
+def return_borough():
+    neighbourhood = request.args.get('neighbourhood')
+    form = neighbourhoodBnbForm()
+    error_message = None
+
+    if form.validate_on_submit():
+        response = requests.get(
+                'http://backend/neighbourhood',
+                params={
+                    'neighbourhood': neighbourhood
+                }
+            )
+        if response.status_code == 200:
+                data = response.json()
+                data = json.loads(data)
+                data = [elem for elem in data]
+                if form.sorting_key.data == 'review_scores_rating':
+                    data = sorted(data, key = lambda x: int(x[form.sorting_key.data]*100), reverse = bool(int(form.sorting_order.data)))
+                else: 
+                    data = sorted(data, key = lambda x: x[form.sorting_key.data], reverse = bool(int(form.sorting_order.data)))
+                return render_template('neighbourhood.html',
+                                    form=form,
+                                    bnb_list=data,
+                                    error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data from FastAPI Backend'
+    return render_template('neighbourhood.html', form=form, result=None,
+                           error_message=error_message)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
