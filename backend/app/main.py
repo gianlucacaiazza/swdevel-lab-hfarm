@@ -1,84 +1,84 @@
-"""
-Backend module for the FastAPI application.
-
-This module defines a FastAPI application that serves
-as the backend for the project.
-"""
-
 from fastapi import FastAPI
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-from datetime import datetime
+from .mymodules import data_handling
 import pandas as pd
-
-
-from .mymodules.birthdays import return_birthday, print_birthdays_str
+import requests
+import time
 
 app = FastAPI()
 
-# Dictionary of birthdays
-birthdays_dictionary = {
-    'Albert Einstein': '03/14/1879',
-    'Benjamin Franklin': '01/17/1706',
-    'Ada Lovelace': '12/10/1815',
-    'Donald Trump': '06/14/1946',
-    'Rowan Atkinson': '01/6/1955'
-}
 
-df = pd.read_csv('/app/app/employees.csv')
-
-@app.get('/csv_show')
-def read_and_return_csv():
-    aux = df['Age'].values
-    return{"Age": str(aux.argmin())}
-
-@app.get('/')
-def read_root():
-    """
-    Root endpoint for the backend.
-
-    Returns:
-        dict: A simple greeting.
-    """
-    return {"Hello": "World"}
+# Creating dataframes with pandas
+attractions = pd.read_csv('Datasets/Locations.csv')
+crime = pd.read_csv('Datasets/CrimeCount.csv')
+stations = pd.read_csv('Datasets/Stations.csv')
+trees = pd.read_csv('Datasets/Trees.csv')
+zip = pd.read_csv('Datasets/zip_neighbourhood.csv')
+bnb = pd.read_csv('Datasets/AirBnb.csv')
 
 
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
-    """
-    Endpoint to query birthdays based on person_name.
+def convert_price(price_str):
+    prezzo_float = float(price_str.replace('$', '').replace(',', ''))
 
-    Args:
-        person_name (str): The name of the person.
+    return int(prezzo_float)
 
-    Returns:
-        dict: Birthday information for the provided person_name.
-    """
-    person_name = person_name.title()  # Convert to title case for consistency
-    birthday = birthdays_dictionary.get(person_name)
-    if birthday:
-        return {"person_name": person_name, "birthday": birthday}
-    else:
-        return {"error": "Person not found"}
+bnb['price'] = bnb['price'].apply(convert_price)
 
 
-@app.get('/module/search/{person_name}')
-def read_item_from_module(person_name: str):
-    return {return_birthday(person_name)}
+@app.get('/search')
+def search_bnb(min, max, trees_bool, crime_rate ):
+    min = int(min)
+    max = int(max)
+    crime_rate = int(crime_rate)
+    zipcodes_attr = data_handling.corrZipAtt(min, max)
+    zipcodes_trees = data_handling.corrZipTrees(trees_bool)
+    zipcodes_crime = data_handling.corrZipCrime(crime_rate)
+    
+    res = data_handling.commonZip(zipcodes_attr, zipcodes_crime, zipcodes_trees)
 
+    val = data_handling.BnbPerZip(res, bnb)
 
-@app.get('/module/all')
-def dump_all_birthdays():
-    return {print_birthdays_str()}
+    list_of_dicts = val.to_json(orient='records')
 
+    return list_of_dicts
 
-@app.get('/get-date')
-def get_date():
-    """
-    Endpoint to get the current date.
+@app.get('/neighbourhood')
+def get_borough(neighbourhood):
+    data = data_handling.get_bnb_by_neighborhood(neighbourhood)
+    list = data.to_json(orient='records')
+    return list
 
-    Returns:
-        dict: Current date in ISO format.
-    """
-    current_date = datetime.now().isoformat()
-    return JSONResponse(content={"date": current_date})
+@app.get('/index')
+def air_quality():
+    neigh = {'Bronx' : (40.844784,-73.864830),
+             'Manhattan' : (40.783058, -73.971252),
+             'Queens' : (40.728226, -73.794853),
+             'Brooklyn' : (40.678177, -73.944160),
+             'Staten Island' : (40.5834557, -74.1496048)
+            }
+    airquality = []
+    for neighborhood, coordinates in neigh.items():
+        
+        lat = str(coordinates[0])
+        lon = str(coordinates[1])
+        current_date = str(int(time.time()))
+        request = 'http://api.openweathermap.org/data/2.5/air_pollution/history?lat='+ lat + '&lon=' + lon + '&start=946702800&end='+ current_date + '&appid=596dff3ac05aeb906e63803d2bfcf01a'
+        response = requests.get(request)
+        json = response.json()
+        aqi_values = [entry['main']['aqi'] for entry in json['list']]
+        mean_aqi = sum(aqi_values) / len(aqi_values)
+        if mean_aqi <= 1:
+            quality = 'Good'
+        elif mean_aqi<=2:
+            quality = 'Fair'
+        elif mean_aqi<=3:
+            quality =  'Moderate'
+        elif mean_aqi<=4:
+            quality = 'Poor'
+        else:
+            quality = 'Very Poor'
+
+        neighborhood_dict = {'Neighborhood': neighborhood, 'AQI': round(mean_aqi, 3), 'Quality': quality}
+
+        airquality.append(neighborhood_dict)
+
+    return airquality
