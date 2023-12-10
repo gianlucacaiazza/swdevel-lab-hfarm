@@ -60,8 +60,18 @@ def air_quality():
         json = response.json()
         aqi_values = [entry['main']['aqi'] for entry in json['list']]
         mean_aqi = sum(aqi_values) / len(aqi_values)
+        if mean_aqi <= 1:
+            quality = 'Good'
+        elif mean_aqi<=2:
+            quality = 'Fair'
+        elif mean_aqi<=3:
+            quality =  'Moderate'
+        elif mean_aqi<=4:
+            quality = 'Poor'
+        else:
+            quality = 'Very Poor'
 
-        neighborhood_dict = {'Neighborhood': neighborhood, 'AQI': round(mean_aqi, 3)}
+        neighborhood_dict = {'Neighborhood': neighborhood, 'AQI': round(mean_aqi, 3), 'Quality': quality}
 
         airquality.append(neighborhood_dict)
 
