@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
+import csv
 
 
 app = FastAPI()
@@ -34,6 +35,31 @@ def get_charging_stations_provider_given_street_name(street_name):
         return f" The provider for the charging station present in {street_name} is {charging_station['titolare'].values[0]}"
     else:
         return "Unfortunately the street name you inserted is not present in our database"
+
+
+@app.get('/module/search/{provider_name}')
+def get_charging_points_by_provider(provider_name):
+    """
+    Retrieve charging points based on the provided provider's name.
+
+    Args:
+    - provider_name (str): The name of the charging point provider.
+
+    Returns:
+    - List[dict]: List of dictionaries containing charging point information.
+    """
+    charging_points = []
+    with open('/app/app/ricarica_colonnine.csv', newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=';')
+        
+        for row in reader:
+            if row['titolare'].upper() == provider_name.upper():
+                charging_points.append({
+                    'localita': row['localita'].capitalize(),
+                    'tipologia': row['tipologia'],
+                    'numero_col': row['numero_col']
+                })
+    return charging_points
 
 
 @app.get('/get-date')
