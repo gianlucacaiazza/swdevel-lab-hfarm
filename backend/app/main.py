@@ -10,27 +10,13 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
+import csv
 
-
-from .mymodules.birthdays import return_birthday, print_birthdays_str
 
 app = FastAPI()
 
-# Dictionary of birthdays
-birthdays_dictionary = {
-    'Albert Einstein': '03/14/1879',
-    'Benjamin Franklin': '01/17/1706',
-    'Ada Lovelace': '12/10/1815',
-    'Donald Trump': '06/14/1946',
-    'Rowan Atkinson': '01/6/1955'
-}
+df = pd.read_csv('/app/app/ricarica_colonnine.csv', sep=';')
 
-df = pd.read_csv('/app/app/employees.csv')
-
-@app.get('/csv_show')
-def read_and_return_csv():
-    aux = df['Age'].values
-    return{"Age": str(aux.argmin())}
 
 @app.get('/')
 def read_root():
@@ -42,34 +28,38 @@ def read_root():
     """
     return {"Hello": "World"}
 
+@app.get('/module/search/{street_name}')
+def get_charging_stations_provider_given_street_name(street_name):
+    charging_station=df[df['nome_via']== street_name]
+    if not charging_station.empty:
+        return f" The provider for the charging station present in {street_name} is {charging_station['titolare'].values[0]}"
+    else:
+        return "Unfortunately the street name you inserted is not present in our database"
 
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
+
+@app.get('/module/search/{provider_name}')
+def get_charging_points_by_provider(provider_name):
     """
-    Endpoint to query birthdays based on person_name.
+    Retrieve charging points based on the provided provider's name.
 
     Args:
-        person_name (str): The name of the person.
+    - provider_name (str): The name of the charging point provider.
 
     Returns:
-        dict: Birthday information for the provided person_name.
+    - List[dict]: List of dictionaries containing charging point information.
     """
-    person_name = person_name.title()  # Convert to title case for consistency
-    birthday = birthdays_dictionary.get(person_name)
-    if birthday:
-        return {"person_name": person_name, "birthday": birthday}
-    else:
-        return {"error": "Person not found"}
-
-
-@app.get('/module/search/{person_name}')
-def read_item_from_module(person_name: str):
-    return {return_birthday(person_name)}
-
-
-@app.get('/module/all')
-def dump_all_birthdays():
-    return {print_birthdays_str()}
+    charging_points = []
+    with open('/app/app/ricarica_colonnine.csv', newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=';')
+        
+        for row in reader:
+            if row['titolare'].upper() == provider_name.upper():
+                charging_points.append({
+                    'localita': row['localita'].capitalize(),
+                    'tipologia': row['tipologia'],
+                    'numero_col': row['numero_col']
+                })
+    return charging_points
 
 
 @app.get('/get-date')
