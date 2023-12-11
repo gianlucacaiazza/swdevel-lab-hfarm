@@ -1,4 +1,4 @@
-from vintage_modules import filter_wines_by_vintage
+from vintage_module import filter_wines_by_vintage
 
 # List of CSV file names related to different types of wines
 wines = ['Red.csv', 'Rose.csv', 'Sparkling.csv', 'White.csv']
