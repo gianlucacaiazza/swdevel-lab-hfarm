@@ -14,12 +14,6 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 
 # Configuration for the FastAPI backend URL
 FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
-BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
-
-
-class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
 
 
 @app.route('/')
@@ -49,35 +43,6 @@ def fetch_date_from_backend():
     except requests.exceptions.RequestException as e:
         print(f"Error fetching date from backend: {e}")
         return 'Date not available'
-
-
-@app.route('/internal', methods=['GET', 'POST'])
-def internal():
-    """
-    Render the internal page.
-
-    Returns:
-        str: Rendered HTML content for the index page.
-    """
-    form = QueryForm()
-    error_message = None  # Initialize error message
-
-    if form.validate_on_submit():
-        person_name = form.person_name.data
-
-        # Make a GET request to the FastAPI backend
-        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{person_name}'
-        response = requests.get(fastapi_url)
-
-        if response.status_code == 200:
-            # Extract and display the result from the FastAPI backend
-            data = response.json()
-            result = data.get('birthday', f'Error: Birthday not available for {person_name}')
-            return render_template('internal.html', form=form, result=result, error_message=error_message)
-        else:
-            error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
-
-    return render_template('internal.html', form=form, result=None, error_message=error_message)
 
 
 if __name__ == '__main__':
