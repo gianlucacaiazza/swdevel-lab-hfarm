@@ -33,3 +33,6 @@ def find_songs_for_passion():
               (spotify_songs['instrumentalness'].between(0.0, 0.5)) &
               (spotify_songs['valence'].between(0.5, 1.0)) &
               (spotify_songs['tempo'].between(80, 120))].sample(5)[['track_name', 'track_artist']]
+
+def discover_random_song():
+    return spotify_songs.sample(1)[['track_name', 'track_artist']]
