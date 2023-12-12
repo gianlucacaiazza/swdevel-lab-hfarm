@@ -14,6 +14,8 @@ import pandas as pd
 
 from .mymodules.birthdays import return_birthday, print_birthdays_str
 
+
+from mood.py import find_songs_for_party, find_songs_for_chill, find_songs_for_workout, find_songs_for_passion, discover_random_song
 app = FastAPI()
 
 # Dictionary of birthdays
@@ -24,6 +26,15 @@ birthdays_dictionary = {
     'Donald Trump': '06/14/1946',
     'Rowan Atkinson': '01/6/1955'
 }
+
+mood_functions = {
+    "party": find_songs_for_party,
+    "chill": find_songs_for_chill,
+    "workout": find_songs_for_workout,
+    "passion": find_songs_for_passion,
+    "discover": discover_random_song  
+}
+
 
 df = pd.read_csv('/app/app/employees.csv')
 
@@ -82,3 +93,10 @@ def get_date():
     """
     current_date = datetime.now().isoformat()
     return JSONResponse(content={"date": current_date})
+
+@app.get('/mood/{mood_name}')
+def get_songs_by_mood(mood_name: str):
+    if mood_name in mood_functions:
+        return mood_functions[mood_name]()
+    else:
+        raise HTTPException(status_code=404, detail="Mood not found")
