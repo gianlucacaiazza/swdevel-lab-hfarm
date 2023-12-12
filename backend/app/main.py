@@ -43,7 +43,7 @@ def get_charging_stations_provider_given_street_name(street_name):
         return "Unfortunately the street name you inserted is not present in our database"
 
 
-@app.get('/module/search/{provider_name}')
+@app.get('/module/lookfor/{provider_name}')
 def get_charging_points_by_provider(provider_name):
     """
     Retrieve charging points based on the provided provider's name.
