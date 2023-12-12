@@ -18,7 +18,7 @@ import pandas as pd
 from .mymodules.mood import find_songs_for_party, find_songs_for_chill, find_songs_for_workout, find_songs_for_passion, discover_random_song
 app = FastAPI()
 
-
+from .mymodules.info import count_songs, artist_songs, get_song_count_by_genre, genre_popularity
 
 mood_functions = {
     "party": find_songs_for_party,
@@ -35,3 +35,19 @@ def get_songs_by_mood(mood_name: str):
         return mood_functions[mood_name]()
     else:
         raise HTTPException(status_code=404, detail="Mood not found")
+    
+
+info_functions ={
+    "c_songs" : count_songs,
+    "a_songs" : artist_songs,
+    "genre" : get_song_count_by_genre,
+    "p_genre" : genre_popularity
+}
+
+@app.get('/info/{info_g}')
+def get_info(info_g: str):
+    if info_g in info_functions:
+        result = info_functions[info_g]()
+        return result
+    else:
+         raise HTTPException(status_code=404, detail="Information not found")
