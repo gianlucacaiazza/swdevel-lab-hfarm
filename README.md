@@ -1,4 +1,4 @@
-# swdevel-lab-hfarm
+# AMA group project 
  Skeleton Project for the Lab of Software Project Development
 
 # Flask and FastAPI Dockerized Project
