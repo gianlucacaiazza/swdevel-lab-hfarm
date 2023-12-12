@@ -18,6 +18,11 @@ app = FastAPI()
 
 df = pd.read_csv('/app/app/ricarica_colonnine.csv', sep=';')
 
+@app.get('/addresses/{area_name}')
+def get_via_by_area(area_name):
+    filtered_data = df[df['nome_nil'] == area_name]
+    return filtered_data['nome_via'].tolist()
+
 
 @app.get('/')
 def read_root():
