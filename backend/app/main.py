@@ -6,7 +6,7 @@ as the backend for the project.
 """
 
 from fastapi import FastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
@@ -15,7 +15,7 @@ import pandas as pd
 from .mymodules.birthdays import return_birthday, print_birthdays_str
 
 
-from mood.py import find_songs_for_party, find_songs_for_chill, find_songs_for_workout, find_songs_for_passion, discover_random_song
+from .mymodules.mood import find_songs_for_party, find_songs_for_chill, find_songs_for_workout, find_songs_for_passion, discover_random_song
 app = FastAPI()
 
 # Dictionary of birthdays
