@@ -13,3 +13,6 @@ def get_song_count_by_genre():
         subgenre_counts = songs_spotify['playlist_subgenre'].value_counts().to_dict()
         return subgenre_counts
 
+def count_songs(csv_path):      
+        total_songs_count = len(spotify_songs)       
+        return total_songs_count
