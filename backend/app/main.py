@@ -5,7 +5,7 @@ This module defines a FastAPI application that serves
 as the backend for the project.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -105,6 +105,27 @@ def numbers_of_stations_per_via(street_name_input: str = None):
         return result
     else:
         return '/'
+
+def get_socket_types_by_zone(zone: str):
+    try:
+        # Filter the DataFrame for the specified zone
+        zone_data = df[df['localita'] == zone]
+
+        # Check if the zone exists
+        if zone_data.empty:
+            raise HTTPException(status_code=404, detail=f"Zone '{zone}' not found.")
+
+        # Get the unique socket types in the zone
+        socket_types = zone_data['infra'].unique().tolist()
+
+        return {"zone": zone, "socket type": socket_types}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/socket_types_by_zone/{zone}")
+async def socket_types_by_zone(zone: str):
+    return get_socket_types_by_zone(zone)
+
 
 
 @app.get('/get-date')
