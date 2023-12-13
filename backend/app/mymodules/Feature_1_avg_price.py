@@ -1,7 +1,8 @@
 
 import pandas as pd
 import inquirer
-
+import sys 
+#sys.path.append('/app/mymodules/df_integrations')
 from df_integrations import flights
 
 def calculate_average_price(data, departure, arrival):
@@ -72,3 +73,5 @@ if average_price is not None:
     print(f"\nThe average price for a flight departing from {departure_airport} and arriving to {arrival_airport} is £{average_price:.2f}.")
 else:
     print(f"\nNo data available for the specified route.")
+
+

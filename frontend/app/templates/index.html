@@ -1,12 +1,31 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Price Calculator</title>
+</head>
+<body>
+    <h1>Flight Price Calculator</h1>
+    
+    <form action="/calculate_average_price" method="post">
+        <label for="departure_airport">Select Departure Airport:</label>
+        <select id="departure_airport" name="departure_airport">
+            {% for airport in departure_airports %}
+                <option value="{{ airport }}">{{ airport }}</option>
+            {% endfor %}
+        </select>
 
-{% block title %} Homepage of Frontend {% endblock %}
+        <br>
 
-{% block content %}
-    <div class="container mt-5">
-        <h1>Hello, world!</h1>
-        <p>Date from Backend: {{ date_from_backend }}</p>
-    </div>
+        <label for="arrival_airport">Select Arrival Airport:</label>
+        <select id="arrival_airport" name="arrival_airport">
+            <!-- Arrival airports will be populated dynamically based on the selected departure airport -->
+        </select>
 
-{% endblock %}
+        <br>
 
+        <input type="submit" value="Calculate Average Price">
+    </form>
+</body>
+</html>

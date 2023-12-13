@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # Fetching unique departure airports from the FastAPI backend
-    departure_airports = requests.get('http://0.0.0.0:80/departure_airports').json()
+    departure_airports = requests.get('http://localhost:8000/departure_airports').json()
 
     return render_template('index.html', departure_airports=departure_airports)
 
@@ -17,11 +17,10 @@ def calculate_average_price():
     arrival_airport = request.form.get('arrival_airport')
 
     # Sending a request to the FastAPI backend to calculate the average price
-    response = requests.get(f'http://0.0.0.0:80/{departure_airport}/{arrival_airport}')
+    response = requests.get(f'http://localhost:8000/{departure_airport}/{arrival_airport}')
     result = response.json()
 
     return render_template('result.html', result=result)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
-
+    app.run(debug=True)
