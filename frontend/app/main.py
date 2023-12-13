@@ -4,7 +4,7 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -16,18 +16,16 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
 
 
-<<<<<<< Updated upstream
-=======
 class ProviderForm(FlaskForm):
     provider_name = StringField('Provider Name:')
     submit = SubmitField('Search')
+
 
 class QueryForm(FlaskForm):
     street_name = StringField('Street name:')
     submit = SubmitField('Get number of columns from FastAPI Backend')
 
-
->>>>>>> Stashed changes
+    
 @app.route('/')
 def index():
     """
@@ -39,6 +37,7 @@ def index():
     # Fetch the date from the backend
     date_from_backend = fetch_date_from_backend()
     return render_template('index.html', date_from_backend=date_from_backend)
+  
 
 def fetch_date_from_backend():
     """
@@ -57,8 +56,6 @@ def fetch_date_from_backend():
         return 'Date not available'
 
 
-<<<<<<< Updated upstream
-=======
 @app.route('/provider', methods=['GET', 'POST'])
 def provider():
     form = ProviderForm()
@@ -77,12 +74,6 @@ def provider():
         else:
             error_message = f'Error: Unable to fetch data for {provider_name} from FastAPI Backend'
     return render_template('provider.html', form=form, result=None, error_message=error_message)
-
-'''
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
-
-'''
 
 
 @app.route('/number_stations', methods=['GET', 'POST'])
@@ -112,6 +103,6 @@ def number_stations():
 
     return render_template('number_stations.html', form=form, result=None, error_message=error_message)
 
->>>>>>> Stashed changes
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
