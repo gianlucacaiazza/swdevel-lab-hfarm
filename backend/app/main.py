@@ -68,7 +68,7 @@ def get_charging_points_by_provider(provider_name):
     return charging_points
 
 
-@app.get('/get_charging_stations')
+@app.get('/get_charging_point')
 def numbers_of_stations_per_via(street_name):
     selected_street = df[df['nome_via'] == street_name]
     
