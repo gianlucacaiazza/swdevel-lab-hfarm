@@ -25,6 +25,10 @@ class QueryForm(FlaskForm):
     street_name = StringField('Street name:')
     submit = SubmitField('Get number of columns from FastAPI Backend')
 
+class ZoneForm(FlaskForm):
+    zone_name=StringField('Zone name')
+    submit=SubmitField('Get types of sockets from FASTAPI Backend')
+
     
 @app.route('/')
 def index():
@@ -103,6 +107,26 @@ def number_stations():
 
     return render_template('number_stations.html', form=form, result=None, error_message=error_message)
 
+    
+@app.route('/socket_types', methods=['GET', 'POST'])
+def socket_types():
+    error_message = None
+    form = None
+
+    if request.method == 'POST':
+        zone_name = request.form.get('zone_name')
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/socket_types_by_zone/{zone_name}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            form = ZoneForm()
+            return render_template('socket_types.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data for {zone_name} from FASTAPI backend'
+
+    form = ZoneForm()
+    return render_template('socket_types.html', form=form, result=None, error_message=error_message)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
