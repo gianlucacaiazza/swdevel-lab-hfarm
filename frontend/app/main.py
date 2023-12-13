@@ -21,6 +21,11 @@ class ProviderForm(FlaskForm):
     submit = SubmitField('Search')
 
 
+class QueryForm(FlaskForm):
+    street_name = StringField('Street name:')
+    submit = SubmitField('Get number of columns from FastAPI Backend')
+
+    
 @app.route('/')
 def index():
     """
@@ -32,6 +37,7 @@ def index():
     # Fetch the date from the backend
     date_from_backend = fetch_date_from_backend()
     return render_template('index.html', date_from_backend=date_from_backend)
+  
 
 def fetch_date_from_backend():
     """
@@ -68,6 +74,34 @@ def provider():
         else:
             error_message = f'Error: Unable to fetch data for {provider_name} from FastAPI Backend'
     return render_template('provider.html', form=form, result=None, error_message=error_message)
+
+
+@app.route('/number_stations', methods=['GET', 'POST'])
+def number_stations():
+    """
+    Render the internal page.
+
+    Returns:
+        str: Rendered HTML content for the index page.
+    """
+    form = QueryForm()
+    error_message = None  # Initialize error message
+
+    if form.validate_on_submit():
+        street_name = form.street_name.data
+
+        # Make a GET request to the FastAPI backend
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/get_charging_stations/{street_name}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            # Extract and display the result from the FastAPI backend
+            data = response.json()
+            return render_template('number_stations.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch dict_vie for {street_name} from FastAPI Backend'
+
+    return render_template('number_stations.html', form=form, result=None, error_message=error_message)
 
 
 if __name__ == '__main__':
