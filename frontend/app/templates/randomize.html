@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Destination Randomizer {% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Destination Randomizer</h1>
+        <p>Inserisci il nome dell'aeroporto di partenza e scopri una destinazione casuale!</p>
+        <form method="POST" action="{{ url_for('show_result') }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.departure.label }}
+                {{ form.departure(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+{% endblock %}
