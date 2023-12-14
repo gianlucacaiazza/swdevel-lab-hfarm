@@ -15,8 +15,7 @@ from mymodules.Cleaning import flights_data_cleaned
 from mymodules.df_integrations import flights
 from mymodules.Feature_1_avg_price import calculate_average_price, filter_destinations
 from mymodules.Avg_Class_Price import calculate_average_price_airline
-
-
+from mymodules.Destination_random import randomize_destination
 
 
 
@@ -54,12 +53,9 @@ def average_web(AIRLINES):
     return result
 
 
-@app.get('/get_airport')
-def airports():
-    airports = flights['Departure'].drop_duplicates().to_json(orient = 'records')
-    return airports
-
 @app.get('/{Departure}/{Arrival}')
 def avg_price(Departure:str, Arrival:str):
     result = calculate_average_price(flights, Departure, Arrival)
+    result = round(result,2)
+    result = "{:.2f}".format(result)
     return result

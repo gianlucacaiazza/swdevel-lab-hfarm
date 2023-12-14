@@ -5,7 +5,7 @@
     <h1>Result</h1>
     
     {% if result %}
-        <p><b>the average price for the connection is: </b>{{ result }} £</p>
+        <p><b>The average price for your selected connection {{ departure }} - {{ arrival }} is: </b>{{ result }} £</p>
     {% else %}
         <p>{{ message }}</p>
     {% endif %}

@@ -4,8 +4,8 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1>Airlines prices</h1>
-        <p>Inserisci la airlines e paragona i prezzi!</p>
+        <h1>Average Connection Price</h1>
+        <p>Select your departure and arrival airports to get the average price for the connection.</p>
         <form method="POST" action="{{ url_for('resultshow') }}">
             {{ form.csrf_token }}
             <div class="form-group">

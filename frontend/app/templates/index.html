@@ -4,8 +4,38 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1>Hey there sailor!</h1>
-        <p>Welcome to <i><b>WePole Travels</b></i>, how can we assist you today?</p>
+        <h1><b>Hey there sailor!</b></h1>
+        <h2>Welcome to <i><b>WePole Travels</b></i>, how can we assist you today?</h2>
     </div>
+    <style>
+        h1 {
+         font-size: 70px; /* Adjust the font size to make it larger or smaller */
+         padding: 10px; /* Adds space inside the h1 element */
+         margin: 20px 0; /* Adds space outside the h1 element */
+        }
+        h2 {
+         font-size:30px;
+         padding: 10px;
+        }
+
+        .main-content {
+          display: flex; /* Enables flexbox layout for the container */
+          justify-content: center; /* Centers content horizontally */
+          align-items: center; /* Centers content vertically */
+          flex-direction: column; /* Stacks items vertically */
+          margin-top: 10px; /* Height of your navbar */
+        }
+    
+        /* Style your image here if needed */
+        .centered-logo {
+          max-width: 80%; /* Ensures the image is responsive */
+          height: auto; /* Maintains aspect ratio */
+          /* Additional styling if needed */
+        }
+      </style>
+    
+        <div class="main-content">
+          <img class="centered-logo" src="{{ url_for('static', filename='WEPOLELOGO.png') }}" alt="WEPOLE TRAVELS Logo", width="600">
+        </div>
 {% endblock %}
 

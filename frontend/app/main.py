@@ -38,8 +38,10 @@ def index():
 def calculate_average_price():
     # Extracting selected departure and arrival airports from the form
     form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_airport')
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
     airports = json.loads(response.json())
+    airports = [airport for airport in airports if airport is not None]
+    airports = sorted(airports)
     form.Departure.choices = airports
     form.Arrival.choices = airports
     Departure = airports
@@ -65,7 +67,7 @@ def resultshow():
             if response.status_code == 200:
                 data = response.json()
                 if data:
-                    return render_template('result_avg.html', result = data)
+                    return render_template('result_avg.html', result = data, departure = Departure, arrival = Arrival)
                 else:
                     return render_template('result_avg.html', message = 'No Result')
             else:
