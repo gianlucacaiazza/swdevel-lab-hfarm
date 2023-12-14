@@ -109,6 +109,7 @@ def numbers_of_stations_per_via(street_name_input: str = None):
 def get_socket_types_by_zone(zone: str):
     try:
         # Filter the DataFrame for the specified zone
+        zone=zone.upper()
         zone_data = df[df['localita'] == zone]
 
         # Check if the zone exists
