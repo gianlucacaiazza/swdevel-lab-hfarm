@@ -1,7 +1,16 @@
+
+=======
+"""
+Frontend module for the Flask application.
+
+This module defines a simple Flask application that serves as the frontend for the project.
+"""
+
+
 from flask import Flask, render_template, request
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
@@ -13,12 +22,9 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
 
-#-------------------------------
 
-from flask import Flask, render_template, request
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField
-import requests
+
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  
@@ -89,10 +95,23 @@ class AddressesForm(FlaskForm):
     ])
     submit = SubmitField('Get Area_name from FastAPI Backend')
 
+class ProviderForm(FlaskForm):
+    provider_name = SelectField()
+
+class QueryForm(FlaskForm):
+    street_name = StringField('Street name:')
+    submit = SubmitField('Get number of columns from FastAPI Backend')
+
+class ZoneForm(FlaskForm):
+    zone_name=StringField('Zone name')
+    submit=SubmitField('Get types of sockets from FASTAPI Backend')
+
+    
 @app.route('/')
 def index():
     date_from_backend = fetch_date_from_backend()
     return render_template('index.html', date_from_backend=date_from_backend)
+  
 
 def fetch_date_from_backend():
     backend_url = 'http://backend/get-date'
@@ -123,5 +142,78 @@ def addresses():
     return render_template('addresses.html', form=form, result=None, error_message=error_message)
 
 
+@app.route('/provider', methods=['GET', 'POST'])
+def provider():
+    error_message = None  # Initialize error message
+    form = None  # Initialize form as None
+
+    if request.method == 'POST':
+        provider_name = request.form.get('provider_name')
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/lookfor/{provider_name}'
+        response = requests.get(fastapi_url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            form = ProviderForm()  # Reinitialize form if needed
+            return render_template('provider.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data for {provider_name} from FastAPI Backend'
+
+    form = ProviderForm()  # Initialize form for initial GET request
+    return render_template('provider.html', form=form, result=None, error_message=error_message)
+
+
+@app.route('/number_stations', methods=['GET', 'POST'])
+def number_stations():
+    """
+    Render the internal page.
+
+    Returns:
+        str: Rendered HTML content for the index page.
+    """
+    form = QueryForm()
+    error_message = None  # Initialize error message
+
+    if form.validate_on_submit():
+        street_name = form.street_name.data
+
+        # Make a GET request to the FastAPI backend
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/get_charging_stations/{street_name}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            # Extract and display the result from the FastAPI backend
+            data = response.json()
+            return render_template('number_stations.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch dict_vie for {street_name} from FastAPI Backend'
+
+    return render_template('number_stations.html', form=form, result=None, error_message=error_message)
+
+    
+@app.route('/socket_types', methods=['GET', 'POST'])
+def socket_types():
+    error_message = None
+    form = None
+
+    if request.method == 'POST':
+        zone_name = request.form.get('zone_name')
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/socket_types_by_zone/{zone_name}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            form = ZoneForm()
+            return render_template('socket_types.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data for {zone_name} from FASTAPI backend'
+
+    form = ZoneForm()
+    return render_template('socket_types.html', form=form, result=None, error_message=error_message)
+
 if __name__ == '__main__':
+
     app.run(host='0.0.0.0', port=81, debug=True)
+=======
+    app.run(host='0.0.0.0', port=80, debug=True)
+

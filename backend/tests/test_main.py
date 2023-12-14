@@ -22,28 +22,28 @@ def test_read_main():
     assert response.json() == {"Hello": "World"}
 
 
-def test_success_read_item():
-    response = client.get("/query/Albert Einstein")
+def test_provider_name_exists():
+    # Test when the provider name exists in the CSV
+    response = client.get("/module/lookfor/Sorgenia")
     assert response.status_code == 200
-    assert response.json() == {"person_name": 'Albert Einstein', 
-                               "birthday": '03/14/1879'}
+    assert response.json() == [
+        {
+            'localita': 'Via algardi alessandro 4',
+            'tipologia': 'N',
+            'numero_col': '5'
+        }
+    ]
 
 
-""" def test_fail_read_item():
-    response = client.get("/query/Pippo")
-    assert response.status_code == 200
-    assert response.json() == {"error": "Person not found"} """
+def test_provider_name_does_not_exist():
+    # Test when the provider name does not exist in the CSV
+    response = client.get("/module/lookfor/pippo")
+    assert response.json() == []
 
 
-# The following will generate an error in pycheck
-""" def test_success_read_item_module():
-    response = client.get("/module/search/Albert Einstein")
-    assert response.status_code == 200
-    assert response.json() == {"Albert Einstein's birthday is 03/14/1879."} """
-
-
-# The following is correct, can you spot the diffence?
-def test_success_read_item_module():
-    response = client.get("/module/search/Albert Einstein")
-    assert response.status_code == 200
-    assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
+def test_case_insensitivity():
+    # Test case insensitivity for provider names
+    response_1 = client.get("/module/lookfor/SoRgEnIa")
+    response_2 = client.get("/module/lookfor/sorgenia")
+    response_3 = client.get("/module/lookfor/SORGENIA")
+    assert response_1.json() == response_2.json() == response_3.json()

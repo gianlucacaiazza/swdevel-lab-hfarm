@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %} Your Provider {% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h1>Find the charging points offered by your provider!</h1>
+        <p>You will see: 
+            <br>- Street name and house number 
+            <br>- Type of charging points  (N: Normal, F: Fast, Q: Quadricycle)
+            <br>- Number of charging points</p>
+    </div>
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label for="providerSelect">Select the name of your provider</label>
+            <select class="form-control" id="providerSelect" name="provider_name">
+                <option value="error_message">-no selection-</option>
+                <option value="A2A Energy Solutions">A2A Energy Solutions</option>
+                <option value="NHP">NHP</option>
+                <option value="Sorgenia">Sorgenia</option>
+                <option value="BeCharge">BeCharge</option>
+                <option value="ENERMIA">ENERMIA</option>
+                <option value="ENEL X Mobility">ENEL X Mobility</option>
+                <option value="PowerPoint City Car">PowerPoint City Car</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p></p>
+    {% if result %}
+    <table>
+        <thead>
+            <tr>
+                <th>Street and house number</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;Type</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in result %}
+                <tr class="result-item">
+                    <td>{{ item.localita }}</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ item.tipologia }}</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.numero_pdr }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+
+{% endblock %}
