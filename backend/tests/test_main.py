@@ -1,11 +1,14 @@
 import os
 import sys
 from fastapi.testclient import TestClient
+import pandas as pd
 
 # Add the project root to the sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Now you can do the relative import
 from app.main import app
+from app.mymodules.Destination_random import randomize_destination
+from app.mymodules.df_integrations import flights
 
 
 """
@@ -54,5 +57,28 @@ def test_success_destinations():
     assert response.status_code == 200
     print(response.json())
 
-
 test_success_destinations()
+
+def test_randomize_destination_valid_input():
+    # Test with a valid departure airport
+    departure = 'LONDONR'
+    response = client.get('/query/{departure}')
+    assert response.status_code == 200
+    print(response.json())
+
+def test_randomize_destination_invalid_input():
+    # Test with an invalid departure airport
+    departure = 'QWETHCSSDH'
+    response = client.get('/query/{departure}')
+    assert response.status_code == 200
+    if response == ['No departure found']:
+        return True
+
+def test_randomize_destination_empty_df():
+    # Test with an empty dataframe
+    empty_df = pd.DataFrame()
+    departure = 'ROME'
+    response = randomize_destination(departure, empty_df)
+    print (response)
+
+test_randomize_destination_valid_input()

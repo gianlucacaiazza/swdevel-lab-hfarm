@@ -24,8 +24,11 @@ class QueryForm(FlaskForm):
     Departure = SelectField('Departure: ')
     Arrival = SelectField('Arrival: ')
     submit = SubmitField('Result: ')
-
-
+    departure = SelectField('Departure:')
+    submit1 = SubmitField('Where can i go?')
+    airline = SelectField('Airlines:')
+    submit2 = SubmitField('Get airlines')
+    
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -72,6 +75,42 @@ def resultshow():
             return render_template('result_avg.html', message = f'Connection error: {str(e)}')
     return redirect(url_for('calculate_average_price'))
 
+
+@app.route('/randomize', methods=['GET', 'POST'])
+def randomize():
+    form = QueryForm()
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
+    departures = json.loads(response.json())
+    form.departure.choices=departures
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    if form.validate_on_submit():
+        departure = form.departure.data
+        response = requests.get(f'{BACKEND_URL}/{departure}')
+        data = response.json()
+        return render_template('randomize.html', form=form, result = data)
+    else:
+        return render_template('randomize.html', form=form, result = f'None')
+
+@app.route('/result', methods=['GET', 'POST'])
+def show_result():
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    if request.method == 'POST':
+        departure = request.form['departure']
+        try:
+            response = requests.get(f'{BACKEND_URL}/{departure}')
+            if response.status_code == 200:
+                data = response.json()
+                data = ', '.join(data)
+                if data:  # Check if there is a result
+                    return render_template('result.html', result=data)
+                else:
+                    return render_template('result.html', message="No result")
+            else:
+                status = response.status_code
+                return render_template('result.html', message="App not responding, response status = "f'{status}')
+        except requests.exceptions.ConnectionError as e:
+            return render_template('result.html', message=f"Connection error: {str(e)}")
+    return redirect(url_for('randomize'))
 
 
 if __name__ == '__main__':
