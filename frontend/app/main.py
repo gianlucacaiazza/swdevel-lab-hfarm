@@ -62,14 +62,14 @@ def resultshow():
             if response.status_code == 200:
                 data = response.json()
                 if data:
-                    return render_template('result.html', result = data)
+                    return render_template('result_avg.html', result = data)
                 else:
-                    return render_template('result.html', message = 'No Result')
+                    return render_template('result_avg.html', message = 'No Result')
             else:
                 status = response.status_code
-                return render_template('result.html', message = 'App not Responding = ' f'{status}')
+                return render_template('result_avg.html', message = 'App not Responding = ' f'{status}')
         except requests.exceptions.ConnectionError as e:
-            return render_template('result.html', message = f'Connection error: {str(e)}')
+            return render_template('result_avg.html', message = f'Connection error: {str(e)}')
     return redirect(url_for('calculate_average_price'))
 
 
