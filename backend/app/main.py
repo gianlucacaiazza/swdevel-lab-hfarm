@@ -63,7 +63,7 @@ def get_charging_points_by_provider(provider_name):
                 charging_points.append({
                     'localita': row['localita'].capitalize(),
                     'tipologia': row['tipologia'],
-                    'numero_col': row['numero_col']
+                    'numero_pdr': row['numero_pdr']
                 })
     return charging_points
 

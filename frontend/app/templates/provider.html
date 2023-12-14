@@ -4,35 +4,51 @@
 
 {% block content %}
 
-    <head>
-        <title>Charging Points by Provider</title>
-    </head>
-    <body>
-        <h1>Search Charging Points by Provider</h1>
-        <!-- WTForms Form to get input from the user -->
-        <form method="POST" action="">
-            {{ form.csrf_token }}
-            <div class="form-group">
-                {{ form.provider_name.label }}
-                {{ form.provider_name(class="form-control", placeholder="Enter provider name") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
-          <!-- Display the result here -->
-          <div id="resultContainer" class="mt-3">
-            {% if result %}
-            <ul>
-                {% for item in result %}
-                <li>{{ item.localita, item.tipologia, item.numero_col }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% if error_message %}
-                <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
+    <div class="container mt-5">
+        <h1>Find the charging points offered by your provider!</h1>
+        <p>You will see: 
+            <br>- Street name and house number 
+            <br>- Type of charging points  (N: Normal, F: Fast, Q: Quadricycle)
+            <br>- Number of charging points</p>
+    </div>
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label for="providerSelect">Select the name of your provider</label>
+            <select class="form-control" id="providerSelect" name="provider_name">
+                <option value="error_message">-no selection-</option>
+                <option value="A2A Energy Solutions">A2A Energy Solutions</option>
+                <option value="NHP">NHP</option>
+                <option value="Sorgenia">Sorgenia</option>
+                <option value="BeCharge">BeCharge</option>
+                <option value="ENERMIA">ENERMIA</option>
+                <option value="ENEL X Mobility">ENEL X Mobility</option>
+                <option value="PowerPoint City Car">PowerPoint City Car</option>
+            </select>
         </div>
-    </body>
-    </html>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p></p>
+    {% if result %}
+    <table>
+        <thead>
+            <tr>
+                <th>Street and house number</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;Type</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in result %}
+                <tr class="result-item">
+                    <td>{{ item.localita }}</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ item.tipologia }}</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.numero_pdr }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 
 
 {% endblock %}
