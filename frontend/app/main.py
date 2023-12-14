@@ -7,7 +7,7 @@ This module defines a simple Flask application that serves as the frontend for t
 from flask import Flask, render_template, request
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
@@ -17,9 +17,7 @@ FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your F
 
 
 class ProviderForm(FlaskForm):
-    provider_name = StringField('Provider Name:')
-    submit = SubmitField('Search')
-
+    provider_name = SelectField()
 
 class QueryForm(FlaskForm):
     street_name = StringField('Street name:')
@@ -62,21 +60,22 @@ def fetch_date_from_backend():
 
 @app.route('/provider', methods=['GET', 'POST'])
 def provider():
-    form = ProviderForm()
-    form.provider_name.label = 'Select the name of your provider'
     error_message = None  # Initialize error message
+    form = None  # Initialize form as None
 
-    if form.validate_on_submit():
-        provider_name = form.provider_name.data
+    if request.method == 'POST':
+        provider_name = request.form.get('provider_name')
         fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/lookfor/{provider_name}'
         response = requests.get(fastapi_url)
+        
         if response.status_code == 200:
             data = response.json()
-            #charging_points = data.get('Available charging points', f'Error: charging points not available for {provider_name}')
-            
+            form = ProviderForm()  # Reinitialize form if needed
             return render_template('provider.html', form=form, result=data, error_message=error_message)
         else:
             error_message = f'Error: Unable to fetch data for {provider_name} from FastAPI Backend'
+
+    form = ProviderForm()  # Initialize form for initial GET request
     return render_template('provider.html', form=form, result=None, error_message=error_message)
 
 
