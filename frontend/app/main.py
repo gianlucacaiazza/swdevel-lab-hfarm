@@ -7,7 +7,8 @@ This module defines a simple Flask application that serves as the frontend for t
 from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
@@ -20,6 +21,14 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 class QueryForm(FlaskForm):
     person_name = StringField('Person Name:')
     submit = SubmitField('Get Birthday from FastAPI Backend')
+
+class MoodForm(FlaskForm):
+    mood = SelectField('Scegli un Mood', choices=[
+        ('chill', 'Chill'),
+        ('workout', 'Workout'),
+        ('passion', 'Passion'),
+        ('party', 'Party')
+    ], validators=[DataRequired()])
 
 
 @app.route('/')
@@ -78,6 +87,23 @@ def internal():
             error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
 
     return render_template('internal.html', form=form, result=None, error_message=error_message)
+
+@app.route('/mood', methods=['GET', 'POST'])
+def mood():
+    form = MoodForm()
+    error_message = None
+    songs = None
+
+    if form.validate_on_submit():
+        selected_mood = form.mood.data
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/mood/{selected_mood}'
+        response = requests.get(fastapi_url)
+        if response.status_code == 200:    
+            songs = response.json()
+        else:
+            error_message = f'Error: Failed to retrive playlist for {selected_mood} from FastAPI Backend'
+
+    return render_template('mood.html', form=form, songs=songs, error_message=error_message)
 
 
 if __name__ == '__main__':
