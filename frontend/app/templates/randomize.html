@@ -5,14 +5,14 @@
 {% block content %}
     <div class="container mt-5">
         <h1>Destination Randomizer</h1>
-        <p>Inserisci il nome dell'aeroporto di partenza e scopri una destinazione casuale!</p>
+        <p>Choose the <i>preferred airport</i> to start your journey and let us surprise you!</p>
         <form method="POST" action="{{ url_for('show_result') }}">
             {{ form.csrf_token }}
             <div class="form-group">
                 {{ form.departure.label }}
                 {{ form.departure(class="form-control") }}
             </div>
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit1(class="btn btn-primary") }}
         </form>
     </div>
 {% endblock %}

@@ -27,8 +27,9 @@ FASTAPI_BACKEND_HOST = 'http://backend:80'  # Replace with the actual URL of you
 
 class QueryForm(FlaskForm):
     departure = SelectField('Departure:')
-    submit = SubmitField('Get destiantion from FastAPI Backend')
-
+    submit1 = SubmitField('Where can i go?')
+    airline = SelectField('Airlines:')
+    submit2 = SubmitField('Get airlines')
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -58,6 +59,7 @@ def show_result():
             response = requests.get(f'{BACKEND_URL}/{departure}')
             if response.status_code == 200:
                 data = response.json()
+                data = ', '.join(data)
                 if data:  # Check if there is a result
                     return render_template('result.html', result=data)
                 else:
@@ -68,7 +70,6 @@ def show_result():
         except requests.exceptions.ConnectionError as e:
             return render_template('result.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('randomize'))
-
 
 
 if __name__ == '__main__':

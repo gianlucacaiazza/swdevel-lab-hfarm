@@ -21,6 +21,8 @@ sys.path.append('app')
 from mymodules.Cleaning import flights_data_cleaned
 from mymodules.df_integrations import flights
 from mymodules.Destination_random import randomize_destination
+from mymodules.Avg_Class_Price import calculate_average_price_airline
+
 
 
 
@@ -46,6 +48,15 @@ def get_departure_from_csv():
     results = flights['Departure'].drop_duplicates().to_json(orient='records')
     return results
     
+@app.get('/get_airline')
+def airlines():
+    tt = flights_data_cleaned['Air Carrier'].drop_duplicates().to_json(orient='records')
+    return tt
+
+@app.get('/{AIRLINES}')
+def average_web(AIRLINES):
+    result = calculate_average_price_airline(flights, AIRLINES)
+    return result
 
 
 
