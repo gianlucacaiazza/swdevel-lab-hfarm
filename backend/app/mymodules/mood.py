@@ -40,5 +40,5 @@ def find_songs_for_passion():
 
 def discover_random_song():
     random_song = spotify_songs.sample(1)[['track_name', 'track_artist']].to_dict(orient='records')
-
+    return random_song
 print(type(find_songs_for_passion()))
