@@ -1,9 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title> choose your mood</title>
-    </head>
-    <body>
+<head>
+    <title>Seleziona il Mood</title>
+</head>
+<body>
+    <h1>Seleziona il Mood per la tua Playlist</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.mood.label }}<br>
+            {{ form.mood }}
+        </p>
+        <p><button type="submit">Crea la mia Playlist</button></p>
+    </form>
 
-    </body>
+    {% if songs %}
+        <h2>Playlist per {{ form.mood.data }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome Brano</th>
+                    <th>Artista</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in songs %}
+                    <tr>
+                        <td>{{ song.track_name }}</td>
+                        <td>{{ song.track_artist }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+</body>
 </html>
