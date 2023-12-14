@@ -47,3 +47,12 @@ def test_success_read_item_module():
     response = client.get("/module/search/Albert Einstein")
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
+
+def test_success_destinations():
+    departure = 'LONDON - LGW'
+    response = client.get('/get_airport')
+    assert response.status_code == 200
+    print(response.json())
+
+
+test_success_destinations()

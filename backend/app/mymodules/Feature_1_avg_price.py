@@ -1,6 +1,6 @@
 
 import pandas as pd
-import inquirer
+'''import inquirer'''
 import sys 
 #sys.path.append('/app/mymodules/df_integrations')
 from df_integrations import flights
@@ -29,7 +29,7 @@ def calculate_average_price(data, departure, arrival):
 
     return average_price
 
-def prompt_for_airports(flights_data):
+'''ef prompt_for_airports(flights_data):
     # Extract unique departure airports
     departure_airports = list(flights_data['Departure'].unique())
 
@@ -60,18 +60,22 @@ def prompt_for_airports(flights_data):
     answers = inquirer.prompt(arrival_question)
     arrival_airport = answers['arrival_airport']
 
-    return departure_airport, arrival_airport
-
-# Prompt the user for departure and arrival airports
-departure_airport, arrival_airport = prompt_for_airports(flights)
-
-# Calculate average price
-average_price = calculate_average_price(flights, departure_airport, arrival_airport)
-
-# Display result
-if average_price is not None:
-    print(f"\nThe average price for a flight departing from {departure_airport} and arriving to {arrival_airport} is £{average_price:.2f}.")
-else:
-    print(f"\nNo data available for the specified route.")
+    return departure_airport, arrival_airport'''
 
 
+
+def filter_destinations(data, departure_airport):
+    """
+    Filter function to find all possible destinations from a given departure airport.
+    
+    :param data: DataFrame containing flight information.
+    :param departure_airport: The departure airport to filter by.
+    :return: A list of unique destinations from the given departure airport.
+    """
+    # Filter the data for the given departure airport
+    filtered_data = data[data['Departure'] == departure_airport]
+
+    # Get the list of unique destinations
+    destinations = filtered_data['Arrival'].unique()
+
+    return destinations
