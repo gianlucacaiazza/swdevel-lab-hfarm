@@ -87,7 +87,24 @@ def provider_street_name():
             return render_template('street_name.html', form=form, result=data, error_message=error_message)
         else:
             error_message = f'Error: Unable to fetch data for {street_name} form FastAPI backend'
-    return render_template('street_name.html', form=form, result=None, error_message=error_message)
+    return render_template('street_name1.html', form=form, result=None, error_message=error_message)
+
+@app.route('/street_name1', methods=['GET','POST'])
+def provider_street_name1():
+    form = ProviderstreetnameForm()
+    error_message= None
+
+    if form.validate_on_submit():
+        street_name1 = form.street_name1.data
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/search/{street_name1}'
+        response = requests.get(fastapi_url)
+        if response.status_code == 200:
+            data = response.json()
+            return render_template('street_name1.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data for {street_name1} form FastAPI backend'
+    return render_template('street_name1.html', form=form, result=None, error_message=error_message)
+
 
 
 if __name__ == '__main__':
