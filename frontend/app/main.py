@@ -83,6 +83,8 @@ def randomize():
     form = QueryForm()
     response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
     departures = json.loads(response.json())
+    departures = [departure for departure in departures if departure is not None]
+    departures = sorted(departures)
     form.departure.choices=departures
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
     if form.validate_on_submit():
