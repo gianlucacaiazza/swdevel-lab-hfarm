@@ -1,5 +1,4 @@
 
-=======
 """
 Frontend module for the Flask application.
 
@@ -212,8 +211,5 @@ def socket_types():
     return render_template('socket_types.html', form=form, result=None, error_message=error_message)
 
 if __name__ == '__main__':
-
-    app.run(host='0.0.0.0', port=81, debug=True)
-=======
     app.run(host='0.0.0.0', port=80, debug=True)
 
