@@ -4,81 +4,74 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, Request, redirect, url_for, request
+app = Flask(__name__)
+
+# ... [Altra configurazione necessaria, se presente] ...
+
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 
 # Configuration for the FastAPI backend URL
-FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
-BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
+FASTAPI_BACKEND_HOST = 'http://backend:80'  # Replace with the actual URL of your FastAPI backend
+
+
+
+
 
 
 class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
-
-
+    departure = SelectField('Departure:')
+    submit1 = SubmitField('Where can i go?')
+    airline = SelectField('Airlines:')
+    submit2 = SubmitField('Get airlines')
 @app.route('/')
 def index():
-    """
-    Render the index page.
-
-    Returns:
-        str: Rendered HTML content for the index page.
-    """
-    # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
-
-def fetch_date_from_backend():
-    """
-    Function to fetch the current date from the backend.
-
-    Returns:
-        str: Current date in ISO format.
-    """
-    backend_url = 'http://backend/get-date'  # Adjust the URL based on your backend configuration
-    try:
-        response = requests.get(backend_url)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-        return response.json().get('date', 'Date not available')
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching date from backend: {e}")
-        return 'Date not available'
+    return render_template('index.html')
 
 
-@app.route('/internal', methods=['GET', 'POST'])
-def internal():
-    """
-    Render the internal page.
-
-    Returns:
-        str: Rendered HTML content for the index page.
-    """
+@app.route('/randomize', methods=['GET', 'POST'])
+def randomize():
     form = QueryForm()
-    error_message = None  # Initialize error message
-
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
+    departures = json.loads(response.json())
+    form.departure.choices=departures
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
     if form.validate_on_submit():
-        person_name = form.person_name.data
+        departure = form.departure.data
+        response = requests.get(f'{BACKEND_URL}/{departure}')
+        data = response.json()
+        return render_template('randomize.html', form=form, result = data)
+    else:
+        return render_template('randomize.html', form=form, result = f'None')
 
-        # Make a GET request to the FastAPI backend
-        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{person_name}'
-        response = requests.get(fastapi_url)
-
-        if response.status_code == 200:
-            # Extract and display the result from the FastAPI backend
-            data = response.json()
-            result = data.get('birthday', f'Error: Birthday not available for {person_name}')
-            return render_template('internal.html', form=form, result=result, error_message=error_message)
-        else:
-            error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
-
-    return render_template('internal.html', form=form, result=None, error_message=error_message)
+@app.route('/result', methods=['GET', 'POST'])
+def show_result():
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    if request.method == 'POST':
+        departure = request.form['departure']
+        try:
+            response = requests.get(f'{BACKEND_URL}/{departure}')
+            if response.status_code == 200:
+                data = response.json()
+                data = ', '.join(data)
+                if data:  # Check if there is a result
+                    return render_template('result.html', result=data)
+                else:
+                    return render_template('result.html', message="No result")
+            else:
+                status = response.status_code
+                return render_template('result.html', message="App not responding, response status = "f'{status}')
+        except requests.exceptions.ConnectionError as e:
+            return render_template('result.html', message=f"Connection error: {str(e)}")
+    return redirect(url_for('randomize'))
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
+        
