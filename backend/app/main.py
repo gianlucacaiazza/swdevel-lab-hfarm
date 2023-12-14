@@ -5,7 +5,7 @@ This module defines a FastAPI application that serves
 as the backend for the project.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -13,15 +13,29 @@ import pandas as pd
 import csv
 
 
+
+app = FastAPI()
+
+
+from fastapi.responses import HTMLResponse
+
+
 app = FastAPI()
 
 
 df = pd.read_csv('/app/app/ricarica_colonnine.csv', sep=';')
 
-@app.get('/addresses/{area_name}')
-def get_via_by_area(area_name):
-    filtered_data = df[df['nome_nil'] == area_name]
-    return filtered_data['nome_via'].tolist()
+
+@app.get('/addresses/{name}', response_class=HTMLResponse)
+def get_via_by_area( name: str):
+    name_lower = name.lower()
+    filtered_data = df[df['nome_nil'].str.lower() == name_lower]
+    via_list = filtered_data['nome_via'].tolist()
+    return HTMLResponse(content=f"{via_list}", status_code=200)
+
+
+
+
 
 
 @app.get('/')
@@ -63,12 +77,12 @@ def get_charging_points_by_provider(provider_name):
                 charging_points.append({
                     'localita': row['localita'].capitalize(),
                     'tipologia': row['tipologia'],
-                    'numero_col': row['numero_col']
+                    'numero_pdr': row['numero_pdr']
                 })
     return charging_points
 
 
-@app.get('/get_charging_stations')
+@app.get('/get_charging_point')
 def numbers_of_stations_per_via(street_name):
     selected_street = df[df['nome_via'] == street_name]
     
@@ -105,6 +119,27 @@ def numbers_of_stations_per_via(street_name_input: str = None):
         return result
     else:
         return '/'
+
+def get_socket_types_by_zone(zone: str):
+    try:
+        # Filter the DataFrame for the specified zone
+        zone_data = df[df['localita'] == zone]
+
+        # Check if the zone exists
+        if zone_data.empty:
+            raise HTTPException(status_code=404, detail=f"Zone '{zone}' not found.")
+
+        # Get the unique socket types in the zone
+        socket_types = zone_data['infra'].unique().tolist()
+
+        return {"zone": zone, "socket type": socket_types}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/socket_types_by_zone/{zone}")
+async def socket_types_by_zone(zone: str):
+    return get_socket_types_by_zone(zone)
+
 
 
 @app.get('/get-date')
