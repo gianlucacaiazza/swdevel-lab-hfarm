@@ -29,15 +29,42 @@ from mymodules.Feature_1_avg_price import calculate_average_price, filter_destin
 
 
 
-@app.get('/')
-def read_root():
-    """
-    Root endpoint for the backend.
 
-    Returns:
-        dict: A simple greeting.
-    """
-    return {"Hello": "World"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.get('/get_airport')
 def airports():
