@@ -11,6 +11,24 @@ from mymodules.df_integrations import flights
 from mymodules.Feature_1_avg_price import calculate_average_price, filter_destinations
 #from mymodule.feature import calculate_average_price, prompt_for_airports
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.get('/')
 def read_root():
     """
@@ -30,5 +48,3 @@ def airports():
 def avg_price(Departure:str, Arrival:str):
     result = calculate_average_price(flights, Departure, Arrival)
     return result
-
-
