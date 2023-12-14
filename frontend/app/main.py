@@ -19,12 +19,6 @@ FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your F
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
-
-
-
-
-
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  
 
@@ -97,14 +91,20 @@ class AddressesForm(FlaskForm):
 class ProviderForm(FlaskForm):
     provider_name = SelectField()
 
+    
 class QueryForm(FlaskForm):
     street_name = StringField('Street name:')
     submit = SubmitField('Get number of columns from FastAPI Backend')
 
+
+class ProviderstreetnameForm(FlaskForm):
+    street_name = StringField('Street Name:')
+    submit = SubmitField('Search')
+
+    
 class ZoneForm(FlaskForm):
     zone_name=StringField('Zone name')
     submit=SubmitField('Get types of sockets from FASTAPI Backend')
-
     
 @app.route('/')
 def index():
@@ -160,6 +160,24 @@ def provider():
 
     form = ProviderForm()  # Initialize form for initial GET request
     return render_template('provider.html', form=form, result=None, error_message=error_message)
+
+@app.route('/street_name', methods=['GET','POST'])
+def provider_street_name():
+    form = ProviderstreetnameForm()
+    error_message= None
+
+    if form.validate_on_submit():
+        street_name = form.street_name.data
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/search/{street_name}'
+        response = requests.get(fastapi_url)
+        if response.status_code == 200:
+            data = response.json()
+            return render_template('street_name1.html', form=form, result=data, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch data for {street_name} form FastAPI backend'
+    return render_template('street_name1.html', form=form, result=None, error_message=error_message)
+
+
 
 
 @app.route('/number_stations', methods=['GET', 'POST'])
