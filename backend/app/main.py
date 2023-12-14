@@ -31,6 +31,7 @@ mood_functions = {
 
 @app.get('/mood/{mood_name}')
 def get_songs_by_mood(mood_name: str):
+    """"Retreive a list of songs matching a specified mood"""
     if mood_name in mood_functions:
         return mood_functions[mood_name]()
     else:
@@ -46,6 +47,7 @@ info_functions ={
 
 @app.get('/info/{info_g}')
 def get_info(info_g: str):
+    """"Retreive information take form the csv"""
     if info_g in info_functions:
         result = info_functions[info_g]()
         return result
