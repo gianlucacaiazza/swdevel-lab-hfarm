@@ -23,7 +23,7 @@ def artist_songs():
     sorted_artist_counts = dict(sorted(artist_counts.items()))
     return(sorted_artist_counts)
 
-def count_songs(csv_path):
+def count_songs():
     """Return a dictionary with the total count of songs in the dataset"""      
     total_songs_count = len(spotify_songs)       
     return total_songs_count
