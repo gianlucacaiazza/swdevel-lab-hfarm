@@ -13,15 +13,29 @@ import pandas as pd
 import csv
 
 
+
+app = FastAPI()
+
+
+from fastapi.responses import HTMLResponse
+
+
 app = FastAPI()
 
 
 df = pd.read_csv('/app/app/ricarica_colonnine.csv', sep=';')
 
-@app.get('/addresses/{area_name}')
-def get_via_by_area(area_name):
-    filtered_data = df[df['nome_nil'] == area_name]
-    return filtered_data['nome_via'].tolist()
+
+@app.get('/addresses/{name}', response_class=HTMLResponse)
+def get_via_by_area( name: str):
+    name_lower = name.lower()
+    filtered_data = df[df['nome_nil'].str.lower() == name_lower]
+    via_list = filtered_data['nome_via'].tolist()
+    return HTMLResponse(content=f"{via_list}", status_code=200)
+
+
+
+
 
 
 @app.get('/')
@@ -63,7 +77,7 @@ def get_charging_points_by_provider(provider_name):
                 charging_points.append({
                     'localita': row['localita'].capitalize(),
                     'tipologia': row['tipologia'],
-                    'numero_col': row['numero_col']
+                    'numero_pdr': row['numero_pdr']
                 })
     return charging_points
 
