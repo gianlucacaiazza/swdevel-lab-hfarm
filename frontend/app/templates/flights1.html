@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Airlines prices {% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Airlines prices</h1>
+        <p>Inserisci la airlines e paragona i prezzi!</p>
+        <form method="POST" action="{{ url_for('resultshow') }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.Departure.label }}
+                {{ form.Departure(class="form-control") }}
+                {{ form.Arrival.label }}
+                {{ form.Arrival(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+{% endblock %}
