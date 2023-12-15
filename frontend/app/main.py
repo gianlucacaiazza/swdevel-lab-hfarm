@@ -23,11 +23,12 @@ class QueryForm(FlaskForm):
     submit = SubmitField('Get Birthday from FastAPI Backend')
 
 class MoodForm(FlaskForm):
-    mood = SelectField('Scegli un Mood', choices=[
+    mood = SelectField('Choose a Mood', choices=[
         ('chill', 'Chill'),
         ('workout', 'Workout'),
         ('passion', 'Passion'),
-        ('party', 'Party')
+        ('party', 'Party'),
+        ('discover','Discover')
     ], validators=[DataRequired()])
 
 
