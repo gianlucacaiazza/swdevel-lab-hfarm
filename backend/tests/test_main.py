@@ -45,7 +45,7 @@ def test_provider_name_exists():
         {
             'localita': 'Via algardi alessandro 4',
             'tipologia': 'N',
-            'numero_col': '5'
+            'numero_pdr': '10'
         }
     ]
 
@@ -86,6 +86,24 @@ def test_socket_types_does_not_exist():
     assert response.json() == expected_error
 
 
+
+def test_addresses_exists():
+    # Test when the street name exists in the CSV
+    response = client.get("/addresses/DUOMO")
+    assert response.status_code == 200
+
+    expected_response = ["VIA LARGA","LARGO FRANCESCO RICHINI","VIA SANTA VALERIA","LARGO RAFFAELE MATTIOLI","PIAZZA EDISON TOMMASO ","VIA SANTA MARIA ALLA PORTA","VIA RASTRELLI","VIA CORRENTI CESARE","PIAZZA QUASIMODO SALVATORE","CORSO ITALIA","VIA SANTA MARIA FULCORINA","PIAZZA ERCULEA","FORO BUONAPARTE","VIA LENTASIO","VIA NEGRI GAETANO","VIA ARMORARI","VIA LARGA"]
+
+    assert response.json() == expected_response
+
+
+def test_addresses_does_not_exist():
+    response = client.get("/addresses/NONEXISTENTAREA")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+
 def test_case_insensitivity():
     # Test case insensitivity for provider names
     response_1 = client.get("/module/lookfor/SoRgEnIa")
@@ -116,6 +134,15 @@ def test_case_insensitivity_street_name():
     response_2 = client.get("/module/search/VIALARGA")
     response_3 = client.get("/module/search/vialarga")
     assert response_1.json() == response_2.json() == response_3.json() 
+
+
+def test_case_insensitivity_addresses():
+    response_1 = client.get("/module/lookfor/DuOmO")
+    response_2 = client.get("/module/lookfor/duomo")
+    response_3 = client.get("/module/lookfor/DUOMO")
+    assert response_1.json() == response_2.json() == response_3.json()
+
+
 
 
 
