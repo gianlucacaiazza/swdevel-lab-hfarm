@@ -105,6 +105,23 @@ def mood():
 
     return render_template('mood.html', form=form, songs=songs, error_message=error_message)
 
+@app.route('/info')
+def info():
+    error_message = None
+    data = {}
+
+    info_list = ["c_songs", "genre", "p_genre"]
+
+    backend_url = f'{FASTAPI_BACKEND_HOST}/info/'
+
+    for info in info_list:
+        response = requests.get(backend_url + info)
+        if response.status_code == 200:
+            data[info] = response.json()
+        else:
+            error_message = f"Error: Unable to retrieve {info} from the backend."
+
+    return render_template('info.html', data=data, error_message=error_message)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
