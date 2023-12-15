@@ -22,6 +22,21 @@ def test_read_main():
     assert response.json() == {"Hello": "World"}
 
     
+def test_street_name_exists():
+    # Replace this with your actual API endpoint and client setup
+    response12 = client.get("/module/search/CORSO INDIPENDENZA")
+    excepted_response12 = "The provider for the charging station present in CORSO INDIPENDENZA is A2A Energy Solutions"
+    assert response12.status_code == 200
+    assert response12.json() == excepted_response12
+
+
+def test_street_name_does_not_exist():
+    # Test when the provider name does not exist in the CSV
+    response = client.get("/module/search/VIA CASALSERUGO")
+    expected_error = "Unfortunately the street name you inserted is not present in our database"
+    assert response.json() == expected_error
+
+
 def test_provider_name_exists():
     # Test when the provider name exists in the CSV
     response = client.get("/module/lookfor/Sorgenia")
@@ -78,7 +93,7 @@ def test_case_insensitivity():
     response_3 = client.get("/module/lookfor/SORGENIA")
     assert response_1.json() == response_2.json() == response_3.json()
 
-
+    
 def test_case_insensitivity_charg_points():
     # Test case insensitivity for street names
     response_1 = client.get("/get_charging_points/VIA LARGA")
@@ -93,6 +108,15 @@ def test_case_insensitivity_socket_types():
     response_2 = client.get("/socket_types_by_zone/via larga 7")
     response_3 = client.get("/socket_types_by_zone/VIA LARGA 7")
     assert response_1.json() == response_2.json() == response_3.json()
+    
+    
+def test_case_insensitivity_street_name():
+    #Test case insensitivity for provider names
+    response_1 = client.get("/module/search/ViALaRgA")
+    response_2 = client.get("/module/search/VIALARGA")
+    response_3 = client.get("/module/search/vialarga")
+    assert response_1.json() == response_2.json() == response_3.json() 
+
 
 
 
