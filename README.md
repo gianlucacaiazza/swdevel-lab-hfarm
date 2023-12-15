@@ -30,7 +30,7 @@ Feature 3: Artits present in the dataset organised in alphabetical order.
 
 **We ask the user to:** 
 
-Feature 1: make the system generate the perfcte playlist baed on the mood of the user 
+Feature 1: make the system generate the perfect playlist based on the mood of the user 
 
 Feature 2: know all the characteristics of the generated playlist 
 
