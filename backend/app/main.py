@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 import csv
+from typing import List
 
 
 
@@ -25,13 +26,15 @@ app = FastAPI()
 
 df = pd.read_csv('/app/app/ricarica_colonnine.csv', sep=';')
 
-
-@app.get('/addresses/{name}', response_class=HTMLResponse)
-def get_via_by_area( name: str):
+@app.get('/addresses/{name}', response_model=List[str])
+def get_via_by_area(name: str):
     name_lower = name.lower()
     filtered_data = df[df['nome_nil'].str.lower() == name_lower]
-    via_list = filtered_data['nome_via'].tolist()
-    return HTMLResponse(content=f"{via_list}", status_code=200)
+    if not filtered_data.empty:
+        via_list = filtered_data['nome_via'].tolist()
+        return via_list
+    else:
+        return []
 
 
 
@@ -50,6 +53,7 @@ def read_root():
 
 @app.get('/module/search/{street_name}')
 def get_charging_stations_provider_given_street_name(street_name):
+    street_name=street_name.upper()
     charging_station=df[df['nome_via']== street_name]
     if not charging_station.empty:
         return f"The provider for the charging station present in {street_name} is {charging_station['titolare'].values[0]}"
