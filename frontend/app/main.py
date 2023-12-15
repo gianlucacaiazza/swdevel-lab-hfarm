@@ -5,10 +5,6 @@ This module defines a simple Flask application that serves as the frontend for t
 """
 
 from flask import Flask, render_template, Request, redirect, url_for, request
-app = Flask(__name__)
-
-# ... [Altra configurazione necessaria, se presente] ...
-
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
@@ -38,7 +34,7 @@ def index():
 def calculate_average_price():
     # Extracting selected departure and arrival airports from the form
     form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_airport')
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
     airports = json.loads(response.json())
     form.Departure.choices = airports
     form.Arrival.choices = airports
