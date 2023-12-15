@@ -63,10 +63,9 @@ def resultshow():
                 if data:
                     return render_template('result_avg.html', result = data)
                 else:
-                    return render_template('result_avg.html', message = 'No Result')
+                    return render_template('result_avg.html', message = f"Unfortunately there isn't a flight connection between {Departure} and {Arrival}")
             else:
-                status = response.status_code
-                return render_template('result_avg.html', message = 'App not Responding = ' f'{status}')
+                return render_template('result_avg.html', message = f"Unfortunately there isn't a flight connection between {Departure} and {Arrival}")
         except requests.exceptions.ConnectionError as e:
             return render_template('result_avg.html', message = f'Connection error: {str(e)}')
     return redirect(url_for('calculate_average_price'))
