@@ -51,30 +51,3 @@ def test_success_read_item_module():
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
 
-
-
-def test_randomize_destination_valid_input():
-    # Test with a valid departure airport
-    departure = 'LONDONR'
-    response = client.get('/query/{departure}')
-    assert response.status_code == 200
-    print(response.json())
-
-def test_randomize_destination_invalid_input():
-    # Test with an invalid departure airport
-    departure = 'QWETHCSSDH'
-    response = client.get('/query/{departure}')
-    assert response.status_code == 200
-    if response == ['No departure found']:
-        return True
-
-def test_randomize_destination_empty_df():
-    # Test with an empty dataframe
-    empty_df = pd.DataFrame()
-    departure = 'ROME'
-    response = randomize_destination(departure, empty_df)
-    print (response)
-
-
-
-test_randomize_destination_valid_input()

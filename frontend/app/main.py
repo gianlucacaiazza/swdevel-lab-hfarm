@@ -52,7 +52,7 @@ def randomize():
 
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if request.method == 'POST':
         departure = request.form['departure']
         try:
