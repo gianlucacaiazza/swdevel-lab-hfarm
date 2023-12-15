@@ -52,7 +52,7 @@ def read_root():
 def get_charging_stations_provider_given_street_name(street_name):
     charging_station=df[df['nome_via']== street_name]
     if not charging_station.empty:
-        return f" The provider for the charging station present in {street_name} is {charging_station['titolare'].values[0]}"
+        return f"The provider for the charging station present in {street_name} is {charging_station['titolare'].values[0]}"
     else:
         return "Unfortunately the street name you inserted is not present in our database"
 
