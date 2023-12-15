@@ -25,11 +25,16 @@ Our goal was to allow everyone to find the correct song based on their mood.
 
 Feature 2: By analysing our dataset we were able to outline its characteristics. We selected: song number for each genre, number of songs of each artist, total number of songs present in the dataset. 
 
-Feature 3: artits present in the dataset organised in alphabetical order. 
+Feature 3: Artits present in the dataset organised in alphabetical order. 
 
 
 **We ask the user to:** 
 
+Feature 1: make the system generate the perfcte playlist baed on the mood of the user 
+
+Feature 2: know all the characteristics of the generated playlist 
+
+Feature 3: click on the initial letter of an artist in order to know all the artists whose names begin with the same letter and discover the songs of each artist
 
 **Dataset**
 
