@@ -23,6 +23,10 @@ The call to action is selecting their current mood from the available ones into 
 
 Our goal was to allow everyone to find the correct song based on their mood. 
 
+Feature 2: By analysing our dataset we were able to outline its characteristics. We selected: song number for each genre, number of songs of each artist, total number of songs present in the dataset. 
+
+Feature 3: artits present in the dataset organised in alphabetical order. 
+
 
 **We ask the user to:** 
 
