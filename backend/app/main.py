@@ -10,7 +10,6 @@ import sys
 app = FastAPI()
 sys.path.append('app')
 
-
 # Load flight data and integrate cleaning functions
 from mymodules.Cleaning import flights_data_cleaned
 from mymodules.df_integrations import flights
@@ -19,6 +18,10 @@ from mymodules.Avg_Class_Price import calculate_average_price_airline
 from mymodules.Destination_random import randomize_destination
 from mymodules.Feature4_Cheapest_to_fly import cheapest_to_fly
 
+
+
+
+app = FastAPI()
 
 
 @app.get('/')
@@ -54,6 +57,7 @@ def airlines():
 def average_web(AIRLINES):
     result = calculate_average_price_airline(flights, AIRLINES)
     return result
+
 
 @app.get('/avg/{Departure}/{Arrival}')
 def avg_price(Departure:str, Arrival:str):

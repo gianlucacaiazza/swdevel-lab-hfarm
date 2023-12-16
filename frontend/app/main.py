@@ -4,7 +4,9 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
-from flask import Flask, render_template, Request, redirect, url_for, request
+from flask import Flask, render_template, Request, redirect, url_for, request, jsonify
+app = Flask(__name__)
+
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
@@ -28,12 +30,10 @@ class QueryForm(FlaskForm):
     submit3 = SubmitField('Show Result')
 
 
-    
 @app.route('/')
 def index():
     return render_template('index.html')
 
-  
 @app.route('/airlines_comparator', methods=['GET', 'POST'])
 def airlines():
     form = QueryForm()
@@ -70,7 +70,6 @@ def show_results():
             return render_template('results_air.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('airlines'))
 
-  
 @app.route('/calculate_average_price', methods=['GET', 'POST'])
 def calculate_average_price():
     # Extracting selected departure and arrival airports from the form
@@ -193,6 +192,43 @@ def cheap_result():
         except requests.exceptions.ConnectionError as e:
             return render_template('cheap_result.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('cheapest'))
+
+@app.route('/airlines_comparator', methods=['GET', 'POST'])
+def airlines():
+    form = QueryForm()
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_airline')
+    airlines = json.loads(response.json())
+    form.airline.choices=airlines
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/{airlines}'
+    if form.validate_on_submit():
+        airlines = form.airline.data
+        response = requests.get(f'{BACKEND_URL}/{airlines}')
+        data = response.json()
+        return render_template('airlines.html', form=form, result = data)
+    else:
+        return render_template('airlines.html', form=form, result = f'None')
+
+      
+@app.route('/result-air', methods=['GET', 'POST'])
+def airlines_result():
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
+    if request.method == 'POST':
+        airlines = request.form['airline']
+        try:
+            response = requests.get(f'{BACKEND_URL}/{airlines}')
+            if response.status_code == 200:
+                data = response.json()
+                if data:  # Check if there is a result
+                    return render_template('results_air.html', result=data)
+                else:
+                    return render_template('results_air.html', message="No result")
+            else:
+                status = response.status_code
+                return render_template('results_air.html', message="App not responding, response status = "f'{status}')
+        except requests.exceptions.ConnectionError as e:
+            return render_template('results_air.html', message=f"Connection error: {str(e)}")
+    return redirect(url_for('airlines'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
