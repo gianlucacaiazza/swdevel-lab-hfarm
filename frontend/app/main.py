@@ -56,7 +56,7 @@ def show_results():
     if request.method == 'POST':
         airlines = request.form['airline']
         try:
-            response = requests.get(f'{BACKEND_URL}/{airlines}')
+            response = requests.get(f'{BACKEND_URL}/airlines-{airlines}')
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
@@ -83,7 +83,7 @@ def calculate_average_price():
     form.Arrival.choices = airports
     Departure = airports
     Arrival =  airports
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/{Departure}/{Arrival}'
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/avg/{Departure}/{Arrival}'
     if form.validate_on_submit():
         Departure = form.Departure.data
         Arrival = form.Arrival.data
@@ -124,7 +124,7 @@ def randomize():
     departures = [departure for departure in departures if departure is not None]
     departures = sorted(departures)
     form.departure.choices=departures
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if form.validate_on_submit():
         departure = form.departure.data
         response = requests.get(f'{BACKEND_URL}/{departure}')
@@ -159,11 +159,11 @@ def show_result():
 @app.route('/cheapest', methods=['GET', 'POST'])
 def cheapest():
     form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departures')
-    arrivals = json.loads(response.json())
-    arrivals = [a for a in arrivals if a is not None]
-    arrivals = sorted(arrivals)
-    form.Arrival.choices=arrivals
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_arrivals')
+    airports = json.loads(response.json())
+    airports = [airport for airport in airports if airport is not None]
+    airports = sorted(airports)
+    form.Arrival.choices=airports
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
     if form.validate_on_submit():
         arrivals = form.Arrival.data
@@ -178,9 +178,9 @@ def cheapest():
 def cheap_result():
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
     if request.method == 'POST':
-        arrivals = request.form['arrivals']
+        arrivals = request.form['Arrival']
         try:
-            response = requests.get(f'{BACKEND_URL}/{arrivals}')
+            response = requests.get(f'{BACKEND_URL}/arrival-{arrivals}')
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
