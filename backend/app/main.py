@@ -30,7 +30,7 @@ def read_root():
     """
     return {"Hello": "World"}
 
-@app.get("/query/{departure}")
+@app.get("/random/{departure}")
 def randomize_destination_endpoint(departure: str):
     result = randomize_destination(departure, flights)
     return result
