@@ -1,3 +1,7 @@
+
+import sys
+sys.path.append('app/mymodules')
+
 import pandas as pd
 
 import sys
@@ -16,7 +20,6 @@ df['Travel Date'] = pd.to_datetime(df['Travel Date'], format = '%d/%m/%Y')
 add_rows = []
 #create a condition (mask) that checks whether the value in the 'Ticket Single or Return' column is equal to 'Return'
 mask = df['Ticket Single or Return'] == 'Return'
-
 #slash price by half where mask value = TRUE
 df.loc[mask, 'Price in £'] = df.loc[mask, 'Price in £'] / 2
 
@@ -42,6 +45,4 @@ df.reset_index(drop=True, inplace=True)
 
 #our final dataset to use for the project 
 flights = df
-
-
 

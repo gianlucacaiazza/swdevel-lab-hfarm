@@ -27,16 +27,3 @@ def calculate_average_price_airline(flights, airline):
 
     # Return the results
     return results
-
-'''
-# Example usage
-chosen_airline = 'Airline Name'
-result = calculate_average_price_airline(flights, chosen_airline)
-
-# Display available airlines and prompt user for input
-chosen_airline = 'FLYBE'
-# Example usage
-result = calculate_average_price_airline(flights, chosen_airline)
-
-print(result)
-'''

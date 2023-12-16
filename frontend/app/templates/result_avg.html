@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Result</h1>
+    
+    {% if result %}
+        <p><b>The average price for your selected connection {{ departure }} - {{ arrival }} is: </b>{{ result }} £</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('calculate_average_price') }}">Try Again</a>
+</div>
+{% endblock %}
