@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Result</h1>
+    <h2><i>Don't know where to go?</i></h2>
+    {% if result %}
+        <p>have you considered this destination on this/these dates?</p>
+        <p>{{ result }}</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('randomize') }}">Try Again</a>
+</div>
+{% endblock %}

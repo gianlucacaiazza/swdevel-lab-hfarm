@@ -23,8 +23,3 @@ flights_data_cleaned.rename(columns={'Journey Finish Point':'Arrival'}, inplace=
 
 # Renaming an Air Carrier
 flights_data_cleaned['Air Carrier'] = flights_data_cleaned['Air Carrier'].replace('DO NOT USE - EASYJET - PLEASE ', 'EASYJET')
-
-
-
-
-
