@@ -51,6 +51,13 @@ def test_success_read_item_module():
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
 
+
+def test_cheapest_to_fly():
+    response = client.get('LONDON - LGW')
+    assert response.status_code == 200
+
+test_cheapest_to_fly()
+
 def test_success_destinations():
     departure = 'LONDON - LGW'
     response = client.get('/get_airport')
@@ -81,4 +88,9 @@ def test_randomize_destination_empty_df():
     response = randomize_destination(departure, empty_df)
     print (response)
 
-test_randomize_destination_valid_input()
+def test_get_arrivals():
+    response = client.get('/get_arrivals')
+    assert response.status_code == 200
+    print(response.json())
+
+test_get_arrivals()
