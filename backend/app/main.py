@@ -49,7 +49,8 @@ info_functions = {
 
 @app.get('/info/{info_g}')
 def get_info(info_g: str):
-    """"Retreive information take form the csv"""
+    """"Retrieves specific music-related information
+        based on the given category."""
     if info_g in info_functions:
         result = info_functions[info_g]()
         return result
