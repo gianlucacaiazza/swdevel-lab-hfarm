@@ -1,15 +1,24 @@
-"""
-Backend module for the FastAPI application.
 
-This module defines a FastAPI application that serves
-as the backend for the project.
-"""
 
 from fastapi import FastAPI
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
+import sys
+
+app = FastAPI()
+sys.path.append('app')
+
+
+from mymodules.Feature4_Cheapest_to_fly import cheapest_to_fly
+from mymodules.df_integrations import flights
+
+
+@app.get('/{Arrival}')
+def cheapest(Arrival:str):
+    result =cheapest_to_fly(flights, Arrival)
+    return result
 
 
 #app = FastAPI()

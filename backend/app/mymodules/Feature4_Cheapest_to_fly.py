@@ -1,5 +1,8 @@
 import pandas as pd
+import sys
+sys.path.append('app/mymodules')
 from df_integrations import flights
+
 
 def cheapest_to_fly(data, arrival):
 
@@ -13,4 +16,4 @@ def cheapest_to_fly(data, arrival):
 
     return cheapest
 
-print (cheapest_to_fly(flights, 'GLASGOW'))
+
