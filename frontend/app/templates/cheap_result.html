@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Result</h1>
+    <h2><i>Find the cheapest company to fly</i></h2>
+    {% if result %}
+        <p>{{ result }}</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('cheapest') }}">Try Again</a>
+</div>
+{% endblock %}

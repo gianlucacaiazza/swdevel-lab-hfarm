@@ -17,6 +17,8 @@ from mymodules.df_integrations import flights
 from mymodules.Feature_1_avg_price import calculate_average_price, filter_destinations
 from mymodules.Avg_Class_Price import calculate_average_price_airline
 from mymodules.Destination_random import randomize_destination
+from mymodules.Feature4_Cheapest_to_fly import cheapest_to_fly
+
 
 
 @app.get('/')
@@ -53,4 +55,14 @@ def avg_price(Departure:str, Arrival:str):
     result = calculate_average_price(flights, Departure, Arrival)
     result = round(result,2)
     result = "{:.2f}".format(result)
+    return result
+  
+@app.get('/get_arrivals')
+def get_departure_from_csv():
+    results = flights['Arrival'].drop_duplicates().to_json(orient='records')
+    return results
+
+@app.get('/{Arrival}')
+def cheapest(Arrival:str):
+    result =cheapest_to_fly(flights, Arrival)
     return result
