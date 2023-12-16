@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artists List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        
+        .alphabet-buttons {
+            text-align: center;
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .alphabet-buttons form {
+            margin: 5px;
+        }
+        .alphabet-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .alphabet-buttons button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Artists List</h1>
+        <div class="alphabet-buttons">
+            {% for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ#" %}
+            <form action="{{ url_for('get_artists_by_letter') }}" method="get" class="alphabet-form">
+                <button type="submit" name="letter" value="{{ char }}">{{ char }}</button>
+            </form>
+            {% endfor %}
+        </div>
+        {% if artists %}
+        <table id="artists-table">
+            <tr>
+                <th>Artist</th>
+                <th>Song Count</th>
+            </tr>
+            {% for artist, count in artists.items() %}
+            <tr>
+                <td>{{ artist }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No artists found for '{{ selected_letter }}'</p>
+        {% endif %}
+    </div>
+</body>
+</html>
