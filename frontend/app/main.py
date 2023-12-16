@@ -124,5 +124,21 @@ def info():
 
     return render_template('info.html', data=data, error_message=error_message)
 
+@app.route('/artists', methods=['GET'])
+def get_artists_by_letter():
+    letter = request.args.get('letter', '#')
+    fastapi_url = f'{FASTAPI_BACKEND_HOST}/info/a_songs'
+    response = requests.get(fastapi_url)
+    if response.status_code == 200:
+        all_artists = response.json()
+        filtered_artists = {
+            artist: count for artist, count in all_artists.items()
+            if artist.startswith(letter) or (letter == "#" and not artist[0].isalpha())
+        }
+        return render_template('artists.html', artists=filtered_artists, selected_letter=letter)
+    else:
+        # Gestire l'errore o mostrare un messaggio all'utente
+        return render_template('artists.html', artists={}, selected_letter=letter, error="Artists not found")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
