@@ -60,9 +60,9 @@ def show_results():
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
-                    return render_template('results_air.html', result=data)
+                    return render_template('results_air.html', airline = airlines, result=data)
                 else:
-                    return render_template('results_air.html', message="No result")
+                    return render_template('results_air.html', airline = airlines, message="No result")
             else:
                 status = response.status_code
                 return render_template('results_air.html', message="App not responding, response status = "f'{status}')
@@ -100,7 +100,7 @@ def resultshow():
         Departure = request.form['Departure']
         Arrival = request.form['Arrival']
         try:
-            response = requests.get(f'{BACKEND_URL}/{Departure}/{Arrival}')
+            response = requests.get(f'{BACKEND_URL}/avg/{Departure}/{Arrival}')
             if response.status_code == 200:
                 data = response.json()
                 if data:
@@ -135,18 +135,23 @@ def randomize():
       
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    IMG_URL = f'{FASTAPI_BACKEND_HOST}/img-'
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if request.method == 'POST':
         departure = request.form['departure']
         try:
+            # Chiamata per ottenere i dati di destinazione
             response = requests.get(f'{BACKEND_URL}/{departure}')
+            # Chiamata per ottenere il nome dell'immagine
             if response.status_code == 200:
                 data = response.json()
-                data = ', '.join(data)
-                if data:  # Check if there is a result
-                    return render_template('result.html', result=data)
+                give_output = ', '.join(data['give_output']) if 'give_output' in data else None
+                arrivalcity_output = data['arrivalcity'] if 'arrivalcity' in data else None
+
+                if give_output:
+                    return render_template('result.html', departure=departure, result=give_output, image=arrivalcity_output)
                 else:
-                    return render_template('result.html', message="No result")
+                    return render_template('result.html', departure=departure, message="No result")
             else:
                 status = response.status_code
                 return render_template('result.html', message="App not responding, response status = "f'{status}')
@@ -183,52 +188,15 @@ def cheap_result():
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
-                    return render_template('cheap_result.html', result=data)
+                    return render_template('cheap_result.html', arrival = arrivals, result=data, image = arrivals)
                 else:
-                    return render_template('cheap_result.html', message="No result")
+                    return render_template('cheap_result.html',arrival = arrivals, message="No result")
             else:
                 status = response.status_code
                 return render_template('cheap_result.html', message="App not responding, response status = "f'{status}')
         except requests.exceptions.ConnectionError as e:
             return render_template('cheap_result.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('cheapest'))
-
-@app.route('/airlines_comparator', methods=['GET', 'POST'])
-def airlines():
-    form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_airline')
-    airlines = json.loads(response.json())
-    form.airline.choices=airlines
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/{airlines}'
-    if form.validate_on_submit():
-        airlines = form.airline.data
-        response = requests.get(f'{BACKEND_URL}/{airlines}')
-        data = response.json()
-        return render_template('airlines.html', form=form, result = data)
-    else:
-        return render_template('airlines.html', form=form, result = f'None')
-
-      
-@app.route('/result-air', methods=['GET', 'POST'])
-def airlines_result():
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
-    if request.method == 'POST':
-        airlines = request.form['airline']
-        try:
-            response = requests.get(f'{BACKEND_URL}/{airlines}')
-            if response.status_code == 200:
-                data = response.json()
-                if data:  # Check if there is a result
-                    return render_template('results_air.html', result=data)
-                else:
-                    return render_template('results_air.html', message="No result")
-            else:
-                status = response.status_code
-                return render_template('results_air.html', message="App not responding, response status = "f'{status}')
-        except requests.exceptions.ConnectionError as e:
-            return render_template('results_air.html', message=f"Connection error: {str(e)}")
-    return redirect(url_for('airlines'))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

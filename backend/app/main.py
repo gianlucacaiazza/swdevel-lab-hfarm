@@ -34,9 +34,13 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/random/{departure}")
-def randomize_destination_endpoint(departure: str):
+def combined_endpoint(departure: str):
     result = randomize_destination(departure, flights)
-    return result
+    return {
+        "give_output": result['give_output'],
+        "arrivalcity": result['arrivalcity']
+    }
+
 
 @app.get('/get_arrivals')
 def get_arrival():
