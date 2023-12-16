@@ -18,8 +18,6 @@ FASTAPI_BACKEND_HOST = 'http://backend:80'  # Replace with the actual URL of you
 
 class QueryForm(FlaskForm):
 
-    departure = SelectField('Arrival: ')
-    submit = SubmitField('Show Result')
     Departure = SelectField('Departure: ')
     Arrival = SelectField('Arrival: ')
     submit = SubmitField('Result: ')
@@ -27,6 +25,8 @@ class QueryForm(FlaskForm):
     submit1 = SubmitField('Where can i go?')
     airline = SelectField('Airlines:')
     submit2 = SubmitField('Get airlines')
+    submit3 = SubmitField('Show Result')
+
 
     
 @app.route('/')
@@ -159,15 +159,15 @@ def show_result():
 @app.route('/cheapest', methods=['GET', 'POST'])
 def cheapest():
     form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_arrivals')
-    departures = json.loads(response.json())
-    departures = [departure for departure in departures if departure is not None]
-    departures = sorted(departures)
-    form.departure.choices=departures
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departures')
+    arrivals = json.loads(response.json())
+    arrivals = [a for a in arrivals if a is not None]
+    arrivals = sorted(arrivals)
+    form.Arrival.choices=arrivals
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
     if form.validate_on_submit():
-        departure = form.departure.data
-        response = requests.get(f'{BACKEND_URL}/{departure}')
+        arrivals = form.Arrival.data
+        response = requests.get(f'{BACKEND_URL}/{arrivals}')
         data = response.json()
         return render_template('cheapest.html', form=form, result = data)
     else:
@@ -176,7 +176,13 @@ def cheapest():
       
 @app.route('/cheap_result', methods=['GET', 'POST'])
 def cheap_result():
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'                
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}'
+    if request.method == 'POST':
+        arrivals = request.form['arrivals']
+        try:
+            response = requests.get(f'{BACKEND_URL}/{arrivals}')
+            if response.status_code == 200:
+                data = response.json()
                 if data:  # Check if there is a result
                     return render_template('cheap_result.html', result=data)
                 else:
@@ -187,7 +193,6 @@ def cheap_result():
         except requests.exceptions.ConnectionError as e:
             return render_template('cheap_result.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('cheapest'))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

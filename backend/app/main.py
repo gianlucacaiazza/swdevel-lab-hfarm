@@ -63,6 +63,6 @@ def get_departure_from_csv():
     return results
 
 @app.get('/{Arrival}')
-def cheapest(Arrival:str):
+def cheapest(Arrival):
     result =cheapest_to_fly(flights, Arrival)
     return result
