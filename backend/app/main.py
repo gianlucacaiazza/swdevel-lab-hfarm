@@ -35,6 +35,11 @@ def randomize_destination_endpoint(departure: str):
     result = randomize_destination(departure, flights)
     return result
 
+@app.get('/get_arrivals')
+def get_arrival():
+    results = flights['Arrival'].drop_duplicates().to_json(orient='records')
+    return results
+
 @app.get('/get_departure')
 def get_departure_from_csv():
     results = flights['Departure'].drop_duplicates().to_json(orient='records')
@@ -45,24 +50,21 @@ def airlines():
     tt = flights_data_cleaned['Air Carrier'].drop_duplicates().to_json(orient='records')
     return tt
 
-@app.get('/{AIRLINES}')
+@app.get('/airlines-{AIRLINES}')
 def average_web(AIRLINES):
     result = calculate_average_price_airline(flights, AIRLINES)
     return result
 
-@app.get('/{Departure}/{Arrival}')
+@app.get('/avg/{Departure}/{Arrival}')
 def avg_price(Departure:str, Arrival:str):
     result = calculate_average_price(flights, Departure, Arrival)
     result = round(result,2)
     result = "{:.2f}".format(result)
     return result
   
-@app.get('/get_arrivals')
-def get_departure_from_csv():
-    results = flights['Arrival'].drop_duplicates().to_json(orient='records')
-    return results
 
-@app.get('/{Arrival}')
-def cheapest(Arrival:str):
+
+@app.get('/arrival-{Arrival}')
+def cheapest(Arrival):
     result =cheapest_to_fly(flights, Arrival)
     return result

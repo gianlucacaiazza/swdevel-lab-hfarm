@@ -9,10 +9,10 @@
         <form method="POST" action="{{ url_for('cheap_result') }}">
             {{ form.csrf_token }}
             <div class="form-group">
-                {{ form.departure.label }}
-                {{ form.departure(class="form-control") }}
+                {{ form.Arrival.label }}
+                {{ form.Arrival(class="form-control") }}
             </div>
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit3(class="btn btn-primary") }}
         </form>
     </div>
 {% endblock %}

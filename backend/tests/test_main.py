@@ -88,4 +88,9 @@ def test_randomize_destination_empty_df():
     response = randomize_destination(departure, empty_df)
     print (response)
 
-test_randomize_destination_valid_input()
+def test_get_arrivals():
+    response = client.get('/get_arrivals')
+    assert response.status_code == 200
+    print(response.json())
+
+test_get_arrivals()
