@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+</style>
+
+<div class = "body" ></div>
+<div class="container mt-5">
+    <h1>Result</h1>
+    <h2><i>Don't know where to go?</i></h2>
+    {% if result %}
+        <p>have you considered this destination on this/these dates?</p>
+        <p>{{ result }}</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('airlines') }}">Try Again</a>
+</div>
+{% endblock %}

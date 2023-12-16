@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Destination Randomizer {% endblock %}
+
+{% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+h1{
+font-family:'Lato';
+}
+</style>
+<div class = "body" ></div>
+    <div class="container mt-5">
+        <h1><b>Destination Randomizer</b></h1>
+        <p>Choose the <i><b>airport of departure</b></i> to start your journey and let us surprise you!</p>
+        <form method="POST" action="{{ url_for('airlines_result') }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.airline.label }}
+                {{ form.airline(class="form-control") }}
+            </div>
+            {{ form.submit2(class="btn btn-primary") }}
+        </form>
+    </div>
+{% endblock %}
