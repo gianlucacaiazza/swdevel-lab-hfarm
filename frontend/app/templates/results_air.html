@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+</style>
+
+<div class = "body" ></div>
+<div class="container mt-5">
+    <div class="form-group">
+        
+    <h1>{{ airline }}</h1>
+</div>
+    <h3><i>The average price divided by class for {{ airline }}</i></h3>
+    {% if result %}
+        <p>{{ result }}</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('airlines') }}"><b>TRY AGAIN</b></a>
+</div>
+{% endblock %}

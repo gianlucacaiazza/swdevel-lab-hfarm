@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Airlines prices {% endblock %}
+
+{% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+h1{
+font-family:'Lato';
+}
+</style>
+<div class = "body">
+    <div class="container mt-5">
+        <h1><b>Average Connection Price</b></h1>
+        <p>Select your departure and arrival airports to get the average price for the connection.</p>
+        <form method="POST" action="{{ url_for('resultshow') }}">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.Departure.label }}
+                {{ form.Departure(class="form-control") }}
+                {{ form.Arrival.label }}
+                {{ form.Arrival(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+</div>
+{% endblock %}

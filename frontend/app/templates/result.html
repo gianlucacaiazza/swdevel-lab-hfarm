@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+background-color: #e5e9eb; 
+
+}
+.image-container {
+        border: 2px solid #2f7fdb; 
+        padding: 10px; 
+        margin-top: 20px; 
+        text-align: center; 
+        background-color: #f0f0f0; 
+        max-width: 500px; 
+        margin-left: auto; 
+        margin-right: auto;
+    }
+    .image-container img {
+        max-width: 100%;
+        height: auto; 
+    }
+h1 {
+    font-family:'Lato';
+    color: #05014a;
+}
+</style>
+
+<div class = "body" ></div>
+<div class="container mt-5">
+    <h1><b>From {{ departure }}...</b></h1>
+    <h2><i>Don't know where to go?</i></h2>
+    {% if result %}
+        <p>from {{ departure }} have you considered this destination on this/these dates?</p>
+        <p>{{ result }}</p>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <a href="{{ url_for('randomize') }}"><b>TRY AGAIN</b></a>
+    {% if image %}
+    <div class = 'image-container'> 
+    <img src="{{ url_for('static', filename= image + '.jpeg') }}" alt="Image of {{ image }}">
+    </div>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+</div>
+{% endblock %}
