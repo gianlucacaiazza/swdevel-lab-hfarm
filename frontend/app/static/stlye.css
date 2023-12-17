@@ -1,0 +1,51 @@
+
+/* Custom navbar style */
+body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+.navbar-custom {
+  background-color: #05014a; /* Replace with your desired color */
+  color: #ffffff; /* This sets the default text color to white */
+}
+
+/* Navbar brand/logo text color */
+.navbar-custom .navbar-brand {
+  color: #2f7fdb;
+}
+
+/* Navbar link/text color */
+.navbar-custom .nav-link {
+  color: #ffffff; /* This sets the navbar links to white */
+}
+
+/* Change color on hover */
+.navbar-custom .nav-link:hover {
+  color: #cccccc; /* This sets the hover color to a light grey */
+}
+.footer {
+position: fixed;   /* Fixed position */
+left: 0;
+bottom: 0;        /* Align to the bottom */
+width: 100%;      /* Full width */ /* Footer background color */
+color: #05014a;     /* Footer text color */
+text-align: right; /* Center the text */
+}
+
+
+h1 {
+ font-size: 70px; /* Adjust the font size to make it larger or smaller */
+ padding: 10px; /* Adds space inside the h1 element */
+ margin: 20px 0; /* Adds space outside the h1 element */
+}
+h2 {
+ font-size:30px;
+ padding: 10px;
+}
+
+/* Style your image here if needed */
+.centered-logo {
+  max-width: 80%; /* Ensures the image is responsive */
+  height: auto; /* Maintains aspect ratio */
+  /* Additional styling if needed */
+}

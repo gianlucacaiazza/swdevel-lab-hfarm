@@ -1,11 +1,7 @@
 
 import sys
 sys.path.append('app/mymodules')
-
 import pandas as pd
-
-import sys
-sys.path.append('app/mymodules')
 
 from Cleaning import flights_data_cleaned
 import datetime

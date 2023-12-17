@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+</style>
+<div class = "body" ></div>
 <div class="container mt-5">
     <h1>Result</h1>
     
     {% if result %}
-        <p><b>the average price for the connection is: </b>{{ result }} £</p>
+        <p><b>The average price for your selected connection {{ departure }} - {{ arrival }} is: </b>{{ result }} £</p>
     {% else %}
         <p>{{ message }}</p>
     {% endif %}
-    <a href="{{ url_for('calculate_average_price') }}">Try Again</a>
+    <a href="{{ url_for('calculate_average_price') }}"><b>TRY AGAIN</b></a>
 </div>
 {% endblock %}

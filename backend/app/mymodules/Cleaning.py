@@ -20,3 +20,6 @@ flights_data_cleaned[' Total Cost ex VAT '] = flights_data_cleaned[' Total Cost 
 flights_data_cleaned.rename(columns={' Total Cost ex VAT ':'Price in £'}, inplace=True)
 flights_data_cleaned.rename(columns={'Journey Start Point':'Departure'}, inplace=True)
 flights_data_cleaned.rename(columns={'Journey Finish Point':'Arrival'}, inplace=True)
+
+# Renaming an Air Carrier
+flights_data_cleaned['Air Carrier'] = flights_data_cleaned['Air Carrier'].replace('DO NOT USE - EASYJET - PLEASE ', 'EASYJET')
