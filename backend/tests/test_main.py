@@ -8,8 +8,8 @@ import json
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Now you can do the relative import
 from app.main import app
-from app.mymodules.Destination_random import randomize_destination
-from app.mymodules.Feature_1_avg_price import calculate_average_price
+from app.mymodules.feat_3_random import randomize_destination
+from app.mymodules.feat_1_class_price import calculate_average_price
 from app.mymodules.df_integrations import flights
 
 
