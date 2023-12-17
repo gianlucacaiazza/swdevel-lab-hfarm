@@ -39,6 +39,7 @@ def airlines():
     form = QueryForm()
     response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_airline')
     airlines = json.loads(response.json())
+    airlines = sorted(airlines)
     form.airline.choices=airlines
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/{airlines}'
     if form.validate_on_submit():
