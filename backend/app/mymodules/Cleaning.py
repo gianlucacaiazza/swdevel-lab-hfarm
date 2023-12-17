@@ -34,7 +34,7 @@ def clean_cost(value):
     if isinstance(value, str) and '£' in value:
         return float(value.replace('£', '').replace(',', '').strip())
     else:
-        return value
+        return float(value)
 
 
 df_clean[' Total Cost ex VAT '] = df_clean[' Total Cost ex VAT '].apply(clean_cost)
