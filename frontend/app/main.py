@@ -1,7 +1,8 @@
 """
 Frontend module for the Flask application.
 
-This module defines a simple Flask application that serves as the frontend for the project.
+This module defines a simple Flask application
+that serves as the frontend for the project.
 """
 
 from flask import Flask, render_template
@@ -11,10 +12,12 @@ from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
+app.config['SECRET_KEY'] = 'your_secret_key'
+# Replace with a secure secret key
 
 # Configuration for the FastAPI backend URL
-FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
+FASTAPI_BACKEND_HOST = 'http://backend'
+# Replace with the actual URL of your FastAPI backend
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
@@ -22,13 +25,14 @@ class QueryForm(FlaskForm):
     person_name = StringField('Person Name:')
     submit = SubmitField('Get Birthday from FastAPI Backend')
 
+
 class MoodForm(FlaskForm):
     mood = SelectField('Choose a Mood', choices=[
         ('chill', 'Chill'),
         ('workout', 'Workout'),
         ('passion', 'Passion'),
         ('party', 'Party'),
-        ('discover','Discover')
+        ('discover', 'Discover')
     ], validators=[DataRequired()])
 
 
@@ -44,6 +48,7 @@ def index():
     date_from_backend = fetch_date_from_backend()
     return render_template('index.html', date_from_backend=date_from_backend)
 
+
 def fetch_date_from_backend():
     """
     Function to fetch the current date from the backend.
@@ -51,7 +56,8 @@ def fetch_date_from_backend():
     Returns:
         str: Current date in ISO format.
     """
-    backend_url = 'http://backend/get-date'  # Adjust the URL based on your backend configuration
+    backend_url = 'http://backend/get-date'
+    # Adjust the URL based on your backend configuration
     try:
         response = requests.get(backend_url)
         response.raise_for_status()  # Raise an HTTPError for bad responses
@@ -71,12 +77,15 @@ def mood():
         selected_mood = form.mood.data
         fastapi_url = f'{FASTAPI_BACKEND_HOST}/mood/{selected_mood}'
         response = requests.get(fastapi_url)
-        if response.status_code == 200:    
+        if response.status_code == 200:
             songs = response.json()
         else:
-            error_message = f'Error: Failed to retrive playlist for {selected_mood} from FastAPI Backend'
+            error_message = f'Error: Failed to retrive playlist for
+            {selected_mood} from FastAPI Backend'
 
-    return render_template('mood.html', form=form, songs=songs, error_message=error_message)
+    return render_template('mood.html', form=form, songs=songs,
+                           error_message=error_message)
+
 
 @app.route('/info')
 def info():
@@ -92,9 +101,11 @@ def info():
         if response.status_code == 200:
             data[info] = response.json()
         else:
-            error_message = f"Error: Unable to retrieve {info} from the backend."
+            error_message = f"Error: Unable to retrieve
+            {info} from the backend."
 
     return render_template('info.html', data=data, error_message=error_message)
+
 
 @app.route('/artists', methods=['GET'])
 def get_artists_by_letter():
@@ -105,12 +116,17 @@ def get_artists_by_letter():
         all_artists = response.json()
         filtered_artists = {
             artist: count for artist, count in all_artists.items()
-            if artist.startswith(letter) or (letter == "#" and not artist[0].isalpha())
+            if artist.startswith(letter) or
+            (letter == "#" and not artist[0].isalpha())
         }
-        return render_template('artists.html', artists=filtered_artists, selected_letter=letter)
+        return render_template('artists.html',
+                               artists=filtered_artists,
+                               selected_letter=letter)
     else:
-        # Gestire l'errore o mostrare un messaggio all'utente
-        return render_template('artists.html', artists={}, selected_letter=letter, error="Artists not found")
+        return render_template('artists.html', artists={},
+                               selected_letter=letter,
+                               error="Artists not found")
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
