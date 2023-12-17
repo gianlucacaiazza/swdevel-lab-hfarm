@@ -57,8 +57,6 @@ def test_success_destinations():
     assert response.status_code == 200
     print(response.json())
 
-test_success_destinations()
-
 def test_randomize_destination_valid_input():
     # Test with a valid departure airport
     departure = 'LONDONR'
@@ -81,4 +79,17 @@ def test_randomize_destination_empty_df():
     response = randomize_destination(departure, empty_df)
     print (response)
 
-test_randomize_destination_valid_input()
+def test_average_class_price():
+    # Test with valid input
+    response = client.get('/FLYBE')
+    assert response.status_code == 200
+    assert response.json() == 'Average Price ECONOMY: 114.62 £Average Price FIRST: 46.95 £'
+
+def test_average_one_class():
+    # Test 
+    response = client.get('/AEROMEXICO')
+    assert response.status_code == 200
+    assert response.json() == 'Average Price ECONOMY: 128.10 £ The airline only has ECONOMY class flights'
+
+
+test_average_one_class()
