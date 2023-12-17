@@ -1,12 +1,23 @@
+"""
 
+Generate a final dataset for the project by performing various data manipulation operations.
+
+Parameters:
+- df_clean (DataFrame): A cleaned DataFrame containing flights data.
+
+Returns:
+- DataFrame: The final dataset with modifications, including creating return tickets,
+  sorting by travel date, dropping unnecessary columns, dropping duplicates
+  , and resetting indexes.
+"""
 import sys
 sys.path.append('app/mymodules')
 import pandas as pd
 
-from Cleaning import flights_data_cleaned
+from cleaning import df_clean
 import datetime
 import random
-df = flights_data_cleaned
+df = df_clean
 
 #changing travel date string into datetime format
 
@@ -41,4 +52,3 @@ df.reset_index(drop=True, inplace=True)
 
 #our final dataset to use for the project 
 flights = df
-

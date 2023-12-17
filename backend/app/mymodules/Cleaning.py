@@ -1,25 +1,49 @@
+
+"""
+
+Read a flights dataset from a CSV file and perform data cleaning operations.
+
+Parameters:
+- file_path (str): The path to the CSV file containing flights data.
+
+Returns:
+- DataFrame: A cleaned DataFrame with irrelevant columns removed, currency 
+symbols removed
+from the 'Total Cost ex VAT' column, and columns renamed for clarity.
+
+"""
+
 import pandas as pd
-import numpy as np
+
 
 flights_data = pd.read_csv('/app/app/flights.csv', encoding='ISO-8859-1')
 
 # Remove useless columns
-flights_data_cleaned = flights_data.drop(columns=["Number of Travellers", "Customer"])
+df_clean = flights_data.drop(columns=["Number of Travellers", "Customer"])
 
-# Cleaning the 'Total Cost ex VAT' column
+
 def clean_cost(value):
+    """
+
+    Apply to column with '£' values.
+
+    Replace '£' values with spaces for future modelling of value
+    Returning float
+
+    """
     if isinstance(value, str) and '£' in value:
         return float(value.replace('£', '').replace(',', '').strip())
     else:
         return value
 
-# Apply the cleaning function to the column
-flights_data_cleaned[' Total Cost ex VAT '] = flights_data_cleaned[' Total Cost ex VAT '].apply(clean_cost)
+
+df_clean[' Total Cost ex VAT '] = df_clean[' Total Cost ex VAT '].apply(clean_cost)
 
 # Renaming the columns for clarity
-flights_data_cleaned.rename(columns={' Total Cost ex VAT ':'Price in £'}, inplace=True)
-flights_data_cleaned.rename(columns={'Journey Start Point':'Departure'}, inplace=True)
-flights_data_cleaned.rename(columns={'Journey Finish Point':'Arrival'}, inplace=True)
+df_clean.rename(columns={' Total Cost ex VAT ': 'Price in £'}, inplace=True)
+df_clean.rename(columns={'Journey Start Point': 'Departure'}, inplace=True)
+df_clean.rename(columns={'Journey Finish Point': 'Arrival'}, inplace=True)
 
 # Renaming an Air Carrier
-flights_data_cleaned['Air Carrier'] = flights_data_cleaned['Air Carrier'].replace('DO NOT USE - EASYJET - PLEASE ', 'EASYJET')
+plane = df_clean['Air Carrier']
+plane = plane.replace('DO NOT USE - EASYJET - PLEASE ', 'EASYJET')
