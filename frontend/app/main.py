@@ -9,7 +9,6 @@ from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -21,11 +20,6 @@ FASTAPI_BACKEND_HOST = 'http://backend'
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
-class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
-
-
 class MoodForm(FlaskForm):
     mood = SelectField('Choose a Mood', choices=[
         ('chill', 'Chill'),
@@ -33,7 +27,7 @@ class MoodForm(FlaskForm):
         ('passion', 'Passion'),
         ('party', 'Party'),
         ('discover', 'Discover')
-    ], validators=[DataRequired()])
+    ])
 
 
 @app.route('/')
