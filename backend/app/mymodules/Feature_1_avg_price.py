@@ -6,8 +6,6 @@ This module provides functionality to calculate the average flight ticket
 price for a selected departure-arrival connection using the WePole software.
 """
 
-import pandas as pd
-
 
 def calculate_average_price(data, departure, arrival):
     """
