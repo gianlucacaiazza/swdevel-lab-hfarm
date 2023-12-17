@@ -80,8 +80,7 @@ def mood():
         if response.status_code == 200:
             songs = response.json()
         else:
-            error_message = f'Error: Failed to retrive playlist for
-            {selected_mood} from FastAPI Backend'
+            error_message = f'Error: Failed to retrive playlist for {selected_mood} from FastAPI Backend'
 
     return render_template('mood.html', form=form, songs=songs,
                            error_message=error_message)
@@ -101,8 +100,7 @@ def info():
         if response.status_code == 200:
             data[info] = response.json()
         else:
-            error_message = f"Error: Unable to retrieve
-            {info} from the backend."
+            error_message = f"Error: Unable to retrieve {info} from the backend."
 
     return render_template('info.html', data=data, error_message=error_message)
 
