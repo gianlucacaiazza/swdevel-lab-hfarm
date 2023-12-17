@@ -1,17 +1,18 @@
+'''We want to create a "surprise me" function where you only need to input the departure airport and it gives a list 
+   of possible destinations + dates'''
+
 import pandas as pd
 from df_integrations import flights
 import random
 import difflib
 
-
-#We want to create a "surprise me" function where you only need to input the departure airport and it gives a list 
-#of possible destinations + dates
-
-import difflib
-import random
-import pandas as pd
-
 def randomize_destination(departure, df):
+    '''
+    parameters:
+    - departure -> the airport desidered by the user, should be chosen from a list in the frontend
+    - df -> in our case "flights", should work with analog df with analog values
+    Returns:
+    - string with {random-destination} and {available dates}'''
 
     departure = departure.upper()
 
@@ -36,12 +37,6 @@ def randomize_destination(departure, df):
         'give_output': give_output(chosen_destination, df),
         'arrivalcity': arrivalcity()
     }
-
-
-
-
-
-
 
 
 

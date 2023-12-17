@@ -13,12 +13,10 @@ sys.path.append('app')
 # Load flight data and integrate cleaning functions
 from mymodules.Cleaning import flights_data_cleaned
 from mymodules.df_integrations import flights
-from mymodules.Feature_1_avg_price import calculate_average_price, filter_destinations
+from mymodules.feature_1_avg_price import calculate_average_price
 from mymodules.Avg_Class_Price import calculate_average_price_airline
 from mymodules.Destination_random import randomize_destination
 from mymodules.Feature4_Cheapest_to_fly import cheapest_to_fly
-
-
 
 
 app = FastAPI()
@@ -34,6 +32,7 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/random/{departure}")
+
 def combined_endpoint(departure: str):
     result = randomize_destination(departure, flights)
     return {
@@ -70,7 +69,6 @@ def avg_price(Departure:str, Arrival:str):
     result = "{:.2f}".format(result)
     return result
   
-
 
 @app.get('/arrival-{Arrival}')
 def cheapest(Arrival):

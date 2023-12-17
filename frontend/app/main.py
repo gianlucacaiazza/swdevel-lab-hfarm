@@ -4,9 +4,8 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
-from flask import Flask, render_template, Request, redirect, url_for, request, jsonify
-app = Flask(__name__)
 
+from flask import Flask, render_template, Request, redirect, url_for, request, jsonify
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
@@ -107,7 +106,7 @@ def resultshow():
                 if data:
                     return render_template('result_avg.html', result = data, departure = Departure, arrival = Arrival)
                 else:
-                    return render_template('result_avg.html', message = 'No Result')
+                    return render_template('result_avg.html', message = f"Unfortunately there isn't a flight connection between {Departure} and {Arrival}")
             else:
                 status = response.status_code
                 return render_template('result_avg.html', message = f'There is not a connection between {Departure} and {Arrival}')
@@ -115,7 +114,7 @@ def resultshow():
             return render_template('result_avg.html', message = f'Connection error: {str(e)}')
     return redirect(url_for('calculate_average_price'))
 
-
+  
 @app.route('/randomize', methods=['GET', 'POST'])
 def randomize():
     form = QueryForm()
@@ -136,7 +135,6 @@ def randomize():
       
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    IMG_URL = f'{FASTAPI_BACKEND_HOST}/img-'
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if request.method == 'POST':
         departure = request.form['departure']
