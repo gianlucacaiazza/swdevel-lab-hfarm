@@ -63,15 +63,21 @@ def fetch_date_from_backend():
 
 @app.route('/mood', methods=['GET', 'POST'])
 def mood():
+    """Render the mood page"""
     form = MoodForm()
     error_message = None
     songs = None
 
     if form.validate_on_submit():
+        """If the form is validated upon submission,
+           retrieve a playlist based on the selected mood
+           from the FastAPI backend"""
         selected_mood = form.mood.data
         fastapi_url = f'{FASTAPI_BACKEND_HOST}/mood/{selected_mood}'
         response = requests.get(fastapi_url)
         if response.status_code == 200:
+            """If the response status is successful (200),
+               extract and display the playlist for the selected mood"""
             songs = response.json()
         else:
             error_message = f'Error: Failed to retrive playlist for {selected_mood} from FastAPI Backend'
@@ -82,6 +88,10 @@ def mood():
 
 @app.route('/info')
 def info():
+    """Fetches and displays various types of information
+       (like 'c_songs', 'genre', 'p_genre') from the FastAPI backend.
+       Renders 'info.html' with the retrieved data or
+       an error message if the data cannot be fetched."""
     error_message = None
     data = {}
 
@@ -101,6 +111,11 @@ def info():
 
 @app.route('/artists', methods=['GET'])
 def get_artists_by_letter():
+    """Retrieves a list of artists from the FastAPI backend
+       filtered by the starting letter provided in the query parameter.
+       Renders 'artists.html' with the filtered list of artists or
+       an error message if no artists are found."""
+    letter = request.args.get('letter', '#')
     letter = request.args.get('letter', '#')
     fastapi_url = f'{FASTAPI_BACKEND_HOST}/info/a_songs'
     response = requests.get(fastapi_url)
