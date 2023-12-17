@@ -51,6 +51,10 @@ def test_success_read_item_module():
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
 
+def test_cheapest_to_fly():
+    response = client.get('LONDON - LGW')
+    assert response.status_code == 200
+
 def test_success_destinations():
     departure = 'LONDON - LGW'
     response = client.get('/get_airport')
@@ -60,7 +64,7 @@ def test_success_destinations():
 def test_randomize_destination_valid_input():
     # Test with a valid departure airport
     departure = 'LONDONR'
-    response = client.get('/query/{departure}')
+    response = client.get('/random/LONDON - LGW')
     assert response.status_code == 200
     print(response.json())
 
@@ -91,5 +95,29 @@ def test_average_one_class():
     assert response.status_code == 200
     assert response.json() == 'Average Price ECONOMY: 128.10 £ The airline only has ECONOMY class flights'
 
+def test_get_arrivals():
+    response = client.get('/get_arrivals')
+    assert response.status_code == 200
+    print(response.json())
 
-test_average_one_class()
+def test_get_img():
+    response = client.get('/img-LONDON - LGW')
+    assert response.status_code == 200
+    print(response.json())
+
+def test_combined_endpoint_valid_departure():
+    # Test with a valid departure airport
+    response = client.get('/random/LONDON - LGW')
+    assert response.status_code == 200
+    data = response.json()  # or the expected data type
+    print(data)
+
+def test_combined_endpoint_invalid_departure():
+    # Test with an invalid departure airport
+    departure = 'INVALID_AIRPORT'
+    response = client.get(f"/random/{departure}")
+    assert response.status_code == 200
+    data = response.json()
+    # Expecting an error message or empty response based on API design
+    assert data == ['No departure found'] or 'error' in data
+    print(data)

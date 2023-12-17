@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %} Airlines prices {% endblock %}
+{% block title %} Destination Randomizer {% endblock %}
 
 {% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+h1{
+font-family:'Lato';
+}
+</style>
+<div class = "body" ></div>
     <div class="container mt-5">
-        <h1>Airlines prices</h1>
-        <p>Inserisci la airlines e paragona i prezzi!</p>
+        <h1><b>Class Comparator</b></h1>
+        <p>Choose the <i><b>airline</b></i> to see the average price of their classes.</p>
         <form method="POST" action="{{ url_for('show_results') }}">
             {{ form.csrf_token }}
             <div class="form-group">

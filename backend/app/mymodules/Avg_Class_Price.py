@@ -46,5 +46,6 @@ def calculate_average_price_airline(flights, airline):
     if len(travel_classes) == 1:
         results_string += f" The airline only has {travel_classes[0]} class flights"
 
+
     # Return the results as a string
     return results_string
