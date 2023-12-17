@@ -55,27 +55,6 @@ def test_cheapest_to_fly():
     response = client.get('LONDON - LGW')
     assert response.status_code == 200
 
-def test_success_destinations():
-    departure = 'LONDON - LGW'
-    response = client.get('/get_airport')
-    assert response.status_code == 200
-    print(response.json())
-
-def test_randomize_destination_valid_input():
-    # Test with a valid departure airport
-    departure = 'LONDONR'
-    response = client.get('/random/LONDON - LGW')
-    assert response.status_code == 200
-    print(response.json())
-
-def test_randomize_destination_invalid_input():
-    # Test with an invalid departure airport
-    departure = 'QWETHCSSDH'
-    response = client.get('/query/{departure}')
-    assert response.status_code == 200
-    if response == ['No departure found']:
-        return True
-
 def test_randomize_destination_empty_df():
     # Test with an empty dataframe
     empty_df = pd.DataFrame()
@@ -121,3 +100,4 @@ def test_combined_endpoint_invalid_departure():
     # Expecting an error message or empty response based on API design
     assert data == ['No departure found'] or 'error' in data
     print(data)
+

@@ -136,7 +136,6 @@ def randomize():
       
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    IMG_URL = f'{FASTAPI_BACKEND_HOST}/img-'
     BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if request.method == 'POST':
         departure = request.form['departure']
