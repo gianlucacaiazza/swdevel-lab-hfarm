@@ -2,12 +2,14 @@ import os
 import sys
 from fastapi.testclient import TestClient
 import pandas as pd
+import json
 
 # Add the project root to the sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Now you can do the relative import
 from app.main import app
 from app.mymodules.Destination_random import randomize_destination
+from app.mymodules.Feature_1_avg_price import calculate_average_price
 from app.mymodules.df_integrations import flights
 
 
@@ -28,7 +30,7 @@ def test_read_main():
 def test_success_read_item():
     response = client.get("/query/Albert Einstein")
     assert response.status_code == 200
-    assert response.json() == {"person_name": 'Albert Einstein', 
+    assert json.loads(response.json()) == {"person_name": 'Albert Einstein', 
                                "birthday": '03/14/1879'}
 
 
@@ -44,6 +46,19 @@ def test_success_read_item():
     assert response.status_code == 200
     assert response.json() == {"Albert Einstein's birthday is 03/14/1879."} """
 
+
+def test_avg_price_valid_input():
+    '''We are checking wheter the algorithm is correctly calculating the average price with a valid input'''
+    response = client.get('/LONDON - LGW/MANCHESTER')
+    assert response.status_code == 200
+    assert response.json() == 99.59571428571427
+
+def test_avg_price_invalid_input():
+    '''We are checking wheter the algorithm is correctly behaving with an invalid input, in this case there is not a direct connection 
+    between AMSTERDAM and FUERTEVENTURA so it shouldn't calculate any output'''
+    response = client.get('/AMSTERDAM/FUERTEVENTURA')
+    assert response.status_code == 200
+    assert response.json() == None
 
 # The following is correct, can you spot the diffence?
 def test_success_read_item_module():
@@ -100,4 +115,5 @@ def test_combined_endpoint_invalid_departure():
     # Expecting an error message or empty response based on API design
     assert data == ['No departure found'] or 'error' in data
     print(data)
+
 
