@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Avg_Class_Price</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Avg_Class_Price</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/app/app/mymodules/Avg_Class_Price.py">/app/app/mymodules/Avg_Class_Price.py</a></font></td></tr></table>
+    <p><tt>Feature&nbsp;3&nbsp;-&nbsp;Average&nbsp;Price&nbsp;Per&nbsp;Flight&nbsp;Class&nbsp;<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;provides&nbsp;functionality&nbsp;to&nbsp;calculate&nbsp;the&nbsp;average&nbsp;prices&nbsp;<br>
+for&nbsp;different&nbsp;types&nbsp;of&nbsp;flight&nbsp;classes&nbsp;offered&nbsp;by&nbsp;a&nbsp;specific&nbsp;airline.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calculate_average_price_airline"><strong>calculate_average_price_airline</strong></a>(flights, airline)</dt><dd><tt>Calculate&nbsp;the&nbsp;average&nbsp;price&nbsp;for&nbsp;each&nbsp;travel&nbsp;class&nbsp;of&nbsp;a&nbsp;specific&nbsp;airline.<br>
+&nbsp;<br>
+Parameters:<br>
+-&nbsp;flights&nbsp;(DataFrame):&nbsp;A&nbsp;DataFrame&nbsp;containing&nbsp;flight&nbsp;data,&nbsp;including&nbsp;columns&nbsp;'Air&nbsp;Carrier',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Travel&nbsp;Class',&nbsp;and&nbsp;'Price&nbsp;in&nbsp;£'.<br>
+-&nbsp;airline&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;airline&nbsp;for&nbsp;which&nbsp;to&nbsp;calculate&nbsp;average&nbsp;prices.<br>
+&nbsp;<br>
+Returns:<br>
+str:&nbsp;A&nbsp;string&nbsp;containing&nbsp;information&nbsp;about&nbsp;the&nbsp;average&nbsp;prices&nbsp;for&nbsp;each&nbsp;travel&nbsp;class&nbsp;of&nbsp;the&nbsp;specified&nbsp;airline.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;the&nbsp;airline&nbsp;has&nbsp;only&nbsp;one&nbsp;travel&nbsp;class,&nbsp;additional&nbsp;information&nbsp;about&nbsp;the&nbsp;class&nbsp;is&nbsp;included.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;the&nbsp;airline&nbsp;has&nbsp;no&nbsp;flights&nbsp;recorded&nbsp;in&nbsp;the&nbsp;DataFrame,&nbsp;appropriate&nbsp;information&nbsp;is&nbsp;provided.<br>
+&nbsp;<br>
+Example&nbsp;Usage:<br>
+result&nbsp;=&nbsp;<a href="#-calculate_average_price_airline">calculate_average_price_airline</a>(flights,&nbsp;'YourAirlineName')<br>
+print(result)<br>
+Average&nbsp;Price&nbsp;ECONOMY:&nbsp;123.45&nbsp;£<br>
+Average&nbsp;Price&nbsp;BUSINESS:&nbsp;789.60&nbsp;£<br>
+The&nbsp;airline&nbsp;only&nbsp;has&nbsp;ECONOMY&nbsp;class&nbsp;flights</tt></dd></dl>
+</td></tr></table>
+</body></html>
