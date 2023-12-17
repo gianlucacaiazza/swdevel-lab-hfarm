@@ -1,14 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+background-color: #e5e9eb; /* This will set the body background to a light grey color */
+/* other styles */
+}
+h1{
+font-family:'Lato';
+color:#05014a;
+}
+.image-container {
+        border: 2px solid #2f7fdb; /* bordo nero */
+        padding: 10px; /* spazio interno */
+        margin-top: 20px; /* spazio sopra il contenitore */
+        text-align: center; /* centra l'immagine */
+        background-color: #f0f0f0; /* sfondo grigio chiaro */
+        max-width: 500px; /* larghezza massima del contenitore */
+        margin-left: auto; /* centra il contenitore orizzontalmente */
+        margin-right: auto;
+    }
+    .image-container img {
+        max-width: 100%; /* rende l'immagine responsive */
+        height: auto; /* mantiene le proporzioni dell'immagine */
+    }
+</style>
+<div class = "body">
 <div class="container mt-5">
-    <h1>Result</h1>
-    <h2><i>Find the cheapest company to fly</i></h2>
+    <h1><b>{{ arrival }}</b></h1>
+    <h2><i>The cheapest company for {{ arrival }} is:</i></h2>
     {% if result %}
         <p>{{ result }}</p>
     {% else %}
         <p>{{ message }}</p>
     {% endif %}
-    <a href="{{ url_for('cheapest') }}">Try Again</a>
+    <a href="{{ url_for('cheapest') }}"><b>TRY AGAIN</b></a>
+    {% if image %}
+    <div class = 'image-container'> 
+    <img src="{{ url_for('static', filename= image + '.jpeg') }}" alt="Image of {{ image }}">
+    </div>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
 </div>
 {% endblock %}

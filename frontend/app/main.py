@@ -4,7 +4,9 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
-from flask import Flask, render_template, Request, redirect, url_for, request
+from flask import Flask, render_template, Request, redirect, url_for, request, jsonify
+app = Flask(__name__)
+
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
@@ -28,12 +30,10 @@ class QueryForm(FlaskForm):
     submit3 = SubmitField('Show Result')
 
 
-    
 @app.route('/')
 def index():
     return render_template('index.html')
 
-  
 @app.route('/airlines_comparator', methods=['GET', 'POST'])
 def airlines():
     form = QueryForm()
@@ -60,9 +60,9 @@ def show_results():
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
-                    return render_template('results_air.html', result=data)
+                    return render_template('results_air.html', airline = airlines, result=data)
                 else:
-                    return render_template('results_air.html', message="No result")
+                    return render_template('results_air.html', airline = airlines, message="No result")
             else:
                 status = response.status_code
                 return render_template('results_air.html', message="App not responding, response status = "f'{status}')
@@ -70,7 +70,6 @@ def show_results():
             return render_template('results_air.html', message=f"Connection error: {str(e)}")
     return redirect(url_for('airlines'))
 
-  
 @app.route('/calculate_average_price', methods=['GET', 'POST'])
 def calculate_average_price():
     # Extracting selected departure and arrival airports from the form
@@ -101,7 +100,7 @@ def resultshow():
         Departure = request.form['Departure']
         Arrival = request.form['Arrival']
         try:
-            response = requests.get(f'{BACKEND_URL}/{Departure}/{Arrival}')
+            response = requests.get(f'{BACKEND_URL}/avg/{Departure}/{Arrival}')
             if response.status_code == 200:
                 data = response.json()
                 if data:
@@ -136,18 +135,23 @@ def randomize():
       
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query'
+    IMG_URL = f'{FASTAPI_BACKEND_HOST}/img-'
+    BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/random'
     if request.method == 'POST':
         departure = request.form['departure']
         try:
+            # Chiamata per ottenere i dati di destinazione
             response = requests.get(f'{BACKEND_URL}/{departure}')
+            # Chiamata per ottenere il nome dell'immagine
             if response.status_code == 200:
                 data = response.json()
-                data = ', '.join(data)
-                if data:  # Check if there is a result
-                    return render_template('result.html', result=data)
+                give_output = ', '.join(data['give_output']) if 'give_output' in data else None
+                arrivalcity_output = data['arrivalcity'] if 'arrivalcity' in data else None
+
+                if give_output:
+                    return render_template('result.html', departure=departure, result=give_output, image=arrivalcity_output)
                 else:
-                    return render_template('result.html', message="No result")
+                    return render_template('result.html', departure=departure, message="No result")
             else:
                 status = response.status_code
                 return render_template('result.html', message="App not responding, response status = "f'{status}')
@@ -184,9 +188,9 @@ def cheap_result():
             if response.status_code == 200:
                 data = response.json()
                 if data:  # Check if there is a result
-                    return render_template('cheap_result.html', result=data)
+                    return render_template('cheap_result.html', arrival = arrivals, result=data, image = arrivals)
                 else:
-                    return render_template('cheap_result.html', message="No result")
+                    return render_template('cheap_result.html',arrival = arrivals, message="No result")
             else:
                 status = response.status_code
                 return render_template('cheap_result.html', message="App not responding, response status = "f'{status}')

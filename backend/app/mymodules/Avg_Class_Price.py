@@ -27,3 +27,5 @@ def calculate_average_price_airline(flights, airline):
 
     # Return the results
     return results
+
+# Example usag
