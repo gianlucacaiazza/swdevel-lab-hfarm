@@ -162,7 +162,7 @@ def show_result():
 @app.route('/cheapest', methods=['GET', 'POST'])
 def cheapest():
     form = QueryForm()
-    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_arrivals')
+    response = requests.get(f'{FASTAPI_BACKEND_HOST}/get_departure')
     airports = json.loads(response.json())
     airports = [airport for airport in airports if airport is not None]
     airports = sorted(airports)

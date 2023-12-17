@@ -11,13 +11,13 @@ app = FastAPI()
 sys.path.append('app')
 
 # Load flight data and integrate cleaning functions
-from mymodules.Cleaning import df_clean
+from mymodules.cleaning import df_clean
 from mymodules.df_integrations import flights
-from mymodules.feat_2_avg_price import calculate_average_price
-from mymodules.feat_1_class_price import calculate_average_price_airline
-from mymodules.feat_3_random import randomize_destination
+from mymodules.feat_1_avg_price import calculate_average_price
+from mymodules.feat_3_class_price import calculate_average_price_airline
+from mymodules.feat_2_random import randomize_destination
 from mymodules.feat_4_cheapest import cheapest_to_fly
-from mymodules.Cleaning import clean_cost
+from mymodules.cleaning import clean_cost
 
 app = FastAPI()
 
@@ -31,8 +31,8 @@ def read_root():
     """
     return {"Hello": "World"}
 
-@app.get("/random/{departure}")
 
+@app.get("/random/{departure}")
 def combined_endpoint(departure: str):
     result = randomize_destination(departure, flights)
     return {
@@ -40,15 +40,18 @@ def combined_endpoint(departure: str):
         "arrivalcity": result['arrivalcity']
     }
 
+
 @app.get('/get_departure')
 def get_departure_from_csv():
     results = flights['Departure'].drop_duplicates().to_json(orient='records')
     return results
     
+
 @app.get('/get_airline')
 def airlines():
     tt = df_clean['Air Carrier'].drop_duplicates().to_json(orient='records')
     return tt
+
 
 @app.get('/airlines-{AIRLINES}')
 def average_web(AIRLINES):
