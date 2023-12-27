@@ -189,3 +189,5 @@ Now you can manage the lifecycle of your Docker containers more flexibly.
 
 
 Now, the additional Python modules are installed in the running container, and you've performed these actions directly from the VS Code terminal. If these changes are intended for production, consider updating the `requirements.txt` file and rebuilding the Docker container.
+
+Cambiato readme
