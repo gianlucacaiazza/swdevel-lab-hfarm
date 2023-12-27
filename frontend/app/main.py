@@ -18,8 +18,8 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
 class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
+    province = StringField('Province:')
+    submit = SubmitField('Get province from FastAPI Backend')
 
 
 @app.route('/')
@@ -63,19 +63,19 @@ def internal():
     error_message = None  # Initialize error message
 
     if form.validate_on_submit():
-        person_name = form.person_name.data
+        province = form.province.data
 
         # Make a GET request to the FastAPI backend
-        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{person_name}'
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/search/province/{province}'
         response = requests.get(fastapi_url)
 
         if response.status_code == 200:
             # Extract and display the result from the FastAPI backend
             data = response.json()
-            result = data.get('birthday', f'Error: Birthday not available for {person_name}')
+            result = data.get('result', f'Error: province not available for {province}')
             return render_template('internal.html', form=form, result=result, error_message=error_message)
         else:
-            error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
+            error_message = f'Error: Unable to fetch province for {province} from FastAPI Backend'
 
     return render_template('internal.html', form=form, result=None, error_message=error_message)
 
