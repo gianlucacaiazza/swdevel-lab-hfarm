@@ -13,6 +13,7 @@ import pandas as pd
 
 
 from .mymodules.birthdays import return_birthday, print_birthdays_str
+from .mymodules.search_school import search_school
 
 app = FastAPI()
 
@@ -26,6 +27,7 @@ birthdays_dictionary = {
 }
 
 df = pd.read_csv('/app/app/employees.csv')
+test_csv = pd.read_csv('/app/app/veneto.csv')
 
 @app.get('/csv_show')
 def read_and_return_csv():
@@ -71,6 +73,9 @@ def read_item_from_module(person_name: str):
 def dump_all_birthdays():
     return {print_birthdays_str()}
 
+@app.get('/module/search-school')
+def dump_schools():
+    return {search_school(None)}
 
 @app.get('/get-date')
 def get_date():
