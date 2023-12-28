@@ -10,3 +10,6 @@ We used the details regarding the province, the number of services offered by ea
 
 From the main interface of our software, users can access a variety of services. Among these, there is the functionality that allows you to find the best school in a specific city, based on criteria such as the services offered. Additionally, you can search by filtering by the grade level of a school within a given province, making it easier to select primary, secondary or other level institutions in specific geographic areas.
 Another important feature of the software is the ability to generate a list of schools based on the type of managing entity: public, private or religious. 
+
+#Development of the application
+
