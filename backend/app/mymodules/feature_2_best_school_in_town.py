@@ -12,7 +12,7 @@ def best_school_in_town(data, city, school_level):
 Finding the school with the most services in a given city and school level
 
 Parameters:
-- data (DataFrame):the dataframe containing school data
+- data (DataFrame):the DataFrame containing school data
 - city (str): the city for which to find the school 
 - school_level (str): the level of school (ex. 'primaria', 'secondaria primo grado')
 
@@ -23,7 +23,7 @@ If no data is available for the specified city or school level,
 return an informative message.
 """
 
-filtered_data = data[(data['Denominazione Comune'] == city)
+filtered_data = data[(data['Denominazione Comune'] == city) &
                      (data['Tipologia Scuola'] == school_level)]
 
 if filtered_data.empty:
