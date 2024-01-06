@@ -25,3 +25,5 @@ infrastrutture: A list of infrastructure facilities to look for in schools (e.g.
 It filters the provided dataset to focus only on the schools located in the specified province.
 The function then identifies schools that possess all of the listed infrastructural facilities.
 If a non-existent province is entered, the function returns an error message indicating that the province does not exist in the dataset.
+
+#feature 2 
