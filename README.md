@@ -13,3 +13,17 @@ Another important feature of the software is the ability to generate a list of s
 
 #Development of the application
 
+#feature 1 
+The function elenco_scuole_con_infrastrutture is designed to identify schools within a specified Italian province that have certain infrastructural facilities. This tool is particularly useful for educational administrators, policy makers, or researchers interested in analyzing the distribution and availability of school facilities such as cafeterias and sports facilities across different regions.
+
+The function accepts three parameters:
+
+data: A DataFrame representing the dataset of school information.
+nome_provincia: A string representing the name of the province to be analyzed.
+infrastrutture: A list of infrastructure facilities to look for in schools (e.g., 'Mensa' for cafeteria, 'Palestra Piscina' for gym and pool).
+
+It filters the provided dataset to focus only on the schools located in the specified province.
+The function then identifies schools that possess all of the listed infrastructural facilities.
+If a non-existent province is entered, the function returns an error message indicating that the province does not exist in the dataset.
+
+#feature 2 
