@@ -9,8 +9,7 @@ def best_school_in_town(data, city, school_level):
 
 
 """
-Finding the school with the most services in a given city and school level
-
+Finding the school with the most services in a given city and school le
 Parameters:
 - data (DataFrame):the DataFrame containing school data
 - city (str): the city for which to find the school 
