@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
-from .mymodules.utils import top_wines_by_rating 
+from .mymodules.utils import top_wines_by_rating, wines_by_least_recent_year, wines_by_recent_year  
 
 
 app = FastAPI()
@@ -41,6 +41,30 @@ def get_most_rated_wines(limit: int = 10):
     top_wines_dict = top_wines_by_rating(df_wines, limit).to_dict(orient='records')
     return JSONResponse(content=top_wines_dict)
 
+
+@app.get('/most-recent-wines')
+def get_most_recent_wines(limit: int = 10):
+    """
+    Endpoint to get the best reviewed wines.
+    Parameters:
+        limit: (optional) an integer representing the max number of wines that has to be returned
+    Returns:
+        dict: top wines sorted by rating (descending)
+    """
+    top_wines_dict = wines_by_recent_year(df_wines, limit).to_dict(orient='records')
+    return JSONResponse(content=top_wines_dict)
+
+@app.get('/least-recent-wines')
+def get_most_recent_wines(limit: int = 10):
+    """
+    Endpoint to get the best reviewed wines.
+    Parameters:
+        limit: (optional) an integer representing the max number of wines that has to be returned
+    Returns:
+        dict: top wines sorted by rating (descending)
+    """
+    top_wines_dict = wines_by_least_recent_year(df_wines, limit).to_dict(orient='records')
+    return JSONResponse(content=top_wines_dict) 
 
 @app.get('/')
 def read_root():
