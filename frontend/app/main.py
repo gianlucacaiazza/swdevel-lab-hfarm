@@ -4,6 +4,7 @@ Frontend module for the Flask application.
 This module defines a simple Flask application that serves as the frontend for the project.
 """
 
+import json 
 from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
@@ -32,8 +33,21 @@ def index():
     """
     # Fetch the date from the backend
     date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
+    
+    return render_template('index.html', top_wines=fetch_top_wines(6))
 
+def fetch_top_wines(limit=10):
+    url = FASTAPI_BACKEND_HOST + "/top-wines?limit=" + str(limit)
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching wines from backend: {e}")
+        return 'Wines not available'
+    
+    
 def fetch_date_from_backend():
     """
     Function to fetch the current date from the backend.
