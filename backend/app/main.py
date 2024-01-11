@@ -10,27 +10,37 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
+from .mymodules.utils import top_wines_by_rating 
 
-
-from .mymodules.birthdays import return_birthday, print_birthdays_str
 
 app = FastAPI()
 
-# Dictionary of birthdays
-birthdays_dictionary = {
-    'Albert Einstein': '03/14/1879',
-    'Benjamin Franklin': '01/17/1706',
-    'Ada Lovelace': '12/10/1815',
-    'Donald Trump': '06/14/1946',
-    'Rowan Atkinson': '01/6/1955'
-}
+df_red = pd.read_csv('/app/app/datasets/Red.csv')
+df_rose = pd.read_csv('/app/app/datasets/Rose.csv')
+df_sparkling = pd.read_csv('/app/app/datasets/Sparkling.csv')
+df_white = pd.read_csv('/app/app/datasets/White.csv')
 
-df = pd.read_csv('/app/app/employees.csv')
+df_red["type"] = "red"
+df_rose["type"] = "rose"
+df_sparkling["type"] = "sparkling"
+df_white["type"] = "white"
 
-@app.get('/csv_show')
-def read_and_return_csv():
-    aux = df['Age'].values
-    return{"Age": str(aux.argmin())}
+df_wines = pd.concat([df_red, df_rose, df_sparkling, df_white])
+
+@app.get('/top-wines')
+def get_most_rated_wines(limit: int = 10):
+    """
+     Endpoint to get the best reviewed wines.
+
+    Parameters:
+        limit: (optional) an integer representing the max number of wines that has to be returned
+
+    Returns:
+        dict: top wines sorted by rating (descending)
+    """
+    top_wines_dict = top_wines_by_rating(df_wines, limit).to_dict(orient='records')
+    return JSONResponse(content=top_wines_dict)
+
 
 @app.get('/')
 def read_root():
@@ -41,35 +51,6 @@ def read_root():
         dict: A simple greeting.
     """
     return {"Hello": "World"}
-
-
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
-    """
-    Endpoint to query birthdays based on person_name.
-
-    Args:
-        person_name (str): The name of the person.
-
-    Returns:
-        dict: Birthday information for the provided person_name.
-    """
-    person_name = person_name.title()  # Convert to title case for consistency
-    birthday = birthdays_dictionary.get(person_name)
-    if birthday:
-        return {"person_name": person_name, "birthday": birthday}
-    else:
-        return {"error": "Person not found"}
-
-
-@app.get('/module/search/{person_name}')
-def read_item_from_module(person_name: str):
-    return {return_birthday(person_name)}
-
-
-@app.get('/module/all')
-def dump_all_birthdays():
-    return {print_birthdays_str()}
 
 
 @app.get('/get-date')
