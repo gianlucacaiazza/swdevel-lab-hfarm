@@ -14,7 +14,7 @@ Another important feature of the software is the ability to generate a list of s
 #Development of the application
 
 #feature 1 
-The function elenco_scuole_con_infrastrutture is designed to identify schools within a specified Italian province that have certain infrastructural facilities. This tool is particularly useful for educational administrators, policy makers, or researchers interested in analyzing the distribution and availability of school facilities such as cafeterias and sports facilities across different regions.
+The function elenco_scuole_con_infrastrutture is designed to identify schools within a specified Italian province that have certain infrastructural facilities. This tool is particularly useful for educational administrators, policy makers, or researchers interested in analyzing the distribution and availability of school facilities such as sports facilities across different regions.
 
 The function accepts three parameters:
 
