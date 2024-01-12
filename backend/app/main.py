@@ -13,6 +13,8 @@ import pandas as pd
 
 
 from .mymodules.birthdays import return_birthday, print_birthdays_str
+from .mymodules.search_school import schools_by_province
+from .mymodules.feature_2_best_school_in_town import best_school_in_town 
 
 app = FastAPI()
 
@@ -27,10 +29,13 @@ birthdays_dictionary = {
 
 df = pd.read_csv('/app/app/employees.csv')
 
+# Lettura del csv, si usa sep=';' poiche' questo file usa come separatore
+# il punto e virgola e non la virgola.
+veneto = pd.read_csv('/app/app/veneto.csv', sep=';')
+
 @app.get('/csv_show')
 def read_and_return_csv():
-    aux = df['Age'].values
-    return{"Age": str(aux.argmin())}
+    return{veneto.to_string()}
 
 @app.get('/')
 def read_root():
@@ -61,10 +66,10 @@ def read_item(person_name: str):
     else:
         return {"error": "Person not found"}
 
-
-@app.get('/module/search/{person_name}')
-def read_item_from_module(person_name: str):
-    return {return_birthday(person_name)}
+# Restituisce tutte le scuole filtrare per provincia.
+@app.get('/module/search/province/{province}')
+def read_item_from_module(province: str):
+    return JSONResponse(schools_by_province(province, veneto))
 
 
 @app.get('/module/all')
@@ -82,3 +87,10 @@ def get_date():
     """
     current_date = datetime.now().isoformat()
     return JSONResponse(content={"date": current_date})
+
+
+@app.get('/best-school/{city}/{school_level}')
+def get_best_school(city: str, school_level: str):
+    return JSONResponse(best_school_in_town(veneto, city, school_level))
+        
+    
