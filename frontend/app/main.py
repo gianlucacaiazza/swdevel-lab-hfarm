@@ -51,13 +51,14 @@ def fetch_date_from_backend():
         return 'Date not available'
 
 
+
 @app.route('/internal', methods=['GET', 'POST'])
 def internal():
     """
     Render the internal page.
 
     Returns:
-        str: Rendered HTML content for the index page.
+        str: Rendered HTML content for the internal page.
     """
     form = QueryForm()
     error_message = None  # Initialize error message
@@ -73,7 +74,11 @@ def internal():
             # Extract and display the result from the FastAPI backend
             data = response.json()
             result = data.get('result', f'Error: province not available for {province}')
-            return render_template('internal.html', form=form, result=result, error_message=error_message)
+            
+            # Call your function to find the best school in town
+            best_school_info = best_school_in_town(data, province, 'scuola_level')  # Replace 'scuola_level' with the actual school level
+            
+            return render_template('internal.html', form=form, result=result, error_message=error_message, best_school_info=best_school_info)
         else:
             error_message = f'Error: Unable to fetch province for {province} from FastAPI Backend'
 
@@ -82,3 +87,4 @@ def internal():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
+

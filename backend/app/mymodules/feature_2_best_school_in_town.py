@@ -1,48 +1,41 @@
-"""
-Feature 2 - Best school in town
-
-This function assesses schools based on services and amenities like cafeterias, gyms, and auditoriums, 
-helping families in selecting the ideal school based on educational level and facilities.
-"""
+import pandas as pd
 
 def best_school_in_town(data, city, school_level):
+    """
+    Trova la scuola con il maggior numero di servizi in una città e un livello di scuola specificati.
+    
+    Parameters:
+    - data (DataFrame): il DataFrame contenente i dati delle scuole
+    - city (str): la città per cui trovare la scuola
+    - school_level (str): il livello della scuola (es. 'primaria', 'secondaria primo grado')
 
-
-"""
-Finding the school with the most services in a given city and school le
-Parameters:
-- data (DataFrame):the DataFrame containing school data
-- city (str): the city for which to find the school 
-- school_level (str): the level of school (ex. 'primaria', 'secondaria primo grado')
-
-Returns:
-dict: a dictionary containing information about the school with the most services, 
-including 'school name', 'services', 'service count'
-If no data is available for the specified city or school level, 
-return an informative message.
-"""
-
-filtered_data = data[(data['Denominazione Comune'] == city) &
-                     (data['Tipologia Scuola'] == school_level)]
-
-if filtered_data.empty:
-    return "No data available for the specific city and school level."
-
-#Count the numer of services for each school
-filtered_data['Service count'] = filtered_data[['Auditorium Aula Magna', 'Mensa', 'Palestra Piscina']].sum(axis=1)
-
-
-#Sort the school by the number of services
-filtered_data = filtered_data.sort_values(by='Service count', ascending=False)   
-
-best_school = filtered_data.iloc[0]
-
-return{
-    'School Name': best_school['Denominazione Plesso Scolastico'],
-    'Services':{
-        'Auditorium Aula Magna': best_school['Auditorium Aula Magna'],
-        'Mensa': best_school['Mensa'],
-        'Palestra Piscina': best_school['Palestra Piscina']
-    },
-    'Service Count': best_school['Service Count']
-}
+    Returns:
+    dict: un dizionario contenente informazioni sulla scuola con il maggior numero di servizi,
+    inclusi 'Nome Scuola', 'Servizi', 'Conteggio servizi'.
+    Se non ci sono dati disponibili per la città o il livello di scuola specificato,
+    restituisce un messaggio informativo.
+    """
+    
+    filtered_data = data[(data['Denominazione Comune'] == city) &
+                         (data['Tipologia Scuola'] == school_level)]
+    
+    if filtered_data.empty:
+        return "Nessun dato disponibile per la città e il livello di scuola specificato."
+    
+    # Calcola il numero di servizi per ciascuna scuola
+    filtered_data['Service Count'] = filtered_data[['Auditorium Aula Magna', 'Mensa', 'Palestra Piscina']].sum(axis=1)
+    
+    # Ordina le scuole in base al numero di servizi
+    filtered_data = filtered_data.sort_values(by='Service Count', ascending=False)
+    
+    best_school = filtered_data.iloc[0]
+    
+    return {
+        'Nome Scuola': best_school['Denominazione Plesso Scolastico'],
+        'Servizi': {
+            'Auditorium Aula Magna': best_school['Auditorium Aula Magna'],
+            'Mensa': best_school['Mensa'],
+            'Palestra Piscina': best_school['Palestra Piscina']
+        },
+        'Conteggio servizi': best_school['Service Count']
+    }

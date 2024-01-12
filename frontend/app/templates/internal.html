@@ -5,8 +5,8 @@
 {% block content %}
 
     <div class="container mt-5">
-        <h1>Hello, Internal Page!</h1>
-        <p>This is an internal page for interacting with a FastAPI backend.</p>
+        <h1>SCHOOL FINDER</h1>
+        <p>Discover your next educational destination.</p>
 
         <!-- WTForms Form to get input from the user -->
         <form method="POST" action="">
@@ -48,6 +48,49 @@
                 <p class="text-danger">{{ error_message }}</p>
             {% endif %}
         </div>
+
+        <!-- Display the result here -->
+        <div id="resultContainer" class="mt-3">
+            {% if result %}
+                <table>
+                    <thead>
+                        <th>Comune</th>
+                        <th>Denominazione Plesso Scolastico</th>
+                        <th>Via Piazza</th>
+                        <th>Denominazione Strada</th>
+                        <th>Civico</th>
+                    </thead>
+                    <tbody>
+                        {% for key, row in result.items() %}
+                            <tr>
+                                <td>{{ row['Denominazione Comune'] }}</td>
+                                <td>{{ row['Denominazione Plesso Scolastico'] }}</td>
+                                <td>{{ row['Via Piazza'] }}</td>
+                                <td>{{ row['Denominazione Strada'] }}</td>
+                                <td>{{ row['Civico'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <!-- Display the best school information -->
+                {% if best_school_info %}
+                    <h2>Best School in {{ form.province.data }}</h2>
+                    <p>Name: {{ best_school_info['Nome Scuola'] }}</p>
+                    <p>Services:</p>
+                    <ul>
+                        <li>Auditorium Aula Magna: {{ best_school_info['Servizi']['Auditorium Aula Magna'] }}</li>
+                        <li>Mensa: {{ best_school_info['Servizi']['Mensa'] }}</li>
+                        <li>Palestra Piscina: {{ best_school_info['Servizi']['Palestra Piscina'] }}</li>
+                    </ul>
+                    <p>Service Count: {{ best_school_info['Conteggio servizi'] }}</p>
+                {% endif %}
+            {% endif %}
+            {% if error_message %}
+                <p class="text-danger">{{ error_message }}</p>
+            {% endif %}
+        </div>
+        
         
 
     </div>
