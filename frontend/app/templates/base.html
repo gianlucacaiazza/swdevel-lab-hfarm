@@ -69,6 +69,8 @@
 <div class="background">
 </div>
 
+#feature 2
+
 <nav class="navbar navbar-expand-lg navbar-custom">
     <a class="navbar-brand" href="#"><b>&nbsp SCHOOL FINDER</b></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +96,27 @@
         </ul>
     </div>
 </nav>
+#feature 1 
 
+<div class="container mt-5">
+    <h1><b>Find Schools with Desired Infrastructures</b></h1>
+    <p>Select your province and infrastructure requirements</p>
+    <form method="POST" action="{{ url_for('schools_with_infrastructures') }}">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.Province.label }}
+            {{ form.Province(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="infrastructures">Choose Infrastructures:</label>
+            <select multiple class="form-control" id="infrastructures" name="infrastructures">
+                <option value="Mensa">Cafeteria (Mensa)</option>
+                <option value="PalestraPiscina">Gym and Pool (Palestra Piscina)</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Find Schools</button>
+    </form>
+</div>
 <footer class="footer">
     <p>Tutti i diritti riservati a SCHOOL FINDER<sup>&#174;</sup>
     <img src="{{ url_for('static', filename='SCHOOL_FINDER_LOGO.png') }}" alt="Logo" width="80">&nbsp</p>
