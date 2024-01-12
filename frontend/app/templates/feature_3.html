@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} List Schools by Type {% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #e5e9eb; /* Set the body background color to a light gray */
+    }
+
+    h1 {
+        font-family: 'Lato';
+    }
+</style>
+<div class="container mt-5">
+    <h1><b>List of Schools by Type</b></h1>
+    <p>Choose the province and school type to filter schools.</p>
+    <form method="POST" action="{{ url_for('list_schools_by_type_result') }}">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.Province.label }}
+            {{ form.Province(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.SchoolType.label }}
+            {{ form.SchoolType(class="form-control") }}
+        </div>
+        {{ form.submit3(class="btn btn-primary") }}
+    </form>
+</div>
+{% endblock %}
+
