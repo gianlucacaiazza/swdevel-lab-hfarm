@@ -38,7 +38,7 @@ def list_schools_by_type(data):
     # Filter for the specified school type
     data_province = data_province[data_province['Proprietario Edificio'].str.lower() == school_type_input.lower()]
 
-    # Select relevant columns
+    # Select the relevant columns
     relevant_columns = ['Denominazione Comune', 'Denominazione Plesso Scolastico', 'Tipologia Scuola', 'Proprietario Edificio']
     selected_schools = data_province[relevant_columns].drop_duplicates()
 
