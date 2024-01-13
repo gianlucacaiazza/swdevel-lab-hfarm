@@ -95,7 +95,7 @@ def get_date():
 def get_best_school(city: str, school_level: str):
     return JSONResponse(best_school_in_town(veneto, city, school_level))
         
-data = pd.read_csv('percorso/del/tuo/file.csv')
+
 @app.get('/schools/{nome_provincia}/{infrastrutture}')
 def get_schools(nome_provincia: str, infrastrutture: str):
     infrastrutture_list = infrastrutture.split(',')  # Crea una lista dalle stringhe separate da virgole
