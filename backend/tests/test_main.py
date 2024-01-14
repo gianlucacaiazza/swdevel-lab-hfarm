@@ -47,3 +47,40 @@ def test_success_read_item_module():
     response = client.get("/module/search/Albert Einstein")
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
+
+
+
+
+
+
+import pytest
+from fastapi.testclient import TestClient
+from app.mymodules.feature_2_best_school_in_town import best_school_in_town  # Assuming your main module is in a directory named "app"
+
+# Create a client for testing
+client = TestClient(app)
+
+# Tests for the best_school_in_town function
+
+def test_best_school_in_town_valid():
+    # Test with valid data
+    response = client.get('/best-school/Milan/primary')  # Replace 'Milan' with a city and 'primary' with a valid school level
+    assert response.status_code == 200
+    data = response.json()
+    assert 'School Name' in data
+    assert 'Services' in data
+    assert 'Service Count' in data
+
+def test_best_school_in_town_invalid_city():
+    # Test with a city not present in the data
+    response = client.get('/best-school/InvalidCity/primary')
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "No data available for the specified city and school level."
+
+def test_best_school_in_town_invalid_level():
+    # Test with a school level not present in the data
+    response = client.get('/best-school/Milan/invalid_level')
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "No data available for the specified city and school level."
