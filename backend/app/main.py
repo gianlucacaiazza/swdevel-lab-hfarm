@@ -12,7 +12,7 @@ import pandas as pd
 
 
 
-
+from .mymodules.birthdays import return_birthday, print_birthdays_str
 from .mymodules.search_school import schools_by_province
 from .mymodules.feature_2_best_school_in_town import best_school_in_town 
 from .mymodules.feat_1_elenco_scuole_con_infrastrutture import elenco_scuole_con_infrastrutture
