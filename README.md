@@ -27,3 +27,38 @@ The function then identifies schools that possess all of the listed infrastructu
 If a non-existent province is entered, the function returns an error message indicating that the province does not exist in the dataset.
 
 #feature 2 
+The function best_school_in_town is meticulously crafted to assist students and parents in identifying the most service-rich school in a specific city and school level. This feature is incredibly valuable for those seeking a comprehensive educational environment that offers a wide array of services. It is particularly useful for making informed decisions regarding school selection based on available facilities and services.
+
+Function Parameters:
+data: A Pandas DataFrame that encapsulates the dataset containing detailed information about various schools.
+city: A string parameter representing the city where the search for the best school is to be conducted.
+school_level: A string that specifies the educational level of the school, such as 'primary', 'middle', or 'high school'.
+
+Functionality:
+Data Filtering: The function initially filters the dataset to include only those schools that are located in the specified city and match the given school level.
+
+Service Evaluation: It then evaluates the schools based on the number of services they offer. This includes a comprehensive check of facilities like auditoriums, cafeterias, and sports complexes.
+
+Result Presentation: The output is a dictionary containing key information about the best school, such as the school's name, the services it offers, and the total count of these services.
+
+
+
+
+
+
+#How to Use the M.E.K.E Software
+
+Preparation
+Ensure that the necessary dataset ('name_of_your_file.csv') is present in the backend part. It is essential for the software's operation.
+
+Launching the Application
+Open the master branch of your project.
+Execute and debug the backend and frontend using Docker containers.
+Accessing the Software
+Once the setup is complete, open your browser and go to the address localhost:port (for example, localhost:8080).
+
+Troubleshooting
+If you encounter issues in launching the application (for example, CSV file formatting errors), check the backend's status and, if necessary, reload the CSV file.
+
+Navigating the Interface
+The various features developed are available in the top bar of the user interface. For example, the functionality to find the best school in a specific city, based on criteria such as the services offered.
