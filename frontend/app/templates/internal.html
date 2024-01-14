@@ -1,160 +1,48 @@
 {% extends 'base.html' %}
 
-{% block title %} Internal of Frontend {% endblock %}
+{% block title %} Homepage of Frontend {% endblock %}
 
 {% block content %}
+<style>
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: url("{{ url_for('static', filename='background.jpg') }}"); /* Sostituisci con il percorso della tua immagine di sfondo */
+        background-size: cover;
+        background-position: center;
+        filter: blur(5px); /* Regola la quantità di sfocatura desiderata */
+    }
 
-    <div class="container mt-5">
-        <h1>SCHOOL FINDER</h1>
-        <p>Discover your next educational destination.</p>
+    .text-background {
+        text-shadow: 2px 2px 4px rgb(0, 128, 128); /* Verde */
+    }
 
-        <!-- WTForms Form to get input from the user -->
-        <form method="POST" action="">
-            {{ form.csrf_token }}
-            <div class="form-group">
-                {{ form.province.label }}
-                {{ form.province(class="form-control", placeholder="Enter province") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
+    .centered-logo {
+        max-width: 80%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
 
-        <!-- Display the result here -->
-        <div id="resultContainer" class="mt-3">
-            {% if result %}
+    .text {
+        color: rgb(0, 0, 255); /* Azzurro */
+    }
+</style>
 
-				<table>
-					<thead>
-						<th>Comune</th>
-						<th>Denominazione Plesso Scolastico</th>
-						<th>Via Piazza</th>
-						<th>Denominazione Strada</th>
-						<th>Civico</th>
-					</thead>
-					<tbody>
-						{% for key, row in result.items() %}
-						  <tr>
-							<td>{{row['Denominazione Comune']}}</td>
-							<td>{{row['Denominazione Plesso Scolastico']}}</td>
-							<td>{{row['Via Piazza']}}</td>
-							<td>{{row['Denominazione Strada']}}</td>
-							<td>{{row['Civico']}}</td>
-						  </tr>
-						{% endfor %}
-						  </tbody>
-				</table>
+<div class="background"></div>
 
-            {% endif %}
-            {% if error_message %}
-                <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
-        </div>
-
-        <!-- Display the result here -->
-        <div id="resultContainer" class="mt-3">
-            {% if result %}
-                <table>
-                    <thead>
-                        <th>Comune</th>
-                        <th>Denominazione Plesso Scolastico</th>
-                        <th>Via Piazza</th>
-                        <th>Denominazione Strada</th>
-                        <th>Civico</th>
-                    </thead>
-                    <tbody>
-                        {% for key, row in result.items() %}
-                            <tr>
-                                <td>{{ row['Denominazione Comune'] }}</td>
-                                <td>{{ row['Denominazione Plesso Scolastico'] }}</td>
-                                <td>{{ row['Via Piazza'] }}</td>
-                                <td>{{ row['Denominazione Strada'] }}</td>
-                                <td>{{ row['Civico'] }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                
-            <!-- Display the best school information -->
-                {% if best_school_info %}
-                    <h2>Best School in {{ form.province.data }}</h2>
-                    <p>Name: {{ best_school_info['Nome Scuola'] }}</p>
-                    <p>Services:</p>
-                    <ul>
-                        <li>Auditorium Aula Magna: {{ best_school_info['Servizi']['Auditorium Aula Magna'] }}</li>
-                        <li>Mensa: {{ best_school_info['Servizi']['Mensa'] }}</li>
-                        <li>Palestra Piscina: {{ best_school_info['Servizi']['Palestra Piscina'] }}</li>
-                    </ul>
-                    <p>Service Count: {{ best_school_info['Conteggio servizi'] }}</p>
-                {% endif %}
-            {% endif %}
-            {% if error_message %}
-                <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
-
-            {% if best_school_info %} 
-            
-        </div>
-        
-        
-
-    </div>
-
-         <!-- feat_1-->
-    {% block title %} Schools with Infrastructure {% endblock %}
-
-{% block content %}
-    <div class="container mt-5">
-        <h1>FIND SCHOOLS WITH CAFETERIA AND GYM</h1>
-        <p>Discover the schools in your province with specific infrastructures.</p>
-
-        <!-- Form per ricevere input dall'utente -->
-        <form method="POST" action="{{ url_for('elenco_scuole_con_infrastrutture') }}">
-            {{ form.csrf_token }}
-            <div class="form-group">
-                {{ form.Provincia.label }}
-                {{ form.Provincia(class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="infrastrutture">Choose Infrastructure:</label>
-                <select multiple class="form-control" id="infrastrutture" name="infrastrutture">
-                    <option value="Mensa">Cafeteria</option>
-                    <option value="PalestraPiscina">gym and pool</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">FIND SCHOOLS</button>
-        </form>
-
-        <div id="resultContainer" class="mt-3">
-            {% if scuole_selezionate %}
-                <table class="table">
-                    <thead>
-                        <th>Comune</th>
-                        <th>Denominazione Plesso Scolastico</th>
-                        <th>Tipologia Scuola</th>
-                        <th>Mensa</th>
-                        <th>Palestra Piscina</th>
-                        
-                    </thead>
-                    <tbody>
-                        {% for scuola in scuole_selezionate %}
-                            <tr>
-                                <td>{{ scuola['Denominazione Comune'] }}</td>
-                                <td>{{ scuola['Denominazione Plesso Scolastico'] }}</td>
-                                <td>{{ scuola['Tipologia Scuola'] }}</td>
-                                <td>{{ scuola['Mensa'] }}</td>
-                                <td>{{ scuola['Palestra Piscina'] }}</td>
-                               
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>Nessuna scuola trovata con i criteri specificati.</p>
-            {% endif %}
-        
-            {% if error_message %}
-                <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
+<div class="container mt-5">
+    <div class="text-background">
+        <div class="text">
+            <h1><b>Benvenuto su SCHOOL FINDER!</b></h1>
+            <h2>Trova la scuola perfetta per te.</h2>
         </div>
     </div>
+</div>
 
-{% endblock %}
+<img class="centered-logo" src="{{ url_for('static', filename='logo.png') }}" alt="Logo di SCHOOL FINDER" width="300">
+{% endblock %}  
