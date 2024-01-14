@@ -88,3 +88,49 @@ def internal():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
+# Configuration for the FastAPI backend URL
+FASTAPI_BACKEND_HOST = 'https://vscode.dev/github/KlementinaYlli/M.E.K.E-Group/blob/KlementinaYlli_module/backend/app/main.py'  
+
+class QueryForm(FlaskForm):
+    province = StringField('Province:')
+    infrastructures = SelectMultipleField('Choose Infrastructures:', choices=[('Mensa', 'Cafeteria'), ('PalestraPiscina', 'GYM and POOL')])
+    submit = SubmitField('Find Schools')
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = QueryForm()
+    schools = None
+    error_message = None
+
+    if form.validate_on_submit():
+        province = form.province.data
+        infrastructures = ','.join(form.infrastructures.data)
+        schools, error_message = fetch_schools(province, infrastructures)
+
+    return render_template('index.html', form=form, schools=schools, error_message=error_message)
+
+def fetch_schools(province, infrastructures):
+    """
+    Fetch schools based on the province and infrastructure requirements.
+
+    Args:
+        province (str): The province to search in.
+        infrastructures (str): Comma-separated string of infrastructures.
+
+    Returns:
+        tuple: Tuple containing the schools (if any) and an error message (if any).
+    """
+    backend_url = f'{FASTAPI_BACKEND_HOST}/schools/{province}/{infrastructures}'
+    try:
+        response = requests.get(backend_url)
+        if response.status_code == 200:
+            return response.json(), None
+        else:
+            return None, f"Error: Backend responded with status code {response.status_code}"
+    except requests.exceptions.RequestException as e:
+        return None, f"Error: Could not connect to backend. Exception: {e}"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, debug=True)
+
+
