@@ -13,23 +13,22 @@
     }
 </style>
 <div class="container mt-5">
-    <h1><b>Find Schools with Desired Infrastructures</b></h1>
-    <p>Select your province and infrastructure requirements</p>
-    <form method="POST" action="{{ url_for('schools_with_infrastructures') }}">
+    <h1><b> FIND SCHOOLS WITH GYM and CAFETERIA</b></h1>
+    <p>Select province and infrastructure requirements</p>
+    <form method="POST" action="{{ url_for('elenco_scuole_con_infrastrutture') }}">
         {{ form.csrf_token }}
         <div class="form-group">
-            {{ form.Province.label }}
-            {{ form.Province(class="form-control") }}
+            {{ form.Provincia.label }}
+            {{ form.Provincia(class="form-control") }}
         </div>
         <div class="form-group">
-            <label for="infrastructures">Choose Infrastructures:</label>
-            <select multiple class="form-control" id="infrastructures" name="infrastructures">
-                <option value="Mensa">Cafeteria (Mensa)</option>
-                <option value="PalestraPiscina">Gym and Pool (Palestra Piscina)</option>
-            
+            <label for="infrastrutture">Choose Infrastructures:</label>
+            <select multiple class="form-control" id="infrastrutture" name="infrastrutture">
+                <option value="Mensa">Cafeteria</option>
+                <option value="PalestraPiscina">GYM and POOL</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Find Schools</button>
+        <button type="submit" class="btn btn-primary">FIND SCHOOLS</button>
     </form>
 </div>
 {% endblock %}

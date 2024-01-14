@@ -84,3 +84,58 @@ def test_best_school_in_town_invalid_level():
     assert response.status_code == 200
     data = response.json()
     assert data == "No data available for the specified city and school level."
+
+# feat_1
+
+# Tests for the elenco_scuole_con_infrastrutture function
+
+def test_elenco_scuole_con_infrastrutture_valid():
+    # Test with valid data
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["Mensa", "Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) > 0
+
+def test_elenco_scuole_con_infrastrutture_invalid_provincia():
+    # Test with an invalid province
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "InvalidProvince",
+        "infrastrutture": ["Mensa", "Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: provincia non esistente."
+
+def test_elenco_scuole_con_infrastrutture_empty_infrastrutture():
+    # Test with empty infrastructure list
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": []
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: nessuna infrastruttura specificata."
+
+def test_elenco_scuole_con_infrastrutture_invalid_infrastruttura():
+    # Test with an invalid infrastructure column
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["InvalidInfrastruttura"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: colonna 'InvalidInfrastruttura' non presente nel dataset."
+
+def test_elenco_scuole_con_infrastrutture_no_data():
+    # Test with no schools found
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Nessuna scuola trovata con le infrastrutture specificate nella provincia data."
