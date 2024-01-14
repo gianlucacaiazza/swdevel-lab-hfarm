@@ -47,3 +47,95 @@ def test_success_read_item_module():
     response = client.get("/module/search/Albert Einstein")
     assert response.status_code == 200
     assert response.json() == ["Albert Einstein's birthday is 03/14/1879."]
+
+
+
+
+
+
+import pytest
+from fastapi.testclient import TestClient
+from app.mymodules.feature_2_best_school_in_town import best_school_in_town  # Assuming your main module is in a directory named "app"
+
+# Create a client for testing
+client = TestClient(app)
+
+# Tests for the best_school_in_town function
+
+def test_best_school_in_town_valid():
+    # Test with valid data
+    response = client.get('/best-school/Milan/primary')  # Replace 'Milan' with a city and 'primary' with a valid school level
+    assert response.status_code == 200
+    data = response.json()
+    assert 'School Name' in data
+    assert 'Services' in data
+    assert 'Service Count' in data
+
+def test_best_school_in_town_invalid_city():
+    # Test with a city not present in the data
+    response = client.get('/best-school/InvalidCity/primary')
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "No data available for the specified city and school level."
+
+def test_best_school_in_town_invalid_level():
+    # Test with a school level not present in the data
+    response = client.get('/best-school/Milan/invalid_level')
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "No data available for the specified city and school level."
+
+# feat_1
+
+# Tests for the elenco_scuole_con_infrastrutture function
+
+def test_elenco_scuole_con_infrastrutture_valid():
+    # Test with valid data
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["Mensa", "Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) > 0
+
+def test_elenco_scuole_con_infrastrutture_invalid_provincia():
+    # Test with an invalid province
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "InvalidProvince",
+        "infrastrutture": ["Mensa", "Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: provincia non esistente."
+
+def test_elenco_scuole_con_infrastrutture_empty_infrastrutture():
+    # Test with empty infrastructure list
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": []
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: nessuna infrastruttura specificata."
+
+def test_elenco_scuole_con_infrastrutture_invalid_infrastruttura():
+    # Test with an invalid infrastructure column
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["InvalidInfrastruttura"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Errore: colonna 'InvalidInfrastruttura' non presente nel dataset."
+
+def test_elenco_scuole_con_infrastrutture_no_data():
+    # Test with no schools found
+    response = client.post('/elenco-scuole-con-infrastrutture', json={
+        "nome_provincia": "Veneto",
+        "infrastrutture": ["Palestra Piscina"]
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data == "Nessuna scuola trovata con le infrastrutture specificate nella provincia data."

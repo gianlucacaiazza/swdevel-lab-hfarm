@@ -6,15 +6,17 @@ as the backend for the project.
 """
 
 from fastapi import FastAPI
-from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 
 
+
 from .mymodules.birthdays import return_birthday, print_birthdays_str
 from .mymodules.search_school import schools_by_province
 from .mymodules.feature_2_best_school_in_town import best_school_in_town 
+from .mymodules.feat_1_elenco_scuole_con_infrastrutture import elenco_scuole_con_infrastrutture, data_personalizzato
+
 
 app = FastAPI()
 
@@ -93,4 +95,9 @@ def get_date():
 def get_best_school(city: str, school_level: str):
     return JSONResponse(best_school_in_town(veneto, city, school_level))
         
-    
+
+@app.get('/schools/{nome_provincia}/{infrastrutture}')
+def get_schools(nome_provincia: str, infrastrutture: str):
+    infrastrutture_list = infrastrutture.split(',')
+    result = elenco_scuole_con_infrastrutture(data_personalizzato, nome_provincia, infrastrutture_list)
+    return JSONResponse(content=result)
