@@ -15,7 +15,7 @@ import pandas as pd
 
 from .mymodules.search_school import schools_by_province
 from .mymodules.feature_2_best_school_in_town import best_school_in_town 
-from .mymodules.feat_1_elenco_scuole_con_infrastrutture import elenco_scuole_con_infrastrutture
+from .mymodules.feat_1_elenco_scuole_con_infrastrutture import elenco_scuole_con_infrastrutture, data_personalizzato
 
 
 app = FastAPI()
@@ -98,6 +98,6 @@ def get_best_school(city: str, school_level: str):
 
 @app.get('/schools/{nome_provincia}/{infrastrutture}')
 def get_schools(nome_provincia: str, infrastrutture: str):
-    infrastrutture_list = infrastrutture.split(',')  # Crea una lista dalle stringhe separate da virgole
-    result = elenco_scuole_con_infrastrutture(veneto, nome_provincia, infrastrutture_list)
-    return JSONResponse(result)
+    infrastrutture_list = infrastrutture.split(',')
+    result = elenco_scuole_con_infrastrutture(data_personalizzato, nome_provincia, infrastrutture_list)
+    return JSONResponse(content=result)
