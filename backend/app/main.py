@@ -12,7 +12,7 @@ import pandas as pd
 
 from .mymodules.search_with_province import schools_by_province
 from .mymodules.best_school import best_school_in_town
-from .mymodules.search_with_infrastructure import search_with_infrastructure
+from .mymodules.search_with_infrastructure import search_with_infrastructure, load_and_clean_data
 
 from .mymodules import listing
 
@@ -22,7 +22,17 @@ app = FastAPI()
 # il punto e virgola e non la virgola.
 veneto = pd.read_csv('/app/app/veneto.csv', sep=';')
 veneto = veneto.fillna('')
+veneto = load_and_clean_data
 
+def load_and_clean_data(file_path):
+    # Carica e pulisce i dati
+    data = pd.read_csv(file_path, sep=';', header=0, encoding='ISO-8859-1')
+    columns_to_drop = ["Codice Plesso Scolastico","Codice Edificio", "Edifici Attivo (SI-NO)", 
+                   "Codice Istituzione Scolastica", "Codice ISTAT Comune", "Latitudine", "Longitudine" ]  # Elenco delle colonne da rimuovere
+    data_cleaned = data.drop(columns=columns_to_drop)
+    data_cleaned.fillna('Not found', inplace=True)
+    data_cleaned.drop_duplicates(inplace=True)
+    return data_cleaned 
 
 @app.get('/all/{type}')
 def list_all(type: str):
