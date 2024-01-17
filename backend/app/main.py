@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 
-from .mymodules.search_school import schools_by_province
+from .mymodules.search_with_province import schools_by_province
 from .mymodules.best_school import best_school_in_town
 from .mymodules.search_with_infrastructure import search_with_infrastructure
 
@@ -23,28 +23,29 @@ app = FastAPI()
 veneto = pd.read_csv('/app/app/veneto.csv', sep=';')
 veneto = veneto.fillna('')
 
+
 @app.get('/all/{type}')
 def list_all(type: str):
     """
     Endpoint to query all available provinces.
-    
+
     Returns:
         dict: Available provinces.
     """
 
     if type == 'provinces':
-        return { 'elements': listing.list_provinces(veneto) }
+        return {'elements': listing.list_provinces(veneto)}
     elif type == 'cities':
-        return { 'elements': listing.list_cities(veneto) }
-    elif type == 'school_types': 
-        return { 'elements': listing.list_school_types(veneto) }
-    
-    return { 'error': 'element not found'}
+        return {'elements': listing.list_cities(veneto)}
+    elif type == 'school_types':
+        return {'elements': listing.list_school_types(veneto)}
+
+    return {'error': 'element not found'}
 
 
 @app.get('/module/search/province/{province}')
 def with_province(province: str):
-	"""
+    """
     Endpoint to query schools by province
 
     Args:
@@ -54,7 +55,7 @@ def with_province(province: str):
         dict: all the schools in the inserted province.
     """
 
-	return JSONResponse(schools_by_province(province, veneto))
+    return JSONResponse(schools_by_province(province, veneto))
 
 
 @app.get('/module/search/rank/{city}/{level}')
@@ -69,13 +70,13 @@ def with_highest_rank(city: str, level: str):
     Returns:
         dict: all the schools filtered by province and level.
     """
-     
+
     result = best_school_in_town(city, level, veneto)
-    
+
     if result is not None:
-        return { 'result' : result.transpose().to_dict() }
-    
-    return { 'error' : 'Unable to find school' }
+        return {'result': result.transpose().to_dict()}
+
+    return {'error': 'Unable to find school'}
 
 
 @app.get('/module/search/infrastructure/{province}/{infrastructure}')
@@ -90,10 +91,10 @@ def with_infrastructure(province: str, infrastructure: str):
     Returns:
         dict: all the schools filtered by province and infrastructure.
     """
-     
+
     result = search_with_infrastructure(province, infrastructure, veneto)
-    
+
     if result is not None:
-        return { 'result' : result.transpose().to_dict() }
-    
-    return { 'error' : 'Unable to find school' }
+        return {'result': result.transpose().to_dict()}
+
+    return {'error': 'Unable to find school'}

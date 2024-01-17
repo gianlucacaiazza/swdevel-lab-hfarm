@@ -17,8 +17,8 @@ FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your F
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
-class QueryForm(FlaskForm):
-    province = StringField('Province:')
+class ScoolbyProvince(FlaskForm):
+    province = SelectField('Province:', choices=[])
     submit = SubmitField('Get all schools')
 
 class BestSchoolForm(FlaskForm):
@@ -42,8 +42,7 @@ def index():
         str: Rendered HTML content for the index page.
     """
     # Fetch the date from the backend
-    date_from_backend = 'dawd'
-    return render_template('index.html', date_from_backend=date_from_backend)
+    return render_template('index.html')
 
 
 @app.route('/school-by-province', methods=['GET', 'POST'])
@@ -54,7 +53,9 @@ def school_by_province():
     Returns:
         str: Rendered HTML content search school by province page.
     """
-    form = QueryForm()
+    form = ScoolbyProvince()
+    form.province.choices = make_tuples(list('provinces'))
+    
     error_message = None  # Initialize error message
 
     if form.validate_on_submit():
@@ -116,10 +117,10 @@ def best_school():
 @app.route('/school-with-infrastructures', methods=['GET', 'POST'])
 def shool_with_infrastructures():
     """
-    Render the best school page.
+    Render the best school with infrastructures page.
 
     Returns:
-        str: Rendered HTML content best school section.
+        str: Rendered HTML content best school with infrastructures section.
     """
     form = SchoolInfrastructuresForm()
     
@@ -157,10 +158,10 @@ def shool_with_infrastructures():
 
 def list(element):
     """
-    Function to fetch the current date from the backend.
+    Function to list a column of the csv file.
 
     Returns:
-        str: Current date in ISO format.
+        list: List of unique values of the requested column.
     """
     backend_url = f'{FASTAPI_BACKEND_HOST}/all/{element}'
     try:

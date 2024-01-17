@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Best school in town {% endblock %}
+{% block title %} School with infrastructures{% endblock %}
 
 {% block content %}
 
@@ -50,7 +50,11 @@
             {% endif %}
             {% if error_message %}
                 <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
+			{% else %}
+			{% if result is not none and not result: %}
+				<h5>Nessun risultato trovato </h5>
+			{% endif %}
+		{% endif %}
         </div>
         
 

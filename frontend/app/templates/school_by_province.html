@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Internal of Frontend {% endblock %}
+{% block title %} School by province {% endblock %}
 
 {% block content %}
 
@@ -42,11 +42,15 @@
 						{% endfor %}
 						  </tbody>
 				</table>
-
+					
             {% endif %}
             {% if error_message %}
                 <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
+			{% else %}
+				{% if result is not none and not result: %}
+					<h5>Nessun risultato trovato </h5>
+				{% endif %}
+			{% endif %}
         </div>
         
 

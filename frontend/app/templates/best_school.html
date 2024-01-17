@@ -53,7 +53,11 @@
             {% endif %}
             {% if error_message %}
                 <p class="text-danger">{{ error_message }}</p>
-            {% endif %}
+			{% else %}
+				{% if result is not none and not result: %}
+					<h5>Nessun risultato trovato </h5>
+				{% endif %}
+			{% endif %}
         </div>
         
 
