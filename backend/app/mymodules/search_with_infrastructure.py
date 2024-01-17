@@ -15,6 +15,6 @@ def search_with_infrastructure(province_name, infrastructure_name: str, df):
     with_province = df[df['Denominazione Provincia'].str.upper() == province_name.upper()]
 
 
-    with_infrastructure = df[df[infrastructure_name] > 0]
+    with_infrastructure = with_province[with_province[infrastructure_name] > 0]
 
     return with_infrastructure

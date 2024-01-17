@@ -30,7 +30,6 @@ def best_school_in_town(city: str, school_level: str, df):
     filtered_data = filtered_data.sort_values(by='Service Count', ascending=False)
     
     best_schools = filtered_data[filtered_data['Service Count'] == filtered_data.iloc[0]['Service Count']]
-    #transposed = filtered_data.transpose()
 
 
     return best_schools

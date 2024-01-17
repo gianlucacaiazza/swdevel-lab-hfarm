@@ -5,8 +5,8 @@
 {% block content %}
 
     <div class="container mt-5">
-        <h1>Hello, Internal Page!</h1>
-        <p>This is an internal page for interacting with a FastAPI backend.</p>
+        <h1>Select a province</h1>
+        <p>We'll find all the schools in the province you selected!</p>
 
         <!-- WTForms Form to get input from the user -->
         <form method="POST" action="">
@@ -15,7 +15,7 @@
                 {{ form.province.label }}
                 {{ form.province(class="form-control", placeholder="Enter province") }}
             </div>
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit(class="btn btn-primary mt-4") }}
         </form>
 
         <!-- Display the result here -->

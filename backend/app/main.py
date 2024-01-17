@@ -24,7 +24,7 @@ veneto = pd.read_csv('/app/app/veneto.csv', sep=';')
 veneto = veneto.fillna('')
 
 @app.get('/all/{type}')
-def province_list(type: str):
+def list_all(type: str):
     """
     Endpoint to query all available provinces.
     
