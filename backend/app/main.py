@@ -10,94 +10,90 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
 
-
-
-from .mymodules.birthdays import return_birthday, print_birthdays_str
 from .mymodules.search_school import schools_by_province
-from .mymodules.feature_2_best_school_in_town import best_school_in_town 
-from .mymodules.feat_1_elenco_scuole_con_infrastrutture import elenco_scuole_con_infrastrutture, data_personalizzato
+from .mymodules.best_school import best_school_in_town
+from .mymodules.search_with_infrastructure import search_with_infrastructure
 
+from .mymodules import listing
 
 app = FastAPI()
-
-# Dictionary of birthdays
-birthdays_dictionary = {
-    'Albert Einstein': '03/14/1879',
-    'Benjamin Franklin': '01/17/1706',
-    'Ada Lovelace': '12/10/1815',
-    'Donald Trump': '06/14/1946',
-    'Rowan Atkinson': '01/6/1955'
-}
-
-df = pd.read_csv('/app/app/employees.csv')
 
 # Lettura del csv, si usa sep=';' poiche' questo file usa come separatore
 # il punto e virgola e non la virgola.
 veneto = pd.read_csv('/app/app/veneto.csv', sep=';')
+veneto = veneto.fillna('')
 
-@app.get('/csv_show')
-def read_and_return_csv():
-    return{veneto.to_string()}
-
-@app.get('/')
-def read_root():
+@app.get('/all/{type}')
+def list_all(type: str):
     """
-    Root endpoint for the backend.
-
+    Endpoint to query all available provinces.
+    
     Returns:
-        dict: A simple greeting.
+        dict: Available provinces.
     """
-    return {"Hello": "World"}
+
+    if type == 'provinces':
+        return { 'elements': listing.list_provinces(veneto) }
+    elif type == 'cities':
+        return { 'elements': listing.list_cities(veneto) }
+    elif type == 'school_types': 
+        return { 'elements': listing.list_school_types(veneto) }
+    
+    return { 'error': 'element not found'}
 
 
-@app.get('/query/{person_name}')
-def read_item(person_name: str):
-    """
-    Endpoint to query birthdays based on person_name.
+@app.get('/module/search/province/{province}')
+def with_province(province: str):
+	"""
+    Endpoint to query schools by province
 
     Args:
-        person_name (str): The name of the person.
+        province (str): province name.
 
     Returns:
-        dict: Birthday information for the provided person_name.
+        dict: all the schools in the inserted province.
     """
-    person_name = person_name.title()  # Convert to title case for consistency
-    birthday = birthdays_dictionary.get(person_name)
-    if birthday:
-        return {"person_name": person_name, "birthday": birthday}
-    else:
-        return {"error": "Person not found"}
 
-# Restituisce tutte le scuole filtrare per provincia.
-@app.get('/module/search/province/{province}')
-def read_item_from_module(province: str):
-    return JSONResponse(schools_by_province(province, veneto))
+	return JSONResponse(schools_by_province(province, veneto))
 
 
-@app.get('/module/all')
-def dump_all_birthdays():
-    return {print_birthdays_str()}
-
-
-@app.get('/get-date')
-def get_date():
+@app.get('/module/search/rank/{city}/{level}')
+def with_highest_rank(city: str, level: str):
     """
-    Endpoint to get the current date.
+    Endpoint to query schools by city and level
+
+    Args:
+        province (str): city name.
+        level (str): level name.
 
     Returns:
-        dict: Current date in ISO format.
+        dict: all the schools filtered by province and level.
     """
-    current_date = datetime.now().isoformat()
-    return JSONResponse(content={"date": current_date})
+     
+    result = best_school_in_town(city, level, veneto)
+    
+    if result is not None:
+        return { 'result' : result.transpose().to_dict() }
+    
+    return { 'error' : 'Unable to find school' }
 
 
-@app.get('/best-school/{city}/{school_level}')
-def get_best_school(city: str, school_level: str):
-    return JSONResponse(best_school_in_town(veneto, city, school_level))
-        
+@app.get('/module/search/infrastructure/{province}/{infrastructure}')
+def with_infrastructure(province: str, infrastructure: str):
+    """
+    Endpoint to query schools by province and infrastructure
 
-@app.get('/schools/{nome_provincia}/{infrastrutture}')
-def get_schools(nome_provincia: str, infrastrutture: str):
-    infrastrutture_list = infrastrutture.split(',')
-    result = elenco_scuole_con_infrastrutture(data_personalizzato, nome_provincia, infrastrutture_list)
-    return JSONResponse(content=result)
+    Args:
+        province (str): province name.
+        infrastructure (str): level name.
+
+    Returns:
+        dict: all the schools filtered by province and infrastructure.
+    """
+     
+    result = search_with_infrastructure(province, infrastructure, veneto)
+    
+    if result is not None:
+        return { 'result' : result.transpose().to_dict() }
+    
+    return { 'error' : 'Unable to find school' }

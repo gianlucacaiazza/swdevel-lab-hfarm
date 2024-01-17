@@ -1,6 +1,7 @@
 import pandas as pd
+import json
 
-def best_school_in_town(data, city, school_level):
+def best_school_in_town(city: str, school_level: str, df):
     """
     Trova la scuola con il maggior numero di servizi in una città e un livello di scuola specificati.
     
@@ -15,27 +16,20 @@ def best_school_in_town(data, city, school_level):
     Se non ci sono dati disponibili per la città o il livello di scuola specificato,
     restituisce un messaggio informativo.
     """
-    
-    filtered_data = data[(data['Denominazione Comune'] == city) &
-                         (data['Tipologia Scuola'] == school_level)]
+
+    filtered_data = df[(df['Denominazione Comune'].str.lower() == city.lower()) & (df['Tipologia Scuola'].str.lower() == school_level.lower())]
     
     if filtered_data.empty:
-        return "Nessun dato disponibile per la città e il livello di scuola specificato."
+        return None
     
+
     # Calcola il numero di servizi per ciascuna scuola
-    filtered_data['Service Count'] = filtered_data[['Auditorium Aula Magna', 'Mensa', 'Palestra Piscina']].sum(axis=1)
+    filtered_data['Service Count'] = filtered_data[['Spazi Didattici', 'Auditorium Aula Magna', 'Mensa', 'Palestra Piscina', 'Spazi Amministrativi']].sum(axis=1)
     
     # Ordina le scuole in base al numero di servizi
     filtered_data = filtered_data.sort_values(by='Service Count', ascending=False)
     
-    best_school = filtered_data.iloc[0]
-    
-    return {
-        'Nome Scuola': best_school['Denominazione Plesso Scolastico'],
-        'Servizi': {
-            'Auditorium Aula Magna': best_school['Auditorium Aula Magna'],
-            'Mensa': best_school['Mensa'],
-            'Palestra Piscina': best_school['Palestra Piscina']
-        },
-        'Conteggio servizi': best_school['Service Count']
-    }
+    best_schools = filtered_data[filtered_data['Service Count'] == filtered_data.iloc[0]['Service Count']]
+
+
+    return best_schools

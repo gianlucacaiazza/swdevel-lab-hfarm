@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} Internal of Frontend {% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h1>Select a province</h1>
+        <p>We'll find all the schools in the province you selected!</p>
+
+        <!-- WTForms Form to get input from the user -->
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.province.label }}
+                {{ form.province(class="form-control", placeholder="Enter province") }}
+            </div>
+            {{ form.submit(class="btn btn-primary mt-4") }}
+        </form>
+
+        <!-- Display the result here -->
+        <div id="resultContainer" class="mt-3">
+            {% if result %}
+
+				<table>
+					<thead>
+						<th>Comune</th>
+						<th>Denominazione Plesso Scolastico</th>
+						<th>Via Piazza</th>
+						<th>Denominazione Strada</th>
+						<th>Civico</th>
+					</thead>
+					<tbody>
+						{% for key, row in result.items() %}
+						  <tr>
+							<td>{{row['Denominazione Comune']}}</td>
+							<td>{{row['Denominazione Plesso Scolastico']}}</td>
+							<td>{{row['Via Piazza']}}</td>
+							<td>{{row['Denominazione Strada']}}</td>
+							<td>{{row['Civico']}}</td>
+						  </tr>
+						{% endfor %}
+						  </tbody>
+				</table>
+
+            {% endif %}
+            {% if error_message %}
+                <p class="text-danger">{{ error_message }}</p>
+            {% endif %}
+        </div>
+        
+
+    </div>
+
+
+{% endblock %}

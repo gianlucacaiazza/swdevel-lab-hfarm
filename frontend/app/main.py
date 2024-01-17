@@ -7,7 +7,7 @@ This module defines a simple Flask application that serves as the frontend for t
 from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
@@ -19,8 +19,19 @@ BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 class QueryForm(FlaskForm):
     province = StringField('Province:')
-    submit = SubmitField('Get province from FastAPI Backend')
+    submit = SubmitField('Get all schools')
 
+class BestSchoolForm(FlaskForm):
+    city = SelectField('City:', choices=[])
+    type = SelectField('Type:', choices=[])
+    
+    submit = SubmitField('Get best school')
+    
+class SchoolInfrastructuresForm(FlaskForm):
+    province = SelectField('Province:', choices=[])
+    infrastructure = SelectField('Infrastructures:', choices=[])
+    
+    submit = SubmitField('Get all schools')
 
 @app.route('/')
 def index():
@@ -31,34 +42,17 @@ def index():
         str: Rendered HTML content for the index page.
     """
     # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
+    date_from_backend = 'dawd'
     return render_template('index.html', date_from_backend=date_from_backend)
 
-def fetch_date_from_backend():
-    """
-    Function to fetch the current date from the backend.
 
-    Returns:
-        str: Current date in ISO format.
-    """
-    backend_url = 'http://backend/get-date'  # Adjust the URL based on your backend configuration
-    try:
-        response = requests.get(backend_url)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-        return response.json().get('date', 'Date not available')
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching date from backend: {e}")
-        return 'Date not available'
-
-
-
-@app.route('/internal', methods=['GET', 'POST'])
-def internal():
+@app.route('/school-by-province', methods=['GET', 'POST'])
+def school_by_province():
     """
     Render the internal page.
 
     Returns:
-        str: Rendered HTML content for the internal page.
+        str: Rendered HTML content search school by province page.
     """
     form = QueryForm()
     error_message = None  # Initialize error message
@@ -74,17 +68,115 @@ def internal():
             # Extract and display the result from the FastAPI backend
             data = response.json()
             result = data.get('result', f'Error: province not available for {province}')
-            
-            # Call your function to find the best school in town
-            best_school_info = best_school_in_town(data, province, 'scuola_level')  # Replace 'scuola_level' with the actual school level
-            
-            return render_template('internal.html', form=form, result=result, error_message=error_message, best_school_info=best_school_info)
+            return render_template('school_by_province.html', form=form, result=result, error_message=error_message)
         else:
             error_message = f'Error: Unable to fetch province for {province} from FastAPI Backend'
 
-    return render_template('internal.html', form=form, result=None, error_message=error_message)
+    return render_template('school_by_province.html', form=form, result=None, error_message=error_message)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+@app.route('/best-school', methods=['GET', 'POST'])
+def best_school():
+    """
+    Render the best school page.
 
+    Returns:
+        str: Rendered HTML content best school section.
+    """
+    form = BestSchoolForm()
+    
+    cities = list('cities')
+    types = list('school_types')
+
+    form.city.choices = make_tuples(cities)
+    form.type.choices = make_tuples(types)
+    
+    error_message = None  # Initialize error message
+
+    if form.validate_on_submit():
+        city = form.city.data
+        type = form.type.data
+        
+        # Make a GET request to the FastAPI backend
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/search/rank/{city}/{type}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            # Extract and display the result from the FastAPI backend
+            data = response.json()
+            
+            result = data.get('result', [])
+            return render_template('best_school.html', form=form, result=result, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch'
+
+    return render_template('best_school.html', form=form, result=None, error_message=error_message)
+
+
+@app.route('/school-with-infrastructures', methods=['GET', 'POST'])
+def shool_with_infrastructures():
+    """
+    Render the best school page.
+
+    Returns:
+        str: Rendered HTML content best school section.
+    """
+    form = SchoolInfrastructuresForm()
+    
+    provinces = list('provinces')
+
+    form.province.choices = make_tuples(provinces)
+    form.infrastructure.choices = [
+        ("Spazi Didattici", "Spazi Didattici"),
+        ("Auditorium Aula Magna", "Auditorium Aula Magna"),
+        ("Mensa", "Mensa"),
+        ("Palestra Piscina", "Palestra Piscina"),
+        ("Spazi Amministrativi", "Spazi Amministrativi")
+	]
+    
+    error_message = None  # Initialize error message
+
+    if form.validate_on_submit():
+        province = form.province.data
+        infrastructure = form.infrastructure.data
+        
+        # Make a GET request to the FastAPI backend
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/module/search/infrastructure/{province}/{infrastructure}'
+        response = requests.get(fastapi_url)
+
+        if response.status_code == 200:
+            # Extract and display the result from the FastAPI backend
+            data = response.json()
+            
+            result = data.get('result', [])
+            return render_template('school_with_infrastructures.html', form=form, result=result, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch'
+
+    return render_template('school_with_infrastructures.html', form=form, result=None, error_message=error_message)
+
+def list(element):
+    """
+    Function to fetch the current date from the backend.
+
+    Returns:
+        str: Current date in ISO format.
+    """
+    backend_url = f'{FASTAPI_BACKEND_HOST}/all/{element}'
+    try:
+        response = requests.get(backend_url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
+        return response.json().get('elements', [])
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching date from backend: {e}")
+        return 'Date not available'
+
+
+def make_tuples(element):
+    result = []
+    for x in element:
+        result.append((x, x))
+    return result
+
+
+if __name__ == '__main__':    app.run(host='0.0.0.0', port=80, debug=True)
