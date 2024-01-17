@@ -18,3 +18,4 @@ def search_with_infrastructure(province_name, infrastructure_name: str, df):
     with_infrastructure = with_province[with_province[infrastructure_name] > 0]
 
     return with_infrastructure
+    
