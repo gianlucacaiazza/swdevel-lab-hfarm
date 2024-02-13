@@ -1,12 +1,18 @@
-# swdevel-lab-hfarm
- Skeleton Project for the Lab of Software Project Development
+# FETCHED PROJECT - mcm group
+Fetched is web application crafted to streamline the process of finding accommodations within the Veneto region. Beyond its primary function of aiding in accommodation searches, Fetched offers a rich array of supplementary features to enhance the visitor experience.
+
+In addition to a diverse range of lodging options, Fetched acts as a valuable travel companion by furnishing users with insightful suggestions for nearby museums. This feature enables travelers to delve into the vibrant culture of the region, exploring its artistic heritage and historical significance.
+
+Moreover, Fetched goes beyond mere lodging recommendations and museum insights. It paints a vivid portrait of the Veneto region by presenting captivating descriptions complemented by images for each of its provinces.
+
+By seamlessly integrating accommodations, museum recommendations, and evocative snapshots of Veneto's provinces, Fetched provides users with an immersive exploration of this captivating Italian region.
 
 # Flask and FastAPI Dockerized Project
+This project demonstrates a simple web application using Flask as the frontend and FastAPI as the backend. The frontend allows to search for a city in Veneto and the result is given by the backend using a search bar.
 
-This project demonstrates a simple web application using Flask as the frontend and FastAPI as the backend. The frontend allows querying birthdays from the backend using a form. The project is Dockerized for easy deployment.
+The project is Dockerized for easy deployment.
 
 ## Architecture
-
 The project follows a simple client-server architecture:
 
 1. **Frontend (Flask):**
@@ -33,6 +39,7 @@ Bidirectional communication is established between the Frontend (Flask) and Back
     - Dockerfile: Dockerfile for building the backend image.
     - main.py: Main backend application file.
     - requirements.txt: List of Python dependencies for the backend.
+    - tests: Folder for testing code.
 - `frontend/`: Flask frontend implementation.
     - Dockerfile: Dockerfile for building the frontend image.
     - static/: Folder for static files (CSS, JavaScript, etc.).
@@ -42,92 +49,46 @@ Bidirectional communication is established between the Frontend (Flask) and Back
 - `docker-compose.yml`: Docker Compose configuration for running both frontend and backend.
 
 ## Prerequisites
-
 - Docker
 - Visual Studio Code (Optional, for debugging)
 
 ## Usage
 
-1. Clone the repository and navigate in the directory:
+1. Do you want to use and updated version of the datasets? Download the datasets
+
+   - Download the accomodations dataset from [this link](https://dati.veneto.it/opendata/elenco_strutture_ricettive_del_veneto?metadati=showall).
+
+   - Download the museum dataset from [this link](http://www.datiopen.it/it/opendata/Mappa_dei_musei_in_Italia).
+
+   - Prepare accomodation dataset (In this case, we used Google Colab to prepare it):
+   ```bash
+      import pandas as pd
+      from google.colab import files
+      columns_to_drop = ["INTERNO", "LOCALITA", "CATEGORIA", "ALTRI SERVIZI", "STELLE", "SOLARIUM", "CENTRO STORICO", "TIPOLOGIA SECONDARIA", "FAX", "ZONA FIERA", "SPAGNOLO", "AUTOSTRADA", "STAZIONE FS", "TIPOLOGIA", "AEROPORTO", "CAP","RISTORANTE", "TERMALE", "MARE", "COLLINARE", "NUOVA CLASSIFICAZIONE LR11", "PERIFERIA", "NUMERO CIVICO", "IMPIANTI RISALITA", "ZONA", "CODICE IDENTIFICATIVO", "SALA CONFERENZE", "TEDESCO", "FRANCESE", "DATA ULTIMA MODIFICA", "GIOCHI BIMBI", "INGLESE", "CHIUSURA TEMPORANEA"]
+      df = pd.read_csv("strutture.csv", sep=";")
+      df.drop(columns = columns_to_drop, inplace = True)
+      df.to_csv('output.csv', encoding = 'utf-8-sig')
+      files.download('output.csv')
+   ```
+   - Prepare museum dataset (In this case, we used Google Colab to prepare it):
+   ```bash
+      import pandas as pd
+      from google.colab import files
+      df = pd.read_csv("Mappa-dei-musei-in-Italia.csv", sep=";")
+      df_veneto = df[df['Regione'] == 'Veneto']
+      df_veneto.drop(columns=["Longitudine", "Latitudine", "Identificatore in OpenStreetMap", "Data e ora inserimento", "Anno inserimento"], inplace=True)
+      df_veneto = df_veneto.dropna(subset=['Nome'])
+      df_veneto.to_csv('musei_veneto.csv', encoding = 'utf-8-sig')
+      files.download('musei_veneto.csv')
+   ```
+   - Replace the old datasets with the new ones (the datasets name must be the same).
+
+2. Clone the repository and navigate in the directory:
 
     ```bash
-    git clone REPO_URL
-    cd swdevel-lab-hfarm
+    git clone git@github.com:martina28mb/mcm_groupwork.git
+    cd mcm_groupwork
     ```
-
-2. Build and run the Docker containers:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-    This will start both the frontend and backend containers.
-    
-> **NOTE:** Uncomment the lines in the Dockerfiles that follow the section labeled `Command to run the application` and comment out the ones labeled `Command to keep the container running`. This will allow you to access the backend and frontend, as described in Point 3.
-
-3. Open your web browser and navigate to [http://localhost:8080](http://localhost:8080) to access the `frontend` and [http://localhost:8081](http://localhost:8081) to access the `backend`.
-
-4. Use the form on the frontend to query birthdays from the backend.
-
-## Shutting Down the Docker Containers
-
-To shut down the running Docker containers, you can use the following steps:
-
-1. Open a terminal.
-
-2. Navigate to the project root directory.
-
-3. Run the following command to stop and remove the Docker containers:
-
-    ```bash
-    docker-compose down
-    ```
-
-## Starting and Stopping Containers Individually
-
-If you need to start or stop the containers individually, you can use the following commands:
-
-- **Start Frontend Container:**
-
-    ```bash
-    docker-compose up frontend
-    ```
-
-- **Stop Frontend Container:**
-
-    ```bash
-    docker-compose stop frontend
-    ```
-
-- **Start Backend Container:**
-
-    ```bash
-    docker-compose up backend
-    ```
-
-- **Stop Backend Container:**
-
-    ```bash
-    docker-compose stop backend
-    ```
-
-Make sure to replace `frontend` and `backend` with the appropriate service names from your `docker-compose.yml` file.
-
-### Notes:
-
-When stopping containers individually, the `docker-compose down` command is not required.
-Now you can manage the lifecycle of your Docker containers more flexibly.
-
-
-## Debugging with Visual Studio Code and Docker Extension
-
-1. Open the project in Visual Studio Code:
-
-    ```bash
-    code .
-    ```
-
-2. Set breakpoints in your Python code as needed.
 
 3. Build and run the Docker containers:
 
@@ -135,57 +96,76 @@ Now you can manage the lifecycle of your Docker containers more flexibly.
     docker-compose up --build
     ```
 
-    Ensure that your Docker containers are running.
+    This will start both the frontend and backend containers.
 
-4a. Install the [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) for Visual Studio Code.
-4b. Install the [Remote Development Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) for Visual Studio Code
+4. Open your web browser and navigate to [http://localhost:8080](http://localhost:8080) to access the `frontend` and [http://localhost:8081](http://localhost:8081) to access the `backend`.
 
-5. Open the "Docker" view in Visual Studio Code by clicking on the Docker icon in the Activity Bar.
+5. Click on the blocks in the home page to read informations about Veneto provinces and use the search bar to look for a city in Veneto region, in Italy. Suggested museums, if any, will be displayed below accomodations available in the city choosen.
 
-6. Under "Containers," you should see your running containers. Right-click on the container running your Flask or FastAPI application.
+## TEST SECTION
+# Overview
+The test suite for this application is built using the pytest framework. It includes several test cases to validate the functionality of the API endpoints.
 
-7. Select "Attach Visual Studio Code" from the context menu. This will configure the container for debugging.
+# Running tests
+To execute the test suite, follow these steps:
+1. Navigate to the root directory of the application.
+2. Run the following command in your terminal:
 
-8. Open the Run view in Visual Studio Code and select the "Python: Remote Attach" configuration.
+   pytest --cov=app --cov-report=html tests/
 
-9. Click the "Run" button to start the debugger.
+This command runs the tests and generates a coverage report in HTML format.
 
-10. Access the frontend in your web browser and trigger the actions you want to debug.
+# Test cases
+"test_read_main()"
+This test checks the root endpoint "/" to ensure it returns the expected response.
 
-### Notes:
+"test_query_endpoint_success()"
+Validates the query endpoint with accurate parameters to ensure it returns the expected response.
 
-- Ensure that your Docker containers are running (`docker-compose up --build`) before attaching Visual Studio Code.
+"test_query_endpoint_no_results()"
+Tests the query endpoint with a municipality that has no results, ensuring the correct response is returned.
 
-- Adjust the container name in the "Docker: Attach to Node" configuration if needed.
+"test_query_endpoint_with_piscina()"
+Validates the query endpoint with a municipality and "piscina" parameter to return an expected response.
 
-- The provided configurations assume that your Flask or FastAPI application is running with the debugger attached. Adjust the configurations if needed.
+"test_query_endpoint_with_sauna_no_link()"
+Tests the query endpoint with various parameters, including "sauna", ensuring the correct response is returned without a link.
 
-- If using Flask, ensure that the Flask application is started with the `--no-reload` option to prevent automatic reloading, which can interfere with debugging.
+"test_query_endpoint_with_all_but_sauna()"
+Validates the query endpoint with multiple parameters except "sauna"" and ensures the expected response is returned.
 
-- Debugging FastAPI requires configuring the FastAPI application to run with the `--reload` option. Update the FastAPI Dockerfile CMD accordingly.
+"test_query_endpoint_musei_only()"
+Tests the query endpoint with a municipality and "piscina"" parameter for expected responses related to museums.
 
-- After the debugger is attached, you can use breakpoints, inspect variables, and step through your code as needed.
+## GENERATING DOCUMENTATION
+In order to generate the documentation of the project, "pydoc" is used. Pydoc is a tool that automatically generates documentation from Python modules.
 
+1. Open a Terminal/Command Prompt;
 
-## Adding New Modules to a Running Docker Container
+2. Navigate to the project directory:
+   cd mcm_groupwork
 
-1. **Install Additional Modules:**
-    ```bash
-    pip install new_module
-    ```
-   Replace `new_module` with the names of the module you want to install.
+3. Run pydoc program using the following command:
+   pydoc -w ./
+Note: ./ indicates the path to follow to reach the directory from which you want to generate the documentation.
+   
+This command will generate HTML documentation for all modules in the current directory and its subdirectories.
 
-2. **Verify Installed Modules:**
-    ```bash
-    pip list
-    ```
-   This command displays a list of installed Python packages, including the newly added modules.
+4. Access Generated Documentation:
+Once the command completes, some HTML files corresponding to the modules in the project will be generated. 
+Open these HTML files in your web browser to view the documentation.
 
-3. **Optional: Update requirements.txt:**
-    ```bash
-    pip freeze > requirements.txt
-    ```
-   If you want to keep track of the installed modules, you may choose to update the `requirements.txt` file inside the container.
+## LINTING WITH PYCODESTYLE
+Linting is the process of analyzing code for potential errors or stylistic issues. In order to do it, we use a tool called "pycodestyle", that checks Python code against the style conventions defined in PEP 8.
 
+1. Installation
+Make sure you have pycodestyle installed. If not, you can install it using pip:
+ pip install pycodestyle
 
-Now, the additional Python modules are installed in the running container, and you've performed these actions directly from the VS Code terminal. If these changes are intended for production, consider updating the `requirements.txt` file and rebuilding the Docker container.
+2. Run pycodestyle
+To verify the code, you have to execute in your terminal the following:
+ pycodestyle mcm_groupwork
+
+3. Check the results
+Once you execute the previous code in the terminal, you will visualize the results.
+

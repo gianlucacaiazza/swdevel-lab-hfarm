@@ -1,26 +1,37 @@
 """
 Frontend module for the Flask application.
 
-This module defines a simple Flask application that serves as the frontend for the project.
+This module defines a simple Flask application that
+serves as the frontend for the project.
 """
 
 from flask import Flask, render_template
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, BooleanField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
+app.config['SECRET_KEY'] = 'your_secret_key'
 
-# Configuration for the FastAPI backend URL
-FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
+"""Configuration for the FastAPI backend URL."""
+FASTAPI_BACKEND_HOST = 'http://backend'
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
 class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
+    """
+    Form class to handle query input from the user.
+    """
 
+    destination = StringField('Destination:')
+    piscina_checkbox = BooleanField('Swimming pool')
+    accesso_disabili_checkbox = BooleanField('Disabled access')
+    fitness_checkbox = BooleanField('Fitness corner')
+    sauna_checkbox = BooleanField('Sauna')
+    aria_condizionata_checkbox = BooleanField('Air conditioning')
+    lago_checkbox = BooleanField('Lake')
+    submit_field = SubmitField('Search')
 
 @app.route('/')
 def index():
@@ -30,54 +41,149 @@ def index():
     Returns:
         str: Rendered HTML content for the index page.
     """
-    # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
+    # Fetch the data from the backend
+    return render_template('index.html')
 
-def fetch_date_from_backend():
+@app.route('/padova')
+def padova():
     """
-    Function to fetch the current date from the backend.
+    Render the Padova page.
 
     Returns:
-        str: Current date in ISO format.
+        str: Rendered HTML content for the Padova page.
     """
-    backend_url = 'http://backend/get-date'  # Adjust the URL based on your backend configuration
-    try:
-        response = requests.get(backend_url)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-        return response.json().get('date', 'Date not available')
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching date from backend: {e}")
-        return 'Date not available'
+    return render_template('padova.html')
 
+
+@app.route('/venezia')
+def venezia():
+    """
+    Render the Venezia page.
+
+    Returns:
+        str: Rendered HTML content for the Venezia page.
+    """
+    return render_template('venezia.html')
+
+
+@app.route('/verona')
+def verona():
+    """
+    Render the Verona page.
+
+    Returns:
+        str: Rendered HTML content for the Verona page.
+    """
+    return render_template('verona.html')
+
+
+@app.route('/belluno')
+def belluno():
+    """
+    Render the Belluno page.
+
+    Returns:
+        str: Rendered HTML content for the Belluno page.
+    """
+    return render_template('belluno.html')
+
+
+@app.route('/treviso')
+def treviso():
+    """
+    Render the Treviso page.
+
+    Returns:
+        str: Rendered HTML content for the Treviso page.
+    """
+    return render_template('treviso.html')
+
+
+@app.route('/vicenza')
+def vicenza():
+    """
+    Render the Vicenza page.
+
+    Returns:
+        str: Rendered HTML content for the Vicenza page.
+    """
+    return render_template('vicenza.html')
+
+
+@app.route('/rovigo')
+def rovigo():
+    """
+    Render the Rovigo page.
+
+    Returns:
+        str: Rendered HTML content for the Rovigo page.
+    """
+    return render_template('rovigo.html')
 
 @app.route('/internal', methods=['GET', 'POST'])
 def internal():
     """
-    Render the internal page.
+    Render the internal search page.
 
     Returns:
-        str: Rendered HTML content for the index page.
+        str: Rendered HTML content for the internal search page.
     """
     form = QueryForm()
-    error_message = None  # Initialize error message
+    error_message = None
 
     if form.validate_on_submit():
-        person_name = form.person_name.data
+        comune = form.destination.data
 
-        # Make a GET request to the FastAPI backend
-        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{person_name}'
+        """Obtain checkbox's values from form."""
+        piscina_filter = form.piscina_checkbox.data
+        accesso_disabili_filter = form.accesso_disabili_checkbox.data
+        fitness_filter = form.fitness_checkbox.data
+        sauna_filter = form.sauna_checkbox.data
+        aria_condizionata_filter = form.aria_condizionata_checkbox.data
+        lago_filter = form.lago_checkbox.data
+
+        """Update URL to include filters"""
+        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{comune}?piscina={piscina_filter}&accesso_disabili={accesso_disabili_filter}&fitness={fitness_filter}&sauna={sauna_filter}&aria_condizionata={aria_condizionata_filter}&lago={lago_filter}'
+
+        """Make a GET request to the FastAPI backend."""
         response = requests.get(fastapi_url)
 
         if response.status_code == 200:
-            # Extract and display the result from the FastAPI backend
+            """Extract and display the result from the FastAPI backend."""
             data = response.json()
-            result = data.get('birthday', f'Error: Birthday not available for {person_name}')
-            return render_template('internal.html', form=form, result=result, error_message=error_message)
-        else:
-            error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
+            accomodations = data.get('risultati', [])
 
-    return render_template('internal.html', form=form, result=None, error_message=error_message)
+            if accomodations:
+                result_strutture = []
+                for struttura in accomodations:
+                    result_item = {"nome": struttura["nome"]}
+                    if "link" in struttura:
+                        result_item["link"] = struttura["link"]
+                    if "indirizzo" in struttura:
+                        result_item["indirizzo"] = struttura["indirizzo"]
+                    if "telefono" in struttura:
+                        result_item["telefono"] = struttura["telefono"]
+                    if "email" in struttura:
+                        result_item["email"] = struttura["email"]
+                    result_strutture.append(result_item)
+
+                # Debug print to check the value of result_strutture
+                print("Result_strutture:", result_strutture)
+
+                if not result_strutture:
+                    result_strutture = [{"nome": f'No accommodations available for {comune}'}]
+            else:
+                result_strutture = [{"nome": f'No accommodations available for {comune}'}]
+
+            """Extract museum's information."""
+            musei_consigliati = data.get('musei_consigliati', [])
+            result_musei = ', '.join(musei_consigliati) if musei_consigliati else f'No recommended museums for {comune}'
+
+            return render_template('internal.html', form=form, result_strutture=result_strutture, result_musei=result_musei, error_message=error_message)
+        else:
+            error_message = f'Error: Unable to fetch accommodations for {comune} from FastAPI Backend'
+
+    return render_template('internal.html', form=form, result_strutture=None, result_musei=None, error_message=error_message)
 
 
 if __name__ == '__main__':

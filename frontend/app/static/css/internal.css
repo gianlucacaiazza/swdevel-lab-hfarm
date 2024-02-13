@@ -1,0 +1,207 @@
+body {
+    background-color: #ffffff; 
+    color: #000000; 
+}
+
+.container {
+    width: 100%; 
+    margin: 0 auto; 
+}
+
+/* H1 style */
+h1 {
+    color: #008080; /* Main color for headers */
+}
+
+/* Add this style to put the address under the name*/
+.accommodation-item {
+    position: relative;
+}
+.searchbar-int{
+    justify-content: center;
+    width: 100%;
+}
+.form-control{
+    margin-right: 15px;
+}
+.title-int{
+    text-align: center;
+}
+.int-space{
+    margin-bottom: 4em;
+}
+.form-group.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; 
+    
+}
+.form-group{
+    align-items: center;
+    display: flex;
+}
+.child {
+    flex: 1;
+    margin: 10px;
+  }
+.child:first-child {
+    margin-right: 20px;
+  }
+.width-searchbar{
+    width: 65% !important;
+}
+  .result_title {
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+.parent {
+    display: flex;
+    width: 100%
+  }
+.check-background{
+    border-radius: 10px;
+    height: auto;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+}
+.btn-green{
+    background-color: #044a4a !important;    
+}
+
+.form-check-input {
+    width: 20px; 
+    height: 20px; 
+    margin-right: 5px; 
+    background-color: #008080;
+    border: 1px solid #008080;
+    border-radius: 4px; 
+}
+.linea .accommodation-list, .linea .museum-list {
+    grid-template-columns: repeat(1, 1fr);
+    }
+
+.form-check-label {
+    color: #333;
+    font-weight: bold; 
+}
+
+.custom-control-input{
+    color:#008080;
+}
+
+.btn-primary {
+    background-color: #008080;
+    color: #ffffff;
+    border: none !important;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.form-group.form-check {
+    border-color: #ccc!important;
+    border-radius: 5px;
+    background-color: transparent;
+    border: 2px solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 35px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    flex: 1 0 calc(33.33% - 40px);
+} /* Divide into 3 columns with a space of 40px between them */
+
+/* Result Display Styles */
+#resultContainer {
+    background-color: #ffffff;
+    margin-top: 20px;
+}
+/* Ipertextual link */
+#resultContainer .custom_link{
+    color:#ffffff;
+}
+#resultContainer .custom_link:hover{
+    color:#b76df7;
+}
+
+.accommodation-list {
+    background-color: #ffffff;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.accommodation-item{
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #008080;
+    color:#ffffff;
+}
+
+.text-danger {
+    color: rgb(1, 46, 54); /* Color for error messages */
+}
+
+/* Styling the "back home" button */
+.torna-home-button{
+    text-align: center;
+   
+}
+
+.torna-home {
+    align-items: center;
+    padding: 10px; 
+    background-color: #044a4a; 
+    color: #fff; 
+    border:none;
+    border-radius: 5px; 
+    cursor: pointer; /* Change color when over*/
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Add style when over the link */
+.torna-home:hover {
+    background-color: #b76df7;  
+  }
+
+.museum-item table tbody tr:nth-child(odd) {
+    background-color: #008080bf; 
+    color: white;
+}
+
+.museum-item table tbody tr:nth-child(even) {
+    background-color: #044a4acc; 
+    color: white;
+}
+.museum-item table thead th {
+    border-radius: 7px;
+    background-color: #bbb; 
+    color: #ffffff;
+    border: 0px !important; 
+}
+.accommodation-list, .museum-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.table{
+    color: white !important;
+}
+.rounded-table{
+    border-radius: 7px;
+}
+.museum-width{
+    width: 60%;
+}
